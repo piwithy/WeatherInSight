@@ -23,14 +23,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '7nskbab6e&8$88t7(@a=!ez+1*21&dgpdu1+ny#q+d$cddz-i)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['weatherinsight.space', 'www.weatherinsight.space']
+ALLOWED_HOSTS = ['weatherinsight.space', 'www.weatherinsight.space', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
