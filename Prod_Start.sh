@@ -11,8 +11,8 @@ fi
 source "venv/bin/activate"
 export DJANGO_DEBUG="False"
 python manage.py makemigrations
+python manage.py migrate
 python manage.py sqlmigrate pages 0001
-python manage.py sql
 python manage.py collectstatic --no-input --clear
 python manage.py check --deploy
 gunicorn --access-logfile - --workers 3 --bind "unix:$WORKING_DIR/gunicorn.sock" WeatherInSight.wsgi:application
