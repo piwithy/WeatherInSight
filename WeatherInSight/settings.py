@@ -19,17 +19,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'manmtl1yn(_71)5)-g98uvpv!lk!12=09-23i#*vj^x69dfsgq'
+SECRET_KEY = '3f4lr1xfa2+4#tq*)b%9cu4u+g@%peeiqvjvwmfo!9*-0(h2a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.249', 'weatherinsight.space']
+ALLOWED_HOSTS = []
 
-USE_X_FORWARDED_HOST = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+if not DEBUG:
+    with open('/home/jezegoup/secret_key.txt') as f:
+        SECRET_KEY = f.read().strip()
+    STATIC_ROOT = os.path.join(BASE_DIR, 'prod_static/')
+    USE_X_FORWARDED_HOST = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.249', 'weatherinsight.space']
 
 # Application definition
 
@@ -118,4 +124,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
