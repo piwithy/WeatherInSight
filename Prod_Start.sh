@@ -14,4 +14,4 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --no-input --clear
 python manage.py check --deploy
-gunicorn --access-logfile - --workers 3 --bind unix:/etc/django/gunicorn.sock WeatherInSight.wsgi:application
+gunicorn --access-logfile - --workers 3 --bind "unix:$WORKING_DIR/gunicorn.sock" WeatherInSight.wsgi:application
