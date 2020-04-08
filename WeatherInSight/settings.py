@@ -28,7 +28,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 ALLOWED_HOSTS = []
 
 if not DEBUG:
-    with open('/home/jezegoup/secret_key.txt') as f:
+    with open('/etc/django/secret_key.txt') as f:
         SECRET_KEY = f.read().strip()
     STATIC_ROOT = os.path.join(BASE_DIR, 'prod_static/')
     USE_X_FORWARDED_HOST = True
