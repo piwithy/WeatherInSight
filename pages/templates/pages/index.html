@@ -42,7 +42,8 @@
 
 <section class="container">
     <span id="empty"></span>
-    <h1 Class="project_logo"><img src="{% static 'pages/img/weather_insight_logo_nasa.png' %}" alt="Weather InSight"></h1>
+    <h1 Class="project_logo"><img src="{% static 'pages/img/weather_insight_logo_nasa.png' %}" alt="Weather InSight">
+    </h1>
     <h2>
         <span class="project_slogan">Mars Weather right down to earth thanks to InSight</span>
     </h2>
@@ -52,6 +53,15 @@
         When we will have finished YOU will know
     </p>
     <span id="empty"></span>
+    <footer>
+        <div class="foot">
+            <p>
+                <span id="visitor">Visitor: {{ hits }}</span><br>
+                <span id="copyright">Copyright &copy; {{host}} 2020-<script>document.write(new Date().getFullYear())</script></span><br>
+                <span id="joke">Powered by Rocket Fuel 🚀</span>
+            </p>
+        </div>
+    </footer>
 </section>
 </body>
 </html>

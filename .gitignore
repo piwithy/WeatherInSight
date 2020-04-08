@@ -129,4 +129,6 @@ dmypy.json
 .pyre/
 .idea
 *.iml
-prod_static/
+prod_static/*
+
+**/migrations/*0*.py
