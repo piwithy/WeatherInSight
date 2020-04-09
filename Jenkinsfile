@@ -9,7 +9,9 @@ pipeline{
         }
 
         stage('Testing...'){
-            sh "run_tests.sh"
+            steps{
+                sh "run_tests.sh"
+            }
         }
     }
     post{
