@@ -13,6 +13,18 @@ pipeline{
                 sh "./run_tests.sh"
             }
         }
+
+        stage('Deploying...'){
+            when{
+                branch 'master'
+            }
+            steps{
+                sh """
+                    ssh jezegoup@192.168.0.245 "./deploy.sh ${GIT_COMMIT}"
+                """
+            }
+        }
+
     }
     post{
         success{
