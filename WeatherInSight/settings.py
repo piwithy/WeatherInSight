@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_nose',
     'pages.apps.PagesConfig',
 ]
 
@@ -119,6 +120,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-xunit',
+    '--xunit-file='+BASE_DIR+'/tests/results/results.xml',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
