@@ -24,7 +24,7 @@ pipeline{
                 """
                 emailext(
                     body: '''
-                        Job: ${JOB_NAME}${BUILD_DISPLAY_NAME} Has been Deployed Please\n check if https://weatherinsight.space/is online
+                        Job: ${JOB_NAME}${BUILD_DISPLAY_NAME} Has been Deployed Please\n check if https://weatherinsight.space/ is online
                     ''',
                     subject: "[JENKINS] Deployment Notification (${JOB_NAME}${BUILD_DISPLAY_NAME})",
                     to: 'salydu29@gmail.com'
