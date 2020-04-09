@@ -4,13 +4,13 @@ pipeline{
     stages{
         stage('Preparation du WorkSpace'){
             steps{
-                sh "Setup_environement.sh"
+                sh "./Setup_environement.sh"
             }
         }
 
         stage('Testing...'){
             steps{
-                sh "run_tests.sh"
+                sh "./run_tests.sh"
             }
         }
     }
