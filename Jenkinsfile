@@ -22,6 +22,13 @@ pipeline{
                 sh """
                     ssh jezegoup@192.168.0.245 "./deploy.sh ${GIT_COMMIT}"
                 """
+                emailext(
+                    body: '''
+                        Job: ${JOB_NAME}${BUILD_NAME} Has been Depoyed Pleese\n check if <a href="https://weatherinsight.space/">https://weatherinsight.space/</a> is online
+                    ''',
+                    subject: '[JENKINS] Deployement Notification',
+                    to: 'salydu29@gmail.com'
+                )
             }
         }
 
@@ -34,5 +41,9 @@ pipeline{
             cleanWs()
         }
     }
+
+}
+
+def notify(status) {
 
 }
