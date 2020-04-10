@@ -131,4 +131,7 @@ dmypy.json
 *.iml
 prod_static/*
 
+# DS Store
+.DS_Store
+
 **/migrations/*0*.py
