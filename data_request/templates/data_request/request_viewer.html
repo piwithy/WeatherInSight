@@ -1,0 +1,36 @@
+{% load static %}
+{% load extra_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Request from nasa</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'data_request/style.css' %}">
+</head>
+<body>
+<div class="header_data">
+    <h1>Header data</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key,value in header_data.items %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="body_data">
+    <h1>Body data</h1>
+    <pre>{{ body_data | pretty_json }}</pre>
+</div>
+</body>
+</html>

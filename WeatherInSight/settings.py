@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_nose',
     'pages.apps.PagesConfig',
+    'data_request.apps.DataRequestConfig',
+    'data_request.templatetags',
 ]
 
 MIDDLEWARE = [

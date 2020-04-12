@@ -3,12 +3,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Weather InSight | Coming Soon!</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'pages/style.css' %}">
+    <title>Sol Days Recorded</title>
     <link rel="stylesheet" type="text/css" href="{% static 'pages/nav_bar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'data_request/style.css' %}">
 </head>
 <body>
-<nav class="nav_bar" role="navigation" >
+<nav class="nav_bar" role="navigation">
     <ul class="menu">
         <li id="logo">
             <a title="index" href="https://weatherinsight.space">
@@ -48,29 +48,30 @@
         </li>
     </ul>
 </nav>
-
-<section class="container">
-    <span id="empty"></span>
-    <h1 Class="project_logo"><img src="{% static 'pages/img/weather_insight_logo_nasa.png' %}" alt="Weather InSight">
-    </h1>
-    <h2>
-        <span class="project_slogan">Mars Weather right down to earth thanks to InSight</span>
-    </h2>
-    <p class="project_description">
-        You ever wandered what's the weather on MARS?
-        <br>
-        When we will have finished YOU will know
-    </p>
-    <span id="empty"></span>
-    <footer>
-        <div class="foot">
-            <p>
-                <span id="visitor">Visitor: {{ hits }}</span><br>
-                <span id="copyright">Copyright &copy; {{host}}.space 2020-<script>document.write(new Date().getFullYear())</script></span><br>
-                <span id="joke">Powered by Rocket Fuel 🚀</span>
-            </p>
-        </div>
-    </footer>
-</section>
+<div class="data">
+    <table>
+        <caption>Sol Days Data</caption>
+        <thead>
+        <tr>
+            <th scope="col">Sol Day</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Season</th>
+            <th scope="col">Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sol_day in sol_days %}
+            <tr>
+                <td data-label="Sol Day">{{ sol_day.sol_date }}</td>
+                <td data-label="From">{{ sol_day.first_utc }}</td>
+                <td data-label="To">{{ sol_day.last_utc }}</td>
+                <td data-label="Season">{{ sol_day.season }}</td>
+                <td data-label="Details"><a href="{% url 'data_request:detail' sol_day.sol_date %}">More Info</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
