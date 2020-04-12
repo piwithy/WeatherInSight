@@ -1,42 +1,127 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Detail for {{ sol_date }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'data_request/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'pages/nav_bar.css' %}">
 </head>
 <body>
-<table>
-    <caption>Sol Day: {{ sol_date }}</caption>
-    <thead>
-    <tr>
-        <th>Key</th>
-        <th>Value</th>
-    </tr>
-    </thead>
+<nav class="nav_bar" role="navigation">
+    <ul class="menu">
+        <li id="logo">
+            <a title="index" href="{% url 'pages:index' %}">
+                <img alt="Weather InSight" src="{% static 'pages/img/weather_insight_logo_nasa.png' %}">
+            </a>
+        </li>
 
-    <tbody>
-    <tr>
-        <td>Sol Date</td>
-        <td>{{ sol_date }}</td>
-    </tr>
-    <tr>
-        <td>Season</td>
-        <td>{{ sol_day.season }}</td>
-    </tr>
-    <tr>
-        <td>First UTC</td>
-        <td>{{ sol_day.first_utc }}</td>
-    </tr>
-    <tr>
-        <td>Last UTC</td>
-        <td>{{ sol_day.last_utc }}</td>
-    </tr>
-    {% for sensor in sensors %}
+        <li id="empty"></li>
+
+        <li id="data">
+            <a title="Gathered Data" href="{% url 'data_request:index' %}">
+                Gathered Data
+            </a>
+        </li>
+
+        <li id="empty"></li>
+
+        <li>
+            <a title="ENSTA Bretagne" href="https://www.ensta-bretagne.fr/">
+                <img src="{% static 'pages/img/ensta-logoh-noir.png' %}" height="100" alt="ENSTA-Bretagne">
+            </a>
+        </li>
+        <li>
+            <a title="NASA" href="https://nasa.gov/">
+                <img src="{% static 'pages/img/nasa-logo.svg' %}" height="100" alt="NASA">
+            </a>
+        </li>
+        <li>
+            <a title="Django Project" href="https://www.djangoproject.com/">
+                <img src="{% static 'pages/img/django_logo.png' %}" height="100" alt="Django Project">
+            </a>
+        </li>
+        <li>
+            <a title="Project Github" href="https://github.com/piwithy/WeatherInSight">
+                <img src="{% static 'pages/img/github_logo.svg' %}" height="100" alt="project GitHub">
+            </a>
+        </li>
+    </ul>
+</nav>
+<div class="data">
+    <table>
+        <caption>Sol Day: {{ sol_date }}</caption>
+        <thead>
         <tr>
-            <td>Sensor</td>
+            <th>Key</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            <td>Sol Date</td>
+            <td>{{ sol_date }}</td>
+        </tr>
+        <tr>
+            <td>Season</td>
+            <td>{{ sol_day.season }}</td>
+        </tr>
+        <tr>
+            <td>First UTC</td>
+            <td>{{ sol_day.first_utc }}</td>
+        </tr>
+        <tr>
+            <td>Last UTC</td>
+            <td>{{ sol_day.last_utc }}</td>
+        </tr>
+        <tr>
+            <td>Validated</td>
+            <td>{% if sol_day.validated > 0 %} True {% else %} False {% endif %}</td>
+        </tr>
+        {% for sensor in sensors %}
+            <tr>
+                <td>Sensor: {{ sensor.sensor }}</td>
+                <td>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Average Value</td>
+                            <td>{{ sensor.average_value }}{% if sensor.sensor == "AT" %}
+                                °C{% elif sensor.sensor == "HWS" %}
+                                m/s{% else %}Pa{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Sample Count</td>
+                            <td>{{ sensor.sample_count }}</td>
+                        </tr>
+                        <tr>
+                            <td>Minimum Value</td>
+                            <td>{{ sensor.minimum_value }}{% if sensor.sensor == "AT" %}
+                                °C{% elif sensor.sensor == "HWS" %}
+                                m/s{% else %}Pa{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Maximum Value</td>
+                            <td>{{ sensor.maximum_value }}{% if sensor.sensor == "AT" %}
+                                °C{% elif sensor.sensor == "HWS" %}
+                                m/s{% else %}Pa{% endif %}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td>Wind Data</td>
             <td>
                 <table>
-                    <caption> Sensor: {{ sensor.sensor }}</caption>
                     <thead>
                     <tr>
                         <th>Key</th>
@@ -44,100 +129,50 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Average Value</td>
-                        <td>{{ sensor.average_value }}{% if sensor.sensor == "AT" %}°C{% elif sensor.sensor == "HWS" %}
-                            m/s{% else %}Pa{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td>Sample Count</td>
-                        <td>{{ sensor.sample_count }}</td>
-                    </tr>
-                    <tr>
-                        <td>Minimum Value</td>
-                        <td>{{ sensor.minimum_value }}{% if sensor.sensor == "AT" %}°C{% elif sensor.sensor == "HWS" %}
-                            m/s{% else %}Pa{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td>Maximum Value</td>
-                        <td>{{ sensor.maximum_value }}{% if sensor.sensor == "AT" %}°C{% elif sensor.sensor == "HWS" %}
-                            m/s{% else %}Pa{% endif %}</td>
-                    </tr>
+                    {% for sector in wind_sectors %}
+                        <tr>
+                            <td>Sector {% if sector.sector == -1 %}Most Common {% else %}
+                                {{ sector.sector }}{% endif %}</td>
+                            <td>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Key</th>
+                                        <th>Value</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Compass Degrees</td>
+                                        <td>{{ sector.compass_degrees }}°</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Compass Point</td>
+                                        <td>{{ sector.compass_point }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Compass Right</td>
+                                        <td>{{ sector.compass_right }}°</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Compass Up</td>
+                                        <td>{{ sector.compass_up }}°</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sample Count</td>
+                                        <td>{{ sector.ct }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </td>
         </tr>
-    {% endfor %}
-
-    <tr>
-        <td>Wind Data</td>
-        <td>
-            {% for wind_sector in wind_sectors %}
-                <table>
-                    <caption>
-                        Sector: {% if wind_sector.sector == -1 %} Most Common {% else %}
-                        {{ wind_sector.sector }} {% endif %}
-                    </caption>
-                    <thead>
-                    <tr>
-                        <th>Key</th>
-                        <th>Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>Compass Degrees</td>
-                        <td>{{ wind_sector.compass_degree }}°</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                    </tr>
-                    </tbody>
-                </table>
-            {% endfor %}
-        </td>
-    </tr>
-
-    </tbody>
-
-</table>
-
-
-<ul>
-    <li>Sol Date: {{ sol_date }}</li>
-    <li>Season: {{ sol_day.season }}</li>
-    <li>First UTC: {{ sol_day.first_utc }}</li>
-    <li>Last UTC: {{ sol_day.last_utc }}</li>
-    {% for sensor in sensors %}
-        <li> Sensor: {{ sensor.sensor }}
-            <ul>
-                <li>Average Value: {{ sensor.average_value }} {% if sensor.sensor == "AT" %}
-                    °C{% elif sensor.sensor == "HWS" %}m/s{% else %}Pa{% endif %}</li>
-                <li>Sample Count: {{ sensor.sample_count }}</li>
-                <li>Minimum Value {{ sensor.minimum_value }} {% if sensor.sensor == "AT" %}
-                    °C{% elif sensor.sensor == "HWS" %}m/s{% else %}Pa{% endif %}</li>
-                <li>Maximum Value {{ sensor.maximum_value }} {% if sensor.sensor == "AT" %}
-                    °C{% elif sensor.sensor == "HWS" %}m/s{% else %}Pa{% endif %}</li>
-            </ul>
-        </li>
-    {% endfor %}
-    <li>Wind Data
-        <ul>
-            {% for wind_sector in wind_sectors %}
-                <li> Sector: {% if wind_sector.sector == -1 %} Most Common {% else %}
-                    {{ wind_sector.sector }} {% endif %}
-                    <ul>
-                        <li>Compass Degrees: {{ wind_sector.compass_degree }}</li>
-                        <li>Compass Point: {{ wind_sector.compass_point }}</li>
-                        <li>Compass Right: {{ wind_sector.compass_right }}</li>
-                        <li>Compass up: {{ wind_sector.compass_up }}</li>
-                        <li>Sample Count: {{ wind_sector.ct }}</li>
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li>Validated {% if sol_day.validated > 0 %} True {% else %} False {% endif %}</li>
-</ul>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
