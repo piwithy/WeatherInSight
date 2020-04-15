@@ -9,46 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'pages/nav_bar.css' %}">
 </head>
 <body>
-<nav class="nav_bar" role="navigation">
-    <ul class="menu">
-        <li id="logo">
-            <a title="index" href="{% url 'pages:index' %}">
-                <img alt="Weather InSight" src="{% static 'pages/img/weather_insight_logo_nasa.png' %}">
-            </a>
-        </li>
-
-        <li id="empty"></li>
-
-        <li id="data">
-            <a title="Gathered Data" href="{% url 'data_request:index' %}">
-                Gathered Data
-            </a>
-        </li>
-
-        <li id="empty"></li>
-
-        <li>
-            <a title="ENSTA Bretagne" href="https://www.ensta-bretagne.fr/">
-                <img src="{% static 'pages/img/ensta-logoh-noir.png' %}" height="100" alt="ENSTA-Bretagne">
-            </a>
-        </li>
-        <li>
-            <a title="NASA" href="https://nasa.gov/">
-                <img src="{% static 'pages/img/nasa-logo.svg' %}" height="100" alt="NASA">
-            </a>
-        </li>
-        <li>
-            <a title="Django Project" href="https://www.djangoproject.com/">
-                <img src="{% static 'pages/img/django_logo.png' %}" height="100" alt="Django Project">
-            </a>
-        </li>
-        <li>
-            <a title="Project Github" href="https://github.com/piwithy/WeatherInSight">
-                <img src="{% static 'pages/img/github_logo.svg' %}" height="100" alt="project GitHub">
-            </a>
-        </li>
-    </ul>
-</nav>
+<div class="nav_bar">{% include 'pages/nav_bar.html' %}</div>
 <div class="header_data">
     <h1>Header data</h1>
     <table>
@@ -73,5 +34,6 @@
     <h1>Body data</h1>
     <pre>{{ body_data | pretty_json }}</pre>
 </div>
+<div class="footer">{% include 'pages/footer.html' %}</div>
 </body>
 </html>

@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather InSight | Sol List</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'pages/nav_bar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'pages/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'pages/footer.css' %}">
+</head>
+<body>
+
+<div class="nav_bar">{% include 'pages/nav_bar.html' %}</div>
+<div class="content">
+    {% if sol_days %}
+        <table>
+            <caption>Sol Days Data</caption>
+            <thead>
+            <tr>
+                <th scope="col">Sol Day</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Season</th>
+                <th scope="col">Wind Rose</th>
+                <th scope="col">Details</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sol_day in sol_days %}
+                <tr>
+                    <td data-label="Sol Day">{{ sol_day.sol_date }}</td>
+                    <td data-label="From">{{ sol_day.first_utc }}</td>
+                    <td data-label="To">{{ sol_day.last_utc }}</td>
+                    <td data-label="Season">{{ sol_day.season }}</td>
+                    <td data-label="Wind Rose">
+                        <a href="{% url 'pages:sol_wind_rose' sol_day.sol_date %}">Wind Rose</a>
+                    </td>
+                    <td data-label="Details"><a href="{% url 'pages:sol_detail' sol_day.sol_date %}">More Info</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="6"><a href="{% url 'data_request:request_viewer' %}">View Full Request Response</a></td>
+            </tr>
+            </tbody>
+        </table>
+    {% else %}
+        <h1 style="text-align: center">Data unavailable, Sorry :'( </h1>
+    {% endif %}
+</div>
+<div class="footer">{% include 'pages/footer.html' %}</div>
+</body>
+</html>

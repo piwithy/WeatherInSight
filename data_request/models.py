@@ -93,19 +93,19 @@ class WindSector(models.Model):
             sector = -1
         else:
             sector = int(sector_str)
-        compass_degree = float(data.get("compass_degrees"))
+        compass_degrees = float(data.get("compass_degrees"))
         compass_point = str(data.get("compass_point"))
         compass_right = float(data.get("compass_right"))
         compass_up = float(data.get("compass_up"))
         ct = float(data.get("ct"))
 
-        wind_sector = cls(sector=sector, wind_directions=wind_directions, compass_degrees=compass_degree,
+        wind_sector = cls(sector=sector, wind_directions=wind_directions, compass_degrees=compass_degrees,
                           compass_point=compass_point, compass_right=compass_right, compass_up=compass_up,
                           ct=ct)
         return wind_sector
 
     def update_data(self, data: dict):
-        self.compass_degree = float(data.get("compass_degrees"))
+        self.compass_degrees = float(data.get("compass_degrees"))
         self.compass_point = str(data.get("compass_point"))
         self.compass_right = float(data.get("compass_right"))
         self.compass_up = float(data.get("compass_up"))
@@ -128,29 +128,18 @@ class SensorData(models.Model):
 
     @classmethod
     def create(cls, sol_day: SolDayData, sensor: str, data: dict):
-        if sensor == 'AT':
-            av = np.round((float(data.get('av')) - 32) * (5 / 9), 3)
-            mn = np.round((float(data.get('mn')) - 32) * (5 / 9), 3)
-            mx = np.round((float(data.get('mx')) - 32) * (5 / 9), 3)
-        else:
-            av = np.round(float(data.get('av')), 3)
-            mn = np.round(float(data.get('mn')), 3)
-            mx = np.round(float(data.get('mx')), 3)
-        sample_count = float(data.get('ct'))
+        av = np.round(float(data.get('av')), 3)
+        mn = np.round(float(data.get('mn')), 3)
+        mx = np.round(float(data.get('mx')), 3)
         ct = float(data.get('ct'))
         sensor_data = cls(sol_day=sol_day, sensor=sensor, average_value=av, minimum_value=mn, maximum_value=mx,
                           sample_count=ct)
         return sensor_data
 
     def update_data(self, data: dict):
-        if self.sensor == 'AT':
-            self.av = np.round((float(data.get('av')) - 32) * (5 / 9), 3)
-            self.mn = np.round((float(data.get('mn')) - 32) * (5 / 9), 3)
-            self.mx = np.round((float(data.get('mx')) - 32) * (5 / 9), 3)
-        else:
-            self.av = np.round(float(data.get('av')), 3)
-            self.mn = np.round(float(data.get('mn')), 3)
-            self.mx = np.round(float(data.get('mx')), 3)
+        self.av = np.round(float(data.get('av')), 3)
+        self.mn = np.round(float(data.get('mn')), 3)
+        self.mx = np.round(float(data.get('mx')), 3)
         self.sample_count = float(data.get('ct'))
         self.save()
 

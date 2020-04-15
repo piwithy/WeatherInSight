@@ -1,0 +1,10 @@
+{% load static %}
+<footer>
+    <div class="foot">
+        <p>
+            {% if hits %}<span id="visitor">Visitor: {{ hits }}</span><br>{% endif %}
+            <span id="copyright">Copyright &copy; <script>document.write(location.hostname)</script> 2020-<script>document.write(new Date().getFullYear())</script></span><br>
+            <span id="joke">Powered by Rocket Fuel 🚀</span>
+        </p>
+    </div>
+</footer>

@@ -1,0 +1,153 @@
+{% load static %}
+{% load extra_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wind on Sol {{ sol_day.sol_date }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'data_request/wind_rose.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+    </script>
+    {{ wind_sectors |json_script:"wind_data" }}
+    <script>const wind_data = JSON.parse(document.getElementById('wind_data').textContent)</script>
+    {{ sensor_data| json_script:"sensor_data" }}
+    <script>const sensor_data = JSON.parse(document.getElementById("sensor_data").textContent)</script>
+</head>
+<body>
+<div class="nav_bar">{% include 'pages/nav_bar.html' %}</div>
+<div class="title" style="background-color: #5b80b2"><h1> Wind on Sol {{ sol_day.sol_date }} </h1></div>
+<div class="content" style="background-color: #4f4f4f">
+    <div class="wind_data" style="background-color: #5E5694">
+        <h2>Wind Rose</h2>
+        <div class="chart">
+            <span class="empty" style="background-color: lime"></span>
+            <div class="chart_area" style="position:relative;width: 65vw;background-color: red">
+                <canvas id="myChart" style="background-color: orange"></canvas>
+            </div>
+            <span class="empty" style="background-color: lime"></span>
+        </div>
+        <span>On Sol {{ sol_day.sol_date }} <script>document.write(wind_data['most_common']['compass_point'])</script> was the most common wind direction</span>
+    </div>
+    <div class="sensors" style="background-color: #6DDCBD">
+        <div class="PRE">
+            <table>
+                <thead>
+                <tr>
+                    <th class="sensor_type">Atmospheric Pressure</th>
+                    <th class="sensor_high">High: <span id="pre_high"></span>Pa</th>
+                    <th class="sensor_low">Low: <span id="pre_low"></span>Pa</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="sensor_value" colspan="3"><span id="pre_avg"></span>Pa</td>
+                </tr>
+                <tr>
+                    <td class="sensor_fact" colspan="3"><span id="pre_fact_value"></span>% of Earth Atmospheric Pressure
+                    </td>
+
+                </tr>
+                </tbody>
+                <script>
+                    var sensor = sensor_data['PRE'];
+                    $('#pre_high').html(Math.round(sensor['mx'] * 100) / 100);
+                    $('#pre_low').html(Math.round(sensor['mn'] * 100) / 100);
+                    $('#pre_avg').html(Math.round(sensor['av'] * 100) / 100);
+                    $('#pre_fact_value').html(Math.round(sensor['av'] / 1.0150) / 100)
+                </script>
+            </table>
+        </div>
+        <div class="HWS">
+            <table>
+                <thead>
+                <tr>
+                    <th class="sensor_type">Wind Speed</th>
+                    <th class="sensor_high">High: <span id="hws_high"></span>km/h</th>
+                    <th class="sensor_low">Low: <span id="hws_low"></span>km/h</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="sensor_value" colspan="3"><span id="hws_avg"></span>km/h</td>
+                </tr>
+                <tr>
+                    <td class="sensor_fact" colspan="3">During a storm wind speed is about <span
+                            id="hws_fact_value"></span> km/h
+                    </td>
+
+                </tr>
+                </tbody>
+                <script>
+                    var sensor = sensor_data['HWS'];
+                    $('#hws_high').html(Math.round(sensor['mx'] * 360) / 100);
+                    $('#hws_low').html(Math.round(sensor['mn'] * 360) / 100);
+                    $('#hws_avg').html(Math.round(sensor['av'] * 360) / 100);
+                    $('#hws_fact_value').html(100)
+                </script>
+            </table>
+        </div>
+        <div class="AT">
+            <table>
+                <thead>
+                <tr>
+                    <th class="sensor_type">Atmospheric Temperature</th>
+                    <th class="sensor_high">High: <span id="at_high"></span>°C</th>
+                    <th class="sensor_low">Low: <span id="at_low"></span>°C</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="sensor_value" colspan="3"><span id="at_avg"></span>°C</td>
+                </tr>
+                <tr>
+                    <td class="sensor_fact" colspan="3">Average Earth Temperature is <span
+                            id="at_fact_value"></span>°C
+                    </td>
+
+                </tr>
+                </tbody>
+                <script>
+                    var sensor = sensor_data['AT'];
+                    $('#at_high').html(Math.round(sensor['mx'] * 100) / 100);
+                    $('#at_low').html(Math.round(sensor['mn'] * 100) / 100);
+                    $('#at_avg').html(Math.round(sensor['av'] * 100) / 100);
+                    $('#at_fact_value').html(15)
+                </script>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="footer">{% include 'pages/footer.html' %}</div>
+
+<script>
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'],
+            datasets: [{
+                label: '% of Wind',
+                data: (new Array(16)).fill(0).map((empty, idx) => wind_data[idx] ? (Math.round((wind_data[idx].ct / wind_data.cnt) * 10000) / 100) : 0),
+                backgroundColor: [
+                    'rgba(255, 61, 33, .6)',
+                ],
+                borderColor: [
+                    'rgba(255, 61, 33, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            //startAngle: (-(0.5) * Math.PI) -0.19198622
+        }
+    });
+</script>
+
+</body>
+</html>
