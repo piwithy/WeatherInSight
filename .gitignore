@@ -135,3 +135,4 @@ prod_static/*
 .DS_Store
 
 **/migrations/*0*.py
+**/results.xml

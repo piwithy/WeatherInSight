@@ -10,7 +10,8 @@ import json
 
 # Create your tests here.
 class WindSectorModelTest(TestCase):
-    def setUpClass(cls):
+    @classmethod
+    def setUpTestData(cls):
         body_data_raw = open(settings.BASE_DIR + '/data_request/static/data_request/sample_request.json')
         body_data_json = json.load(body_data_raw)
         # print(body_data_json)
