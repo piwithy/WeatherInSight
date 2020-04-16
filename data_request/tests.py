@@ -63,9 +63,49 @@ class WindSectorModelTest(TestCase):
             "ct": sector_0.ct
         }
         for key, item in sector_0_dict.items():
-            self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key)) # checking Key Equality
+            self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
 
     def test_wind_sector_update(self):
         """
-        Cheacking
+        Checking if the data is correctly updated
         """
+        th_dict = {
+            "sector": 0,
+            "compass_degrees": 0.0,
+            "compass_point": "N",
+            "compass_right": 0.0,
+            "compass_up": 1.0,
+            "ct": 373.0
+        }
+        sector_0 = self.sectors_dict.get(0, None)
+        self.assertNotEqual(sector_0, None)  # Check if Sector Exist
+        sector_0_dict_orig = {
+            "sector": sector_0.sector,
+            "compass_degrees": sector_0.compass_degrees,
+            "compass_point": sector_0.compass_point,
+            "compass_right": sector_0.compass_right,
+            "compass_up": sector_0.compass_up,
+            "ct": sector_0.ct
+        }
+        for key, item in sector_0_dict_orig.items():
+            self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
+        th_dict = {
+            "sector": 0,
+            "compass_degrees": 45.0,
+            "compass_point": "NE",
+            "compass_right": 10.0,
+            "compass_up": 1.5,
+            "ct": 200
+        }
+        sector_0.update_data(th_dict)
+        sector_0_dict_updated = {
+            "sector": sector_0.sector,
+            "compass_degrees": sector_0.compass_degrees,
+            "compass_point": sector_0.compass_point,
+            "compass_right": sector_0.compass_right,
+            "compass_up": sector_0.compass_up,
+            "ct": sector_0.ct
+        }
+        for key, item in sector_0_dict_updated.items():
+            self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
+            self.assertNotEqual(sector_0_dict_orig, item,"checking inequality for key:" + str(key))
