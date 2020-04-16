@@ -153,7 +153,7 @@ class SensorDataModelTest(TestCase):
         for sensor in sensors:
             self.sensors_dict[sensor.sensor] = sensor
 
-    def test_wind_sector_creation(self):
+    def test_sensor_data_creation(self):
         """ Sector 0 Creation Test
         Checking that the data for Sector 0 is coherent with request sample used:
         json:
@@ -183,7 +183,7 @@ class SensorDataModelTest(TestCase):
         for key, item in at_sensor_dict.items():
             self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
 
-    def test_wind_sector_update(self):
+    def test_sensor_data_update(self):
         """
         Checking if the data is correctly updated
         """
@@ -207,12 +207,19 @@ class SensorDataModelTest(TestCase):
             self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
         th_dict = {
             "sensor": 'AT',
+            "av": -60.007,
+            "ct": 200938,
+            "mn": -100.386,
+            "mx": -0.461
+        }
+        at_sensor.update_data(th_dict)
+        th_dict = {
+            "sensor": 'AT',
             "average_value": -60.007,
             "sample_count": 200938,
             "minimum_value": -100.386,
             "maximum_value": -0.461
         }
-        at_sensor.update_data(th_dict)
         at_sensor_dict_updated = {
             "sensor": at_sensor.sensor,
             "average_value": at_sensor.average_value,
@@ -238,5 +245,6 @@ class SensorDataModelTest(TestCase):
         sector_0 = self.sensors_dict.get('AT', None)
         self.assertNotEqual(sector_0, None)  # Check if Sector Exist
         at_sensor_str = str(sector_0)
-        at_sensor_str_th = "Sensor: " + "AT" + " on Sol Day:" + str(492) + ",min: " + str(-94.39) + ",avg: " + str(-54.0) + ",max: " + str(-5.46)
+        at_sensor_str_th = "Sensor: " + "AT" + " on Sol Day:" + str(492) + ",min: " + str(-94.39) + ",avg: " + str(
+            -54.01) + ",max: " + str(-5.46)
         self.assertEqual(at_sensor_str, at_sensor_str_th, 'testing to string for AT Sensor')
