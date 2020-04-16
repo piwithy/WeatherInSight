@@ -137,9 +137,9 @@ class SensorData(models.Model):
         return sensor_data
 
     def update_data(self, data: dict):
-        self.av = np.round(float(data.get('av')), 3)
-        self.mn = np.round(float(data.get('mn')), 3)
-        self.mx = np.round(float(data.get('mx')), 3)
+        self.average_value = np.round(float(data.get('av')), 3)
+        self.minimum_value = np.round(float(data.get('mn')), 3)
+        self.maximum_value = np.round(float(data.get('mx')), 3)
         self.sample_count = float(data.get('ct'))
         self.save()
 

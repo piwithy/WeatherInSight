@@ -62,6 +62,8 @@ class WindSectorModelTest(TestCase):
             "compass_up": sector_0.compass_up,
             "ct": sector_0.ct
         }
+        print("th dict", th_dict)
+        print("db dict", sector_0_dict)
         for key, item in sector_0_dict.items():
             self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
 
@@ -87,6 +89,9 @@ class WindSectorModelTest(TestCase):
             "compass_up": sector_0.compass_up,
             "ct": sector_0.ct
         }
+        print("BEFORE UPDATE")
+        print("th dict", th_dict)
+        print("db dict", sector_0_dict_orig)
         for key, item in sector_0_dict_orig.items():
             self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
         th_dict = {
@@ -106,6 +111,9 @@ class WindSectorModelTest(TestCase):
             "compass_up": sector_0.compass_up,
             "ct": sector_0.ct
         }
+        print("AFTER UPDATE")
+        print("th dict", th_dict)
+        print("db dict", sector_0_dict_updated)
         for key, item in sector_0_dict_updated.items():
             self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
             self.assertNotEqual(sector_0_dict_orig, item, "checking inequality for key:" + str(key))
@@ -121,13 +129,18 @@ class WindSectorModelTest(TestCase):
         self.assertNotEqual(sector_0, None)  # Check if Sector Exist
         sector_0_str = str(sector_0)
         sector_0_str_th = "N" + ", ct:" + str(373.0)
+        print("Normal Sector")
+        print("th str", sector_0_str_th)
+        print("db str", sector_0_str)
         self.assertEqual(sector_0_str, sector_0_str_th, 'testing to string for normal Sector')
-
         sector_mc = self.sectors_dict.get(-1, None)
         self.assertNotEqual(sector_mc, None)  # Check if Sector Exist
-        sector_0_str = str(sector_mc)
-        sector_0_str_th = "MOST COMMON Direction " + "SW" + ", ct:" + str(18432.0)
-        self.assertEqual(sector_0_str, sector_0_str_th, 'testing to string for most common Sector')
+        sector_mc_str = str(sector_mc)
+        sector_mc_str_th = "MOST COMMON Direction " + "SW" + ", ct:" + str(18432.0)
+        print("Most Common Sector")
+        print("th str", sector_mc_str_th)
+        print("db str", sector_mc_str)
+        self.assertEqual(sector_mc_str, sector_mc_str_th, 'testing to string for most common Sector')
 
 
 class SensorDataModelTest(TestCase):
@@ -180,6 +193,8 @@ class SensorDataModelTest(TestCase):
             "minimum_value": at_sensor.minimum_value,
             "maximum_value": at_sensor.maximum_value
         }
+        print("th dict", th_dict)
+        print("db dict", at_sensor_dict)
         for key, item in at_sensor_dict.items():
             self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
 
@@ -203,6 +218,9 @@ class SensorDataModelTest(TestCase):
             "minimum_value": at_sensor.minimum_value,
             "maximum_value": at_sensor.maximum_value
         }
+        print("BEFORE UPDATE")
+        print("th dict", th_dict)
+        print("db dict", at_sensor_dict_orig)
         for key, item in at_sensor_dict_orig.items():
             self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
         th_dict = {
@@ -227,15 +245,21 @@ class SensorDataModelTest(TestCase):
             "minimum_value": at_sensor.minimum_value,
             "maximum_value": at_sensor.maximum_value
         }
+        print("AFTER UPDATE")
+        print("th dict", th_dict)
+        print("db dict", at_sensor_dict_updated)
         for key, item in at_sensor_dict_updated.items():
-            self.assertEqual(th_dict[key], item, "checking equality for key:" + str(key))  # checking Key Equality
-            self.assertNotEqual(at_sensor_dict_orig, item, "checking inequality for key:" + str(key))
+            self.assertNotEqual(at_sensor_dict_orig, item,
+                                "checking inequality after update with previous value for key:" + str(key))
+            self.assertEqual(th_dict[key], item,
+                             "checking after update equality for key:" + str(key))  # checking Key Equality
+
         at_sensor.update_data({
             "sensor": 'AT',
-            "average_value": -54.007,
-            "sample_count": 140938,
-            "minimum_value": -94.386,
-            "maximum_value": -5.461
+            "av": -54.007,
+            "ct": 140938,
+            "mn": -94.386,
+            "mx": -5.461
         })
 
     def test_str(self):
@@ -247,4 +271,6 @@ class SensorDataModelTest(TestCase):
         at_sensor_str = str(sector_0)
         at_sensor_str_th = "Sensor: " + "AT" + " on Sol Day:" + str(492) + ",min: " + str(-94.39) + ",avg: " + str(
             -54.01) + ",max: " + str(-5.46)
+        print("th str", at_sensor_str_th)
+        print("db str", at_sensor_str)
         self.assertEqual(at_sensor_str, at_sensor_str_th, 'testing to string for AT Sensor')
