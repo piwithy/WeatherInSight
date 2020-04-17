@@ -35,7 +35,7 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.249', 'weatherinsight.space']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.249','192.168.0.245',  'weatherinsight.space']
 
 # Application definition
 
