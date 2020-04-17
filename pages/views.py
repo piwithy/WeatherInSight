@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.core import exceptions
 from django.utils import timezone
+from django.http import HttpResponse
 
 from data_request.utils import request_data, sensor_data_2_json, wind_data_2_json
 from data_request.models import SolDayData, SensorData, WindSector
-
-import socket
 
 from .models import Hits
 
@@ -18,9 +17,17 @@ def index(request):
         hits = Hits()
         hits.date_creation = timezone.now()
     hits.count += 1
-    host = str(socket.gethostname())
     hits.save()
-    return render(request, 'pages/index.html', {'hits': hits.count, 'host': host})
+    return render(request, 'pages/index.html', {'hits': hits.count})
+
+
+def data_index(request):
+    # TODO: Vue D'acceuil
+    # TODO: Recuperation des données utiles
+    env = {
+        'data': "data",  # TODO: Données utile pour le template
+    }
+    return render(request,'pages/data_index.html', env)
 
 
 def list_view(request):
