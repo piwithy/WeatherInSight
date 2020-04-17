@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from WeatherInSight import settings
-from .models import WindSector, WindDirection, SolDayData, SensorData
+from .models import WindSector, SolDayData, SensorData
 
 from .utils import check_sol_valid
 

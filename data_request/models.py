@@ -69,7 +69,7 @@ class WindDirection(models.Model):
                 sector = -1
             else:
                 sector = int(key)
-            wind_sector = self.objects.windsector_set.get(sector=sector)
+            wind_sector = WindSector.objects.filter(wind_directions__exact=self)
             wind_sector.update_data(item)
             wind_sector.save()
             self.save()
