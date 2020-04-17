@@ -9,6 +9,11 @@
     list-style: none;
 }
 
+.nav_bar ul li{
+    display: block;
+    font-size: 45px;
+}
+
 .nav_bar #empty{
     flex-grow: 1;
 }

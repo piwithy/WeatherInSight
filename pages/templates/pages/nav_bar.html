@@ -1,0 +1,41 @@
+{% load static %}
+<nav role="navigation">
+    <ul class="menu">
+        <li id="logo">
+            <a title="index" href="{% url 'pages:index' %}">
+                <img alt="Weather InSight" src="{% static 'pages/img/weather_insight_logo_nasa.png' %}">
+            </a>
+        </li>
+
+        <li id="empty"></li>
+
+        <!--<li id="data">
+            <a title="Other Sols" href="{% url 'pages:sol_list' %}">
+                Other Sols
+            </a>
+        </li>-->
+
+        <li id="empty"></li>
+
+        <li>
+            <a title="ENSTA Bretagne" href="https://www.ensta-bretagne.fr/">
+                <img src="{% static 'pages/img/ensta-logoh-noir.png' %}" height="100" alt="ENSTA-Bretagne">
+            </a>
+        </li>
+        <li>
+            <a title="NASA" href="https://nasa.gov/">
+                <img src="{% static 'pages/img/nasa-logo.svg' %}" height="100" alt="NASA">
+            </a>
+        </li>
+        <li>
+            <a title="Django Project" href="https://www.djangoproject.com/">
+                <img src="{% static 'pages/img/django_logo.png' %}" height="100" alt="Django Project">
+            </a>
+        </li>
+        <li>
+            <a title="Project Github" href="https://github.com/piwithy/WeatherInSight">
+                <img src="{% static 'pages/img/github_logo.svg' %}" height="100" alt="project GitHub">
+            </a>
+        </li>
+    </ul>
+</nav>
