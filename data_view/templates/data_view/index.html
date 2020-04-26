@@ -17,19 +17,19 @@
         const lang_index = '{{ lang }}'
         $('#project_slogan').html(function () {
             if (lang_index === 'fr')
-                return 'La météo marsienne sur Terre grace a InSight';
+                return 'La météo Marsienne sur Terre grace a InSight';
             else
                 return 'Mars Weather right down to earth thanks to InSight';
         })
         $('#project_description').html(function () {
             if (lang_index === 'fr')
-                return 'Vous vous êtes toutjours demaindés quelle il fait sur Mars?<br>Quant on aura fini VOUS le saurez';
+                return 'Vous vous êtes toutjours demandez quelle temps il fait sur Mars?<br>Quand on aura fini VOUS le saurez!';
             else
-                return "You ever wandered what's the weather on MARS?<br>When we will have finished YOU will know";
+                return "You ever wondered what's the weather on MARS?<br>When we will have finished YOU will know!";
         })
         $('#hit_counter').html(function () {
             if (lang_index === 'fr') {
-                return "Vous êtres le visiteur " + hits_count;
+                return "Vous êtes le visiteur " + hits_count;
             } else {
                 return "You are visitor " + hits_count
             }
