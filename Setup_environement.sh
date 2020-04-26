@@ -13,4 +13,5 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py sqlmigrate pages 0001
 python manage.py sqlmigrate data_request 0001
+
 deactivate

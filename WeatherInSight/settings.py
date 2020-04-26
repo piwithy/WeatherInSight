@@ -25,7 +25,7 @@ SECRET_KEY = '3f4lr1xfa2+4#tq*)b%9cu4u+g@%peeiqvjvwmfo!9*-0(h2a'
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.0.62', '127.0.0.1']
 
 if not DEBUG:
     with open('/etc/django/secret_key.txt') as f:
@@ -35,7 +35,7 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.249','192.168.0.245',  'weatherinsight.space']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.249', '192.168.0.62', '192.168.0.245', 'weatherinsight.space']
 
 # Application definition
 
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django_nose',
     'pages.apps.PagesConfig',
     'data_request.apps.DataRequestConfig',
-    'data_request.templatetags',
+    'data_view.apps.DataViewConfig',
 ]
 
 MIDDLEWARE = [
@@ -127,7 +127,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = [
     '--with-xunit',
-    '--xunit-file='+BASE_DIR+'/tests/results/results.xml',
+    '--xunit-file=' + BASE_DIR + '/tests/results/results.xml',
 ]
 
 # Static files (CSS, JavaScript, Images)

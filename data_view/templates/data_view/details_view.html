@@ -1,0 +1,60 @@
+{% load static %}
+{{ sol_day|json_script:'sol_day' }}
+{{ sensors|json_script:'sensors' }}
+{{ wind_sectors|json_script:'wind_sectors' }}
+<table>
+    <caption id="sol_date"></caption>
+    <thead id="table_head"></thead>
+    <tbody id="table_body"></tbody>
+</table>
+<div id="debug"></div>
+
+<script>
+    $(document).ready(function () {
+        const lang_details = "{{ lang }}";
+        const sol_day = JSON.parse(document.getElementById("sol_day").textContent);
+        const sensors = JSON.parse(document.getElementById("sensors").textContent);
+        const wind_sectors = JSON.parse(document.getElementById("wind_sectors").textContent);
+        $('#sol_date').html("Sol: " + sol_day['sol_date']);
+        $('#table_head').html('<tr><th>' + key_format('key', lang_details) + '</th><th>' + key_format('value', lang_details) + '</th></tr>')
+        $('#table_body').html(function () {
+            let out_str = "";
+            out_str += "<tr><td>" + key_format("sol_date", lang_details) + "</td><td>" + sol_day['sol_date'] + "</td></tr>";
+            out_str += "<tr><td>" + key_format("season", lang_details) + "</td><td>" + key_format(sol_day['season'], lang_details) + "</td></tr>";
+            out_str += "<tr><td>" + key_format("First_UTC", lang_details) + "</td><td>" + date_format(new Date(sol_day['First_UTC']), lang_details) + "</td></tr>";
+            out_str += "<tr><td>" + key_format("Last_UTC", lang_details) + "</td><td>" + date_format(new Date(sol_day['Last_UTC']), lang_details) + "</td></tr>";
+            out_str += "<tr><td>" + key_format("valid", lang_details) + "</td><td>" + is_valid(sol_day['valid'], lang_details) + "</td></tr>";
+            for (const sensor in sensors) {
+                out_str += '<tr><td>' + key_format('sensor', lang_details) + ': ' + sensor + '</td><td><table><thead><tr><th>' + key_format('key', lang_details) + "</th><th>" + key_format('value', lang_details) + '</th></tr></thead>'
+                out_str += '<tbody>'
+                out_str += '<tr><td>' + key_format('mn', lang_details) + '</td><td>' + unit_converter(sensor, sensors[sensor]['mn'], lang_details) + "</td></tr>"
+                out_str += '<tr><td>' + key_format('av', lang_details) + '</td><td>' + unit_converter(sensor, sensors[sensor]['av'], lang_details) + "</td></tr>"
+                out_str += '<tr><td>' + key_format('mx', lang_details) + '</td><td>' + unit_converter(sensor, sensors[sensor]['mx'], lang_details) + "</td></tr>"
+                out_str += '<tr><td>' + key_format('ct', lang_details) + '</td><td>' + sensors[sensor]['ct'] + "</td></tr>"
+                out_str += '</tbody>'
+                out_str += '</table>'
+            }
+            out_str += "<tr><td>" + key_format("wind_sectors", lang_details) + "</td><td><table><thead><tr><th>" + key_format('key', lang_details) + "</th><th>" + key_format('value', lang_details) + '</th></tr></thead><tbody>'
+            for (const sector in wind_sectors) {
+                if (sector !== "cnt") {
+                    if (sector !== "most_common")
+                        out_str += '<tr><td>' + key_format('sector', lang_details) + ": " + sector + "</td>"
+                    else
+                        out_str += '<tr><td>' + key_format('sector', lang_details) + ": " + key_format(sector, lang_details) + "</td>"
+                    out_str += '<td><table><thead><tr><th>' + key_format('key', lang_details) + "</th><th>" + key_format('value', lang_details) + '</th></tr></thead>'
+                    out_str += '<tbody>'
+                    out_str += '<tr><td>' + key_format('compass_degrees', lang_details) + "</td><td>" + wind_sectors[sector]['compass_degrees'].toFixed(1) + "°</td></tr>"
+                    out_str += '<tr><td>' + key_format('compass_point', lang_details) + "</td><td>" + key_format(wind_sectors[sector]['compass_point'], lang_details) + "</td></tr>"
+                    out_str += '<tr><td>' + key_format('compass_right', lang_details) + "</td><td>" + wind_sectors[sector]['compass_right'].toFixed(3) + "°</td></tr>"
+                    out_str += '<tr><td>' + key_format('compass_up', lang_details) + "</td><td>" + wind_sectors[sector]['compass_up'].toFixed(3) + "°</td></tr>"
+                    out_str += '<tr><td>' + key_format('ct', lang_details) + "</td><td>" + wind_sectors[sector]['ct'] + "</td></tr>"
+                    out_str += '</tbody></table></td></tr>'
+                }
+            }
+            out_str += "</tbody></table></td>"
+
+            return out_str
+        })
+        //$('#debug').html("sol_day<br><pre>" + JSON.stringify(sol_day, null, 4) + "</pre><br>sensors<br><pre>" + JSON.stringify(sensors, null, 4) + "</pre><br>wind_sectors<br><pre>" + JSON.stringify(wind_sectors, null, 4) + "</pre>")
+    })
+</script>

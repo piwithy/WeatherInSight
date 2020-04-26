@@ -1,0 +1,48 @@
+{% load static %}
+{{ header|json_script:'header_data' }}
+{{ body|json_script:'body_data' }}
+
+<div id="head">
+    <table>
+        <caption id="head_table_caption"></caption>
+        <thead id="head_table_head"></thead>
+        <tbody id="head_table_body"></tbody>
+    </table>
+
+    <table>
+        <caption id="body_table_caption"></caption>
+        <thead id="body_table_head"></thead>
+        <tbody id="body_table_body"></tbody>
+    </table>
+</div>
+
+<div class="debug"></div>
+
+<script>
+    $(document).ready(function () {
+        const lang_req = "{{ lang }}"
+        const head_data = JSON.parse(document.getElementById("header_data").textContent);
+        const body_data = JSON.parse(document.getElementById("body_data").textContent);
+        $('#head_table_caption').html(key_format('request_head', lang_req))
+        $('#head_table_head').html("<tr><th>" + key_format('key', lang_req) + "</th><th>" + key_format('value', lang_req) + "</th></tr>")
+        $('#head_table_body').html(function () {
+            let out_str = "";
+            for (const key in head_data) {
+                out_str += "<tr><td>" + key + "</td><td>" + head_data[key] + "</td></tr>"
+            }
+            return out_str
+        });
+
+        $('#body_table_caption').html(key_format('request_body', lang_req))
+        $('#body_table_head').html("<tr><th>" + key_format('key', lang_req) + "</th><th>" + key_format('value', lang_req) + "</th></tr>")
+        $('#body_table_body').html(function () {
+            let out_str = "";
+            for (const key in body_data) {
+                out_str += "<tr><td>" + key_format(key, lang_req) + "</td><td><pre style='text-align: left'>" + JSON.stringify(body_data[key], null, 2) + "</pre></td></tr>"
+            }
+            return out_str
+        })
+
+        //$('.debug').html('HEAD:<br><pre>' + JSON.stringify(head_data, null, 4) + '</pre><br>BODY:<br><pre>' + JSON.stringify(body_data, null, 4) + "</pre>");
+    })
+</script>
