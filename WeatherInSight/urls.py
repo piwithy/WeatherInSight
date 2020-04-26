@@ -16,9 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-
 urlpatterns = [
-    path('data_request/', include('data_request.urls')),
     path('', include('pages.urls')),
+    path('data_view/', include('data_view.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -45,7 +45,8 @@ def sol_data_2_json(sol_day: SolDayData):
         'sol_date': sol_day.sol_date,
         'season': sol_day.season,
         'First_UTC': sol_day.first_utc,
-        'Last_UTC': sol_day.last_utc
+        'Last_UTC': sol_day.last_utc,
+        'valid': sol_day.is_validated()
     }
     return data
 
@@ -90,3 +91,17 @@ def check_sol_valid(sol_key, validity_checks):
         if not validity_checks[sol_key]['WD'].get('valid', False):
             return False
     return True
+
+
+def sol_days_2_json():
+    sol_days = SolDayData.objects.all().order_by("-last_utc")
+    sol_days_dict = {}
+    for sol_day in sol_days:
+        sol_day_dict = {
+            'first_utc': sol_day.first_utc,
+            'last_utc': sol_day.last_utc,
+            'season': sol_day.season,
+            'validated': sol_day.validated
+        }
+        sol_days_dict[sol_day.sol_date] = sol_day_dict
+    return sol_days_dict

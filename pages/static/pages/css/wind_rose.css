@@ -1,0 +1,43 @@
+@font-face {
+    font-family: "Futura Condensed Bold";
+    src: url("/static/pages/fonts/Futura_Condensed_Extra_Bold.otf");
+}
+@font-face {
+    font-family: "Futura Condensed";
+    src: url("/static/pages/fonts/Futura_Light.ttf");
+}
+
+body {
+    margin: 0 10px 0 10px;
+    font-family: 'Futura Condensed', sans-serif;
+}
+
+.content{
+    display: flex;
+}
+.chart{
+    display:block;
+    background-color: orange;
+    max-width: 75vw;
+    flex-grow: 1;
+}
+
+.sensors{
+    display: block;
+    background-color: #0b3d91;
+    flex-grow: 1;
+    min-width: 25vw;
+}
+
+
+.chart_title{
+    text-align: center;
+    font-size: xx-large;
+}
+.chart_title span {
+    color: #0b3d91;
+}
+
+hi {
+    color: #fc3d21;
+}

@@ -1,0 +1,97 @@
+{% load static %}
+{{ sol_day|json_script:'sol_day' }}
+{{ sensors|json_script:'sensors' }}
+{{ wind_sectors|json_script:'wind_sectors' }}
+
+<div id="chart">
+    <div id="chart_title"></div>
+    <div id="chart_area">
+        <canvas id="wind_chart"></canvas>
+    </div>
+    <div id="chart_fact"></div>
+</div>
+
+<div id="sensors_tables"></div>
+
+<div id="debug" style="text-align: left"></div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        const lang_wind_rose = '{{ lang }}';
+        const sol_day = JSON.parse(document.getElementById('sol_day').textContent);
+        const sensors = JSON.parse(document.getElementById('sensors').textContent);
+        const wind_sectors = JSON.parse(document.getElementById('wind_sectors').textContent);
+
+        const sensors_facts = {
+            "AT": {
+                'fr': "La Temperature Moyenne sur Terre et de 15 °C",
+                'en': "Average Temperature on Earth is " + celsius_2_fahrenheit(15).toFixed(0) + " °F",
+            },
+            "PRE": {
+                'fr': 'Soit ' + ((sensors['PRE']['av'] / 101325) * 100).toFixed(2) + "% de la Pression Atmospherique Terrestre (" + pa_2_bar(101325).toFixed(2) + " Bar)",
+                'en': 'Only ' + ((sensors['PRE']['av'] / 101325) * 100).toFixed(2) + "% of Earth Atmospheric Pressure (" + pa_2_psi(101325).toFixed(2) + " PSI)",
+            },
+            "HWS": {
+                'fr': "Pendant un Tempête le vent souffle a environ 100 km/h",
+                'en': "Durring a Storm wind speed is " + (100 / 1.609).toFixed(0) + " mph",
+            }
+        }
+
+        $('#chart_title').html(function () {
+            if (lang_wind_rose === 'fr')
+                return '<span><hi>R</hi>ose des <hi>V</hi>ents au <hi>S</hi>ol ' + sol_day['sol_date'] + ' (' + time_span(new Date(sol_day['First_UTC']), new Date(sol_day['Last_UTC']), lang_wind_rose) + ') </span>'
+            else
+                return '<span><hi>W</hi>ind <hi>R</hi>ose on <hi>S</hi>ol ' + sol_day['sol_date'] + ' (' + time_span(new Date(sol_day['First_UTC']), new Date(sol_day['Last_UTC']), lang_wind_rose) + ') </span>'
+        })
+
+        $('#chart_fact').html(function () {
+            if (lang_wind_rose === 'fr') {
+                return 'Au Sol ' + sol_day['sol_date'] + ' le vent le plus présent était orienté ' + key_format(wind_sectors['most_common']['compass_point'], lang_wind_rose)
+            } else {
+                return 'On Sol ' + sol_day['sol_date'] + ' ' + key_format(wind_sectors['most_common']['compass_point'], lang_wind_rose) + ' was the most common wind'
+            }
+        })
+
+        const chart_ctx = document.getElementById('wind_chart');
+        let chart_wind_sectors = new Chart(chart_ctx, {
+            type: 'radar',
+            data: {
+                labels: (new Array(16)).fill(0).map((empty, idx) => wind_sectors[idx] ? key_format(wind_sectors[idx]['compass_point'], lang_wind_rose) : key_format("wd_no_dir", lang_wind_rose)),
+                datasets: [{
+                    label: key_format('chart_data_title', lang_wind_rose),
+                    data: (new Array(16)).fill(0).map((empty, idx) => wind_sectors[idx] ? (wind_sectors[idx]['ct'] / (wind_sectors['cnt'] / 100)).toFixed(3) : 0),
+                    backgroundColor: [
+                        'rgba(255, 61, 33, .6)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 61, 33, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+            }
+        })
+
+        $('#sensors_tables').html(function () {
+            let out_str = ""
+            for (const key in sensors) {
+                out_str += "<table><thead><tr>"
+                out_str += "<th>" + key_format(key, lang_wind_rose) + "</th>"
+                out_str += "<th>" + key_format("min_short", lang_wind_rose) + " " + unit_converter(key, sensors[key]['mn'], lang_wind_rose) + "</th>"
+                out_str += "<th>" + key_format("max_short", lang_wind_rose) + " " + unit_converter(key, sensors[key]['mx'], lang_wind_rose) + "</th>"
+                out_str += "</tr></thead><tbody>"
+                out_str += "<tr><td colspan='3'>" + unit_converter(key, sensors[key]['av'], lang_wind_rose) + "</td></tr>"
+                out_str += "<tr><td colspan='3'>" + sensors_facts[key][lang_wind_rose] + "</td></tr>"
+                out_str += "</tbody></table>"
+            }
+            return out_str
+        })
+
+        //$('#debug').html('sol_day<br><pre>' + JSON.stringify(sol_day, null, 4) + '</pre><br>sensors<br><pre>' + JSON.stringify(sensors, null, 4) + '</pre><br>wind sectors<br><pre>' + JSON.stringify(wind_sectors, null, 4) + "</pre>")
+    })
+</script>

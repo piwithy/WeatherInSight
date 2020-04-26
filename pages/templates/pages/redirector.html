@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    if (window.navigator.language.slice(0, 2) === 'fr') {
+        const url = window.location.href;
+        const arr = url.split('/');
+        const result = arr[0] + "//" + arr[2] + "/fr/";
+        window.location.replace(result);
+    } else {
+        const url = window.location.href;
+        const arr = url.split('/');
+        const result = arr[0] + "//" + arr[2] + "/en/";
+        window.location.replace(result);
+    }
+</script>
+</body>
+</html>

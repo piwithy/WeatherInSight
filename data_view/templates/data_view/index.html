@@ -1,0 +1,39 @@
+{% load static %}
+{{ hits |json_script:'hits_json' }}
+<div id="index_content">
+    <h1 Class="project_logo"><img src="{% static 'pages/img/weather_insight_logo_nasa.png' %}" alt="Weather InSight">
+    </h1>
+    <h2>
+        <span id="project_slogan"></span>
+    </h2>
+    <p id="project_description"></p>
+    <span id="hit_counter"></span>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        const hits_count = JSON.parse(document.getElementById('hits_json').textContent);
+        const lang_index = '{{ lang }}'
+        $('#project_slogan').html(function () {
+            if (lang_index === 'fr')
+                return 'La météo marsienne sur Terre grace a InSight';
+            else
+                return 'Mars Weather right down to earth thanks to InSight';
+        })
+        $('#project_description').html(function () {
+            if (lang_index === 'fr')
+                return 'Vous vous êtes toutjours demaindés quelle il fait sur Mars?<br>Quant on aura fini VOUS le saurez';
+            else
+                return "You ever wandered what's the weather on MARS?<br>When we will have finished YOU will know";
+        })
+        $('#hit_counter').html(function () {
+            if (lang_index === 'fr') {
+                return "Vous êtres le visiteur " + hits_count;
+            } else {
+                return "You are visitor " + hits_count
+            }
+
+        })
+    })
+</script>
