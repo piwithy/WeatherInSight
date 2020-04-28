@@ -4,20 +4,8 @@
     <form id="from_to_form" action="javascript:alert('Error!');">
         <table>
             <caption id="page_title"></caption>
-            <thead>
-            <tr>
-                <th id="from_cal"><span id="from_cal_from"></span>: <input style="text-align: center; width: 80px"
-                                                                           type="text"
-                                                                           id="from_cal_datepicker"
-                                                                           readonly="readonly"/>
-                </th>
-                <th id="to_cal"><span id="to_cal_to"></span>: <input style="text-align: center; width: 80px" type="text"
-                                                                     id="to_cal_datepicker"
-                                                                     readonly="readonly"/>
-                </th>
-                <th><input id="update_btn" type="submit"></th>
-            </tr>
-            </thead>
+            <tbody id="head_table_body">
+            </tbody>
         </table>
     </form>
 </div>
@@ -94,6 +82,7 @@
 
         // Page Elements
         let page_title = $('#page_title');
+        let head_table_body = $('#head_table_body').html('<tr><td data style="text-transform: uppercase; font-weight:bold " id=" from_cal"><span id="from_cal_from"></span>: <input style="text-align: center; width: 80px" type="text" id="from_cal_datepicker" readonly="readonly"/></td><td style="text-transform: uppercase;font-weight:bold" id="to_cal"><span id="to_cal_to"></span>: <input style="text-align: center; width: 80px" type="text" id="to_cal_datepicker" readonly="readonly"/></td><td><input id="update_btn" type="submit"></td></tr>')
         let from_cal_from = $('#from_cal_from');
         let to_cal_to = $('#to_cal_to');
         let from_datepicker = $('#from_cal_datepicker').datepicker({
