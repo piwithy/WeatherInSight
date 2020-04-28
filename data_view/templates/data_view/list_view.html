@@ -76,6 +76,7 @@
                     out_str += "<td data-label='" + key_format('wind_rose', lang_list) + "'><a href='" + url_mask + "'>" + key_format("wind_rose", lang_list) + "</a>"
                     url_mask = "{% url 'pages:sol_detail' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", filtered_sols[i]['sol_date'])
                     out_str += "<td data-label='" + key_format('details', lang_list) + "'><a href='" + url_mask + "'>" + key_format("more_info", lang_list) + "</a>"
+
                     out_str += "</tr>";
                 }
                 out_str += "<tr><td colspan='6'><a href='{% url 'pages:request_viewer' lang=lang %}'>"
@@ -136,7 +137,6 @@
             build_list(sol_days, from_datepicker.datepicker('getDate'), to_datepicker.datepicker('getDate'));
             event.preventDefault();
         });
-
 
         build_list(sol_days, from_datepicker.datepicker("getDate"), to_datepicker.datepicker("getDate"))
 
