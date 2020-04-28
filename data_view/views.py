@@ -1,10 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.core import exceptions
 from django.utils import timezone
-from django.http import HttpResponse
 from data_request import utils, models
 
-from data_request import views
 from pages.models import Hits
 
 
@@ -42,6 +40,7 @@ def data_index(request):
 
 
 def list_view(request):
+    utils.request_data()
     data = request.session['data']
     env = {
         'lang': data['lang'],
