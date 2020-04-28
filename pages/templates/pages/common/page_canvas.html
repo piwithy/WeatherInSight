@@ -14,7 +14,13 @@
 </head>
 <body>
 <div class="nav_bar"></div>
-<div class="content"></div>
+<div class="content">
+    {% if lang == "fr" %}
+        <h1>Page en cours de Chargement, Veuillez Patientez</h1>
+    {% else %}
+        <h1>Loading Please Wait</h1>
+    {% endif %}
+</div>
 <div class="footer"></div>
 
 
