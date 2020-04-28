@@ -1,15 +1,37 @@
 {% load static %}
 {{ sol_days |json_script:'sol_days_json' }}
+<div id="head_selector" style="margin-bottom: 10px">
+    <form id="from_to_form" action="javascript:alert('Error!');">
+        <table>
+            <caption id="page_title"></caption>
+            <thead>
+            <tr>
+                <th id="from_cal"><span id="from_cal_from"></span>: <input style="text-align: center; width: 80px"
+                                                                           type="text"
+                                                                           id="from_cal_datepicker"
+                                                                           readonly="readonly"/>
+                </th>
+                <th id="to_cal"><span id="to_cal_to"></span>: <input style="text-align: center; width: 80px" type="text"
+                                                                     id="to_cal_datepicker"
+                                                                     readonly="readonly"/>
+                </th>
+                <th><input id="update_btn" type="submit"></th>
+            </tr>
+            </thead>
+        </table>
+    </form>
+</div>
+
 <div id="list">
     <table>
-        <thead>
+        <thead id="list_head">
         <tr>
-            <th id="sol_day_h"></th>
-            <th id="first_utc_h"></th>
-            <th id="last_utc_h"></th>
-            <th id="season_h"></th>
-            <th id="wind_rose_h"></th>
-            <th id="details_h"></th>
+            <th scope="col" id="sol_day_h"></th>
+            <th scope="col" id="first_utc_h"></th>
+            <th scope="col" id="last_utc_h"></th>
+            <th scope="col" id="season_h"></th>
+            <th scope="col" id="wind_rose_h"></th>
+            <th scope="col" id="details_h"></th>
         </tr>
         </thead>
         <tbody id="list_body"></tbody>
@@ -20,29 +42,41 @@
 
 <script>
     $(document).ready(function () {
+        //Data from DJANGO
         const lang_list = '{{ lang }}';
-        const sol_days = sortByKey(JSON.parse(document.getElementById('sol_days_json').textContent))
-        $('#sol_day_h').html('Sol')
-        $('#first_utc_h').html(key_format('from', lang_list));
-        $('#last_utc_h').html(key_format('to', lang_list));
-        $('#season_h').html(key_format('season', lang_list));
-        $('#wind_rose_h').html(key_format('wind_rose', lang_list));
-        $('#details_h').html(key_format('details', lang_list));
-        $('#list_body').html(function () {
-            let out_str = "";
-            if (Object.keys(sol_days).length !== 0) {
-                const sz_sol_day = sol_days.length
-                for (const i in sol_days) {
-                    let j = sz_sol_day - i - 1;
+        const sol_days = JSON.parse(document.getElementById('sol_days_json').textContent)
+
+        //PAGE Functions
+        function build_list(sols, start, end) {
+            $('#list_body').html(function () {
+                let out_str = "";
+                let itr = 0;
+                const filtered_sols = sols.filter(sol => (new Date(start) <= new Date(sol.median_utc) && new Date(sol.median_utc) <= new Date(end)))
+                if (sols.length === 0) {
+                    if (lang_list === 'fr') {
+                        return "<tr><td colspan='6'>Aucune Donées Disponible</td></tr>";
+                    } else {
+                        return "<tr><td colspan='6'>No Data in Available</td></tr>";
+                    }
+                }
+                if (filtered_sols.length === 0) {
+                    if (lang_list === 'fr') {
+                        return "<tr><td colspan='6'>Aucune Donées dans la Plage Séléctionée</td></tr>";
+                    } else {
+                        return "<tr><td colspan='6'>No Data in Selection</td></tr>";
+                    }
+                }
+                for (const i in filtered_sols) {
                     out_str += "<tr>";
-                    out_str += "<td>" + sol_days[j][0] + "</td>"
-                    out_str += "<td>" + date_format(new Date(sol_days[j][1]['first_utc']), lang_list) + "</td>"
-                    out_str += "<td>" + date_format(new Date(sol_days[j][1]['last_utc']), lang_list) + "</td>"
-                    out_str += "<td>" + key_format(sol_days[j][1]['season'], lang_list) + "</td>"
-                    let url_mask = "{% url 'pages:sol_wind_rose' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", sol_days[j][0])
-                    out_str += "<td><a href='" + url_mask + "'>" + key_format("wind_rose", lang_list) + "</a>"
-                    url_mask = "{% url 'pages:sol_detail' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", sol_days[j][0])
-                    out_str += "<td><a href='" + url_mask + "'>" + key_format("more_info", lang_list) + "</a>"
+                    out_str += "<td data-label='Sol'>" + filtered_sols[i]['sol_date'] + "</td>"
+                    out_str += "<td data-label='" + key_format('from', lang_list) + "'>" + date_format(new Date(filtered_sols[i]['first_utc']), lang_list) + "</td>"
+                    out_str += "<td data-label='" + key_format('to', lang_list) + "'>" + date_format(new Date(filtered_sols[i]['last_utc']), lang_list) + "</td>"
+                    out_str += "<td data-label='" + key_format('season', lang_list) + "'>" + key_format(filtered_sols[i]['season'], lang_list) + "</td>"
+                    let url_mask = "{% url 'pages:sol_wind_rose' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", filtered_sols[i]['sol_date'])
+                    out_str += "<td data-label='" + key_format('wind_rose', lang_list) + "'><a href='" + url_mask + "'>" + key_format("wind_rose", lang_list) + "</a>"
+                    url_mask = "{% url 'pages:sol_detail' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", filtered_sols[i]['sol_date'])
+                    out_str += "<td data-label='" + key_format('details', lang_list) + "'><a href='" + url_mask + "'>" + key_format("more_info", lang_list) + "</a>"
+
                     out_str += "</tr>";
                 }
                 out_str += "<tr><td colspan='6'><a href='{% url 'pages:request_viewer' lang=lang %}'>"
@@ -52,16 +86,62 @@
                     out_str += "See full response";
                 }
                 out_str += "</a></td></tr>"
+                return out_str;
+
+            })
+        }
+
+
+        // Page Elements
+        let page_title = $('#page_title');
+        let from_cal_from = $('#from_cal_from');
+        let to_cal_to = $('#to_cal_to');
+        let from_datepicker = $('#from_cal_datepicker').datepicker({
+            minDate: new Date(sol_days[sol_days.length - 1]['median_utc']),
+            maxDate: new Date(sol_days[0]['median_utc']),
+        });
+        let to_datepicker = $('#to_cal_datepicker').datepicker({
+            minDate: new Date(sol_days[sol_days.length - 1]['median_utc']),
+            maxDate: new Date(sol_days[0]['median_utc']),
+        });
+        let update_button = $('#update_btn');
+        let from_to_form = $('#from_to_form');
+        let sol_day_h = $('#sol_day_h').html('Sol');
+        let first_utc_h = $('#first_utc_h').html(key_format('from', lang_list));
+        let last_utc_h = $('#last_utc_h').html(key_format('to', lang_list));
+        let season_h = $('#season_h').html(key_format('season', lang_list));
+        let wind_rose_h = $('#wind_rose_h').html(key_format('wind_rose', lang_list));
+        let details_h = $('#details_h').html(key_format('details', lang_list));
+        let debug = $('#debug');
+
+        //Building Page
+        page_title.html(function () {
+            if (lang_list === 'fr') {
+                return "Liste des Sols";
             } else {
-                if (lang_list === 'fr') {
-                    out_str += "<tr><td colspan='6'>Aucune Donée Disponible</td></tr>";
-                } else {
-                    out_str += "<tr><td colspan='6'>No Data Available</td></tr>";
-                }
+                return "Sols List";
             }
-            return out_str;
-        })
-        //$('#debug').html(JSON.stringify(sol_days, null, 4))
+        });
+
+        from_cal_from.html(key_format('from', lang_list));
+        to_cal_to.html(key_format('to', lang_list));
+
+        from_datepicker.datepicker('setDate', new Date(sol_days[sol_days.length - 1]['median_utc']));
+        from_datepicker.datepicker("option", $.datepicker.regional[lang_list]);
+        to_datepicker.datepicker('setDate', new Date(sol_days[0]['median_utc']));
+        to_cal_to.datepicker("option", $.datepicker.regional[lang_list]);
+
+        update_button.val(key_format('update', lang_list))
+
+        from_to_form.submit(function (event) {
+            build_list(sol_days, from_datepicker.datepicker('getDate'), to_datepicker.datepicker('getDate'));
+            event.preventDefault();
+        });
+
+        build_list(sol_days, from_datepicker.datepicker("getDate"), to_datepicker.datepicker("getDate"))
+
+        //debug.html(JSON.stringify(sol_days, null, 4));
+
     })
 
 </script>
