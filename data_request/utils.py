@@ -1,6 +1,7 @@
 import json
 import requests as req
 from django.core import exceptions
+from datetime import datetime, timezone
 
 from .models import SolDayData, WindSector, SensorData
 
@@ -94,14 +95,24 @@ def check_sol_valid(sol_key, validity_checks):
 
 
 def sol_days_2_json():
-    sol_days = SolDayData.objects.all().order_by("-last_utc")
-    sol_days_dict = {}
+    sol_days = SolDayData.objects.all().order_by("-sol_date")
+    # sol_days_dict = []
+    sol_days_list = []
     for sol_day in sol_days:
         sol_day_dict = {
+            'sol_date': sol_day.sol_date,
             'first_utc': sol_day.first_utc,
             'last_utc': sol_day.last_utc,
+            'median_utc': get_utc_med(sol_day.first_utc, sol_day.last_utc),
             'season': sol_day.season,
             'validated': sol_day.validated
         }
-        sol_days_dict[sol_day.sol_date] = sol_day_dict
-    return sol_days_dict
+        sol_days_list.append(sol_day_dict)
+        # sol_days_dict[sol_day.sol_date] = sol_day_dict
+    return sol_days_list  # sol_days_dict
+
+
+def get_utc_med(first_utc: datetime, last_utc: datetime):
+    diff_2 = (last_utc - first_utc) / 2
+    utc_equiv = first_utc + diff_2
+    return utc_equiv

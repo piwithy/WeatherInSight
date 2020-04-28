@@ -25,7 +25,7 @@ function date_format(date, lang) {
                 10: 'Novembre',
                 11: 'Decembre'
             };
-            return num_2_str(date.getUTCDate()) + ' ' + months[date.getUTCMonth()] + ' ' + date.getUTCFullYear() + ' ' + num_2_str(date.getUTCHours()) + ':' + num_2_str(date.getUTCMinutes()) + ':' + num_2_str(date.getUTCSeconds()) + ' UTC';
+            return num_2_str(date.getDate()) + ' ' + months[date.getMonth()] + ' ' + date.getFullYear() + ' ' + num_2_str(date.getHours()) + ':' + num_2_str(date.getMinutes()) + ':' + num_2_str(date.getSeconds()) + '';
         case 'en':
             months = {
                 0: 'January',
@@ -41,7 +41,7 @@ function date_format(date, lang) {
                 10: 'November',
                 11: 'December'
             };
-            let utc_date = date.getUTCDate();
+            let utc_date = date.getDate();
             if (utc_date === 1 || utc_date === 21 || utc_date === 31)
                 utc_date += 'st';
             else if (utc_date === 2 || utc_date === 22)
@@ -51,7 +51,7 @@ function date_format(date, lang) {
             else
                 utc_date += 'th';
             let ampm = '';
-            let hours = date.getUTCHours();
+            let hours = date.getHours();
             if (hours > 12) {
                 hours = num_2_str(hours - 12);
                 ampm = 'PM'
@@ -59,7 +59,7 @@ function date_format(date, lang) {
                 hours = num_2_str(hours);
                 ampm = 'AM'
             }
-            return months[date.getUTCMonth()] + ', ' + utc_date + ' ' + date.getUTCFullYear() + ' ' + hours + ':' + num_2_str(date.getUTCMinutes()) + ':' + num_2_str(date.getUTCSeconds()) + ampm + ' UTC';
+            return months[date.getMonth()] + ', ' + utc_date + ' ' + date.getFullYear() + ' ' + hours + ':' + num_2_str(date.getMinutes()) + ':' + num_2_str(date.getSeconds()) + ampm + '';
         default:
             throw "Unknown Language: " + lang
     }
