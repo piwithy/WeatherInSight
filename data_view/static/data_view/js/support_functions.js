@@ -114,11 +114,19 @@ function sortByKey(jsObj) {
     return sortedArray.sort();
 }
 
+function load_json_file(url) {
+    let json_data = null;
+    fetch(url).then(response => response.json()).then(json => json_data = json)
+    return json_data;
+}
+
 function key_format(key, lang) {
     const keys = {
         'fr': {
+            'joke': "Propulsé par du Propergol 🚀",
             'wd_no_dir': 'Pas de données',
             'chart_data_title': "Presence du Vent (%)",
+            'average_short': '',
             'min_short': 'Mini',
             'max_short': 'Maxi',
             'AT': 'Temperature',
@@ -160,10 +168,12 @@ function key_format(key, lang) {
             'compass_point': 'Direction de la Boussole',
         },
         'en': {
+            'joke': "Powered by Rocket Fuel 🚀",
             'wd_no_dir': 'No Data',
             'chart_data_title': "Wind Presence (%)",
             'min_short': 'Lows',
             'max_short': 'Highs',
+            'average_short': '',
             'AT': 'Temperature',
             'HWS': 'Wind Speed',
             'PRE': 'Atmospheric Pressure',
@@ -195,6 +205,7 @@ function key_format(key, lang) {
             'wind_sectors': 'Wind Sectors',
         }
     }
+    //console.log(keys)
     let value = keys[lang.toString()][key]
     if (value == null) {
         value = keys['en'][key]

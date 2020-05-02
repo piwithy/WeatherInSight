@@ -1,33 +1,34 @@
 {% load static %}
 {{ sol_days |json_script:'sol_days_json' }}
-<div id="head_selector" style="margin-bottom: 10px">
-    <form id="from_to_form" action="javascript:alert('Error!');">
+<div id="list_view">
+    <div id="head_selector" style="margin-bottom: 10px">
+        <form id="from_to_form" action="javascript:alert('Error!');">
+            <table>
+                <caption id="page_title"></caption>
+                <tbody id="head_table_body">
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <div id="list">
         <table>
-            <caption id="page_title"></caption>
-            <tbody id="head_table_body">
-            </tbody>
+            <thead id="list_head">
+            <tr>
+                <th scope="col" id="sol_day_h"></th>
+                <th scope="col" id="first_utc_h"></th>
+                <th scope="col" id="last_utc_h"></th>
+                <th scope="col" id="season_h"></th>
+                <th scope="col" id="wind_rose_h"></th>
+                <th scope="col" id="details_h"></th>
+            </tr>
+            </thead>
+            <tbody id="list_body"></tbody>
         </table>
-    </form>
+    </div>
+
+    <pre id="debug"></pre>
 </div>
-
-<div id="list">
-    <table>
-        <thead id="list_head">
-        <tr>
-            <th scope="col" id="sol_day_h"></th>
-            <th scope="col" id="first_utc_h"></th>
-            <th scope="col" id="last_utc_h"></th>
-            <th scope="col" id="season_h"></th>
-            <th scope="col" id="wind_rose_h"></th>
-            <th scope="col" id="details_h"></th>
-        </tr>
-        </thead>
-        <tbody id="list_body"></tbody>
-    </table>
-</div>
-
-<pre id="debug"></pre>
-
 <script>
     $(document).ready(function () {
         //Data from DJANGO

@@ -3,17 +3,19 @@
 {{ sensors|json_script:'sensors' }}
 {{ wind_sectors|json_script:'wind_sectors' }}
 
-<div id="chart">
-    <div id="chart_title"></div>
-    <div id="chart_area">
-        <canvas id="wind_chart"></canvas>
+<div id="wind_rose">
+    <div id="chart">
+        <div id="chart_title"></div>
+        <div id="chart_area">
+            <canvas id="wind_chart"></canvas>
+        </div>
+        <div id="chart_fact"></div>
     </div>
-    <div id="chart_fact"></div>
+
+    <div id="sensors_tables"></div>
+
+    <div id="debug" style="text-align: left"></div>
 </div>
-
-<div id="sensors_tables"></div>
-
-<div id="debug" style="text-align: left"></div>
 
 
 <script>
@@ -79,16 +81,19 @@
 
         $('#sensors_tables').html(function () {
             let out_str = ""
+            out_str += '<div class="empty"></div>'
             for (const key in sensors) {
                 out_str += "<table><thead><tr>"
                 out_str += "<th>" + key_format(key, lang_wind_rose) + "</th>"
                 out_str += "<th>" + key_format("min_short", lang_wind_rose) + " " + unit_converter(key, sensors[key]['mn'], lang_wind_rose) + "</th>"
                 out_str += "<th>" + key_format("max_short", lang_wind_rose) + " " + unit_converter(key, sensors[key]['mx'], lang_wind_rose) + "</th>"
                 out_str += "</tr></thead><tbody>"
-                out_str += "<tr><td colspan='3'>" + unit_converter(key, sensors[key]['av'], lang_wind_rose) + "</td></tr>"
+                out_str += "<tr><td colspan='3'>" + key_format("average_short", lang_wind_rose) + " " + unit_converter(key, sensors[key]['av'], lang_wind_rose) + "</td></tr>"
                 out_str += "<tr><td colspan='3'>" + sensors_facts[key][lang_wind_rose] + "</td></tr>"
                 out_str += "</tbody></table>"
+                out_str += '<div class="empty"></div>'
             }
+
             return out_str
         })
 

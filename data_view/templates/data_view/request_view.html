@@ -2,22 +2,23 @@
 {{ header|json_script:'header_data' }}
 {{ body|json_script:'body_data' }}
 
-<div id="head">
-    <table>
-        <caption id="head_table_caption"></caption>
-        <thead id="head_table_head"></thead>
-        <tbody id="head_table_body"></tbody>
-    </table>
+<div id="request">
+    <div id="head">
+        <table>
+            <caption id="head_table_caption"></caption>
+            <thead id="head_table_head"></thead>
+            <tbody id="head_table_body"></tbody>
+        </table>
 
-    <table>
-        <caption id="body_table_caption"></caption>
-        <thead id="body_table_head"></thead>
-        <tbody id="body_table_body"></tbody>
-    </table>
+        <table>
+            <caption id="body_table_caption"></caption>
+            <thead id="body_table_head"></thead>
+            <tbody id="body_table_body"></tbody>
+        </table>
+    </div>
+
+    <div class="debug"></div>
 </div>
-
-<div class="debug"></div>
-
 <script>
     $(document).ready(function () {
         const lang_req = "{{ lang }}"
