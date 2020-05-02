@@ -1,7 +1,12 @@
 {% load static %}
+<!-- START OF DJANGO DATA-->
 {{ sol_day|json_script:'sol_day' }}
 {{ sensors|json_script:'sensors' }}
 {{ wind_sectors|json_script:'wind_sectors' }}
+<!-- END OF DJANGO DATA-->
+
+<!-- START OF HTML OBJECTS -->
+<!--suppress ALL -->
 <div id="details">
     <table>
         <caption id="sol_date"></caption>
@@ -10,15 +15,33 @@
     </table>
     <div id="debug"></div>
 </div>
-<script>
+<!-- END OF HTML OBJECTS -->
+
+<!-- START OF JAVASCRIPT -->
+<script type="text/javascript">
     $(document).ready(function () {
+        /* START of PAGE FUNCTIONS */
+
+        /* END OF PAGES FUNCTIONS */
+
+        /* Start Of Javascript Django DATA  */
         const lang_details = "{{ lang }}";
         const sol_day = JSON.parse(document.getElementById("sol_day").textContent);
         const sensors = JSON.parse(document.getElementById("sensors").textContent);
         const wind_sectors = JSON.parse(document.getElementById("wind_sectors").textContent);
-        $('#sol_date').html("Sol: " + sol_day['sol_date']);
-        $('#table_head').html('<tr><th>' + key_format('key', lang_details) + '</th><th>' + key_format('value', lang_details) + '</th></tr>')
-        $('#table_body').html(function () {
+        /* Start Of Javascript Django DATA  */
+
+        /* START of HTML OBJECT DECLARATION */
+        let sol_date_html = $('#sol_date');
+        let table_head_html = $('#table_head');
+        let table_body_html = $('#table_body');
+        let debug_html = $('#debug');
+        /* END od HTML OBJECT DECLARATION*/
+
+        /* START OF HTML OBJECT WORK*/
+        sol_date_html.html("Sol: " + sol_day['sol_date']);
+        table_head_html.html('<tr><th>' + key_format('key', lang_details) + '</th><th>' + key_format('value', lang_details) + '</th></tr>')
+        table_body_html.html(function () {
             let out_str = "";
             out_str += "<tr><td>" + key_format("sol_date", lang_details) + "</td><td>" + sol_day['sol_date'] + "</td></tr>";
             out_str += "<tr><td>" + key_format("season", lang_details) + "</td><td>" + key_format(sol_day['season'], lang_details) + "</td></tr>";
@@ -56,6 +79,8 @@
 
             return out_str
         })
-        //$('#debug').html("sol_day<br><pre>" + JSON.stringify(sol_day, null, 4) + "</pre><br>sensors<br><pre>" + JSON.stringify(sensors, null, 4) + "</pre><br>wind_sectors<br><pre>" + JSON.stringify(wind_sectors, null, 4) + "</pre>")
+        //$debug_html.html("sol_day<br><pre>" + JSON.stringify(sol_day, null, 4) + "</pre><br>sensors<br><pre>" + JSON.stringify(sensors, null, 4) + "</pre><br>wind_sectors<br><pre>" + JSON.stringify(wind_sectors, null, 4) + "</pre>")
+        /* END OF HTML OBJECT WORK */
     })
 </script>
+<!-- END OF JAVASCRIPT -->

@@ -1,8 +1,12 @@
 {% load static %}
+<!-- START OF DJANGO DATA-->
 {{ sol_day|json_script:'sol_day' }}
 {{ sensors|json_script:'sensors' }}
 {{ wind_sectors|json_script:'wind_sectors' }}
+<!-- END OF DJANGO DATA-->
 
+
+<!--suppress ALL -->
 <div id="wind_rose">
     <div id="chart">
         <div id="chart_title"></div>

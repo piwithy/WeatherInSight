@@ -102,24 +102,6 @@ function unit_converter(sensor, value, lang) {
     }
 }
 
-function sortByKey(jsObj) {
-    var sortedArray = [];
-
-    // Push each JSON Object entry in array by [key, value]
-    for (var i in jsObj) {
-        sortedArray.push([i, jsObj[i]]);
-    }
-
-    // Run native sort function and returns sorted array.
-    return sortedArray.sort();
-}
-
-function load_json_file(url) {
-    let json_data = null;
-    fetch(url).then(response => response.json()).then(json => json_data = json)
-    return json_data;
-}
-
 function key_format(key, lang) {
     const keys = {
         'fr': {
@@ -232,7 +214,7 @@ function en_date_nbr(date) {
 function time_span(first_UTC, last_UTC, lang) {
     let out_str = ""
     if (lang === 'fr') {
-        months = {
+        const months = {
             0: 'Janvier',
             1: 'Fevrier',
             2: 'Mars',
@@ -261,7 +243,7 @@ function time_span(first_UTC, last_UTC, lang) {
         else
             out_str += first_UTC.getFullYear()
     } else {
-        months = {
+        const months = {
             0: 'January',
             1: 'February',
             2: 'March',
