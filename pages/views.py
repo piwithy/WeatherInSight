@@ -9,22 +9,6 @@ def redirector(request):
     return render(request, 'pages/redirector.html')
 
 
-def nav_bar(request, lang='en'):
-    """
-    View used to load the Navigation bar from page Canvas
-    """
-    env = {'lang': lang}
-    return render(request, 'pages/common/nav_bar.html', env)
-
-
-def footer(request, lang='en'):
-    """
-    View used to load the Footer from page Canvas
-    """
-    env = {'lang': lang}
-    return render(request, 'pages/common/footer.html', env)
-
-
 def index(request, lang='en'):
     """
     index page of the website

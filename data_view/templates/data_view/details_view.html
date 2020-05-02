@@ -2,13 +2,14 @@
 {{ sol_day|json_script:'sol_day' }}
 {{ sensors|json_script:'sensors' }}
 {{ wind_sectors|json_script:'wind_sectors' }}
-<table>
-    <caption id="sol_date"></caption>
-    <thead id="table_head"></thead>
-    <tbody id="table_body"></tbody>
-</table>
-<div id="debug"></div>
-
+<div id="details">
+    <table>
+        <caption id="sol_date"></caption>
+        <thead id="table_head"></thead>
+        <tbody id="table_body"></tbody>
+    </table>
+    <div id="debug"></div>
+</div>
 <script>
     $(document).ready(function () {
         const lang_details = "{{ lang }}";

@@ -8,8 +8,6 @@ urlpatterns = [
     path('data_view/', include('data_view.urls')),
 
     path('', views.redirector, name='redirector'),
-    path('<str:lang>/common/nav_bar', views.nav_bar, name='nav_bar'),
-    path('<str:lang>/common/footer', views.footer, name='footer'),
 
     path('<str:lang>/', views.index, name='index'),
     path('<str:lang>/data_index', views.data_index, name='data_index'),  # Temporary
