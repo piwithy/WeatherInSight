@@ -17,12 +17,3 @@ class ModelTestCase(TestCase):
         self.assertEqual(hit.count, 0)
         self.assertEqual(hit.date_creation, now)
         self.assertEqual(str(hit), "Hits id=" + str(hit.id))
-
-
-class WiewDataIndexTest(TestCase):
-    # TODO Implementer des test sur la page DataIndex
-    def test_content(self):
-        """
-        Checking if the generated pages contains the mandatory content
-        """
-        self.assertTrue(True)

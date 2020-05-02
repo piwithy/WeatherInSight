@@ -24,16 +24,10 @@ def index(request):
 
 
 def data_index(request):
+    # TODO recuperation des données util a la pages
     data = request.session['data']
-    try:
-        hits = Hits.objects.latest('-date_creation')
-    except exceptions.ObjectDoesNotExist as e:
-        hits = Hits()
-        hits.date_creation = timezone.now()
-    hits.count += 1
-    hits.save()
     env = {
-        'hits': hits.count,
+        'sol_list': utils.sol_days_2_json(), # Exemple de donnée
         'lang': data['lang']
     }
     return render(request, 'data_view/index.html', env)

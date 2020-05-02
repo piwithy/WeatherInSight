@@ -1,0 +1,39 @@
+{% load static %}
+<!-- START OF DJANGO DATA-->
+{{ sol_list |json_script:'sol_list' }}
+<!-- END OF DJANGO DATA-->
+
+<!-- START OF HTML OBJECTS -->
+<div id="data_index">
+
+    <!-- TODO Contenue de la page -->
+
+    <div id="debug"></div> <!-- Div de debug pour visualiser les donnée recuperer avec Django -->
+</div>
+<!-- END OF HTML OBJECTS -->
+
+<!-- START OF JAVASCRIPT -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        /* START of PAGE FUNCTIONS */
+
+        /* END OF PAGES FUNCTIONS */
+
+        /* Start Of Javascript Django DATA  */
+        const lang = "{{ lang }}"; // Langue du site, ex: "fr"
+        const sol_list = JSON.parse(document.getElementById('sol_list').textContent); //donées au format json <==> dico python
+        /* END Of Javascript Django DATA */
+
+        /* START of HTML OBJECT DECLARATION */
+        let debug_html = $('#debug');
+        /* END od HTML OBJECT DECLARATION*/
+
+        /* START OF HTML OBJECT WORK*/
+
+        debug_html.html("<pre>" + JSON.stringify(sol_list, null, 4) + "</pre>")
+
+        /* END OF HTML OBJECT WORK*/
+        //$('#debug').html("sol_day<br><pre>" + JSON.stringify(sol_day, null, 4) + "</pre><br>sensors<br><pre>" + JSON.stringify(sensors, null, 4) + "</pre><br>wind_sectors<br><pre>" + JSON.stringify(wind_sectors, null, 4) + "</pre>")
+    })
+</script>
+<!-- END OF JAVASCRIPT -->
