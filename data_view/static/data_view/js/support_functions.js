@@ -115,22 +115,42 @@ function is_valid(valid, lang) {
 
 }
 
-function unit_converter(sensor, value, lang) {
-    if (lang === 'fr') {
-        if (sensor === 'AT') {
-            return value.toFixed(3) + " °C"
-        } else if (sensor === 'PRE') {
-            return pa_2_mbar(value).toFixed(3) + " mBar"
-        } else if (sensor === 'HWS') {
-            return mps_2_kph(value).toFixed(3) + " km/h"
+function unit_converter(sensor, value, lang, no_unit = false) {
+    if (no_unit) {
+        if (lang === 'fr') {
+            if (sensor === 'AT') {
+                return value.toFixed(3)
+            } else if (sensor === 'PRE') {
+                return pa_2_mbar(value).toFixed(3)
+            } else if (sensor === 'HWS') {
+                return mps_2_kph(value).toFixed(3)
+            }
+        } else {
+            if (sensor === 'AT') {
+                return celsius_2_fahrenheit(value).toFixed(3)
+            } else if (sensor === 'PRE') {
+                return pa_2_psi(value).toFixed(3)
+            } else if (sensor === 'HWS') {
+                return mps_2_mph(value).toFixed(3)
+            }
         }
     } else {
-        if (sensor === 'AT') {
-            return celsius_2_fahrenheit(value).toFixed(3) + " °F"
-        } else if (sensor === 'PRE') {
-            return pa_2_psi(value).toFixed(3) + " PSI"
-        } else if (sensor === 'HWS') {
-            return mps_2_mph(value).toFixed(3) + " mph"
+        if (lang === 'fr') {
+            if (sensor === 'AT') {
+                return value.toFixed(3) + " °C"
+            } else if (sensor === 'PRE') {
+                return pa_2_mbar(value).toFixed(3) + " mBar"
+            } else if (sensor === 'HWS') {
+                return mps_2_kph(value).toFixed(3) + " km/h"
+            }
+        } else {
+            if (sensor === 'AT') {
+                return celsius_2_fahrenheit(value).toFixed(3) + " °F"
+            } else if (sensor === 'PRE') {
+                return pa_2_psi(value).toFixed(3) + " PSI"
+            } else if (sensor === 'HWS') {
+                return mps_2_mph(value).toFixed(3) + " mph"
+            }
         }
     }
 }

@@ -11,7 +11,13 @@
             <div class="sol_data">
                 <div class="sol_date"></div>
                 <div id="empty"></div>
-                <div class="sol_temp"></div>
+                <div class="sol_temp">
+                    <div class="temp"></div>
+                    <div id="empty"></div>
+                    <div id="temp_chart_area">
+                        <canvas id="temp_chart"></canvas>
+                    </div>
+                </div>
                 <div id="empty"></div>
                 <div class="sol_sensors"></div>
             </div>
@@ -36,6 +42,14 @@
 <script type="text/javascript">
     $(document).ready(function () {
         /* START of PAGE FUNCTIONS */
+        function get_temp_unit(lang) {
+            switch (lang) {
+                case 'fr':
+                    return '°C'
+                default:
+                    return '°F'
+            }
+        }
 
         /* END OF PAGES FUNCTIONS */
 
@@ -52,7 +66,9 @@
             sol_data: {
                 sol_link: $('.main_sol_link'),
                 sol_date: $('.sol_date'),
-                sol_temp: $('.sol_temp'),
+                sol_temp: {
+                    temp: $('.temp')
+                },
                 sol_sensors: $('.sol_sensors'),
             },
             wind_rose_chart: {
@@ -72,7 +88,81 @@
         let urlmask = "{% url 'pages:sol_wind_rose' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", last_six[0]['sol_date'])
         main_sol.sol_data.sol_link.attr('href', urlmask)
         main_sol.sol_data.sol_date.html(translate('planet', translations, lang) + "<br>" + compact_date(new Date(last_six[0]['Median_UTC']), translations, lang) + " (Sol " + last_six[0].sol_date + ")")
-        main_sol.sol_data.sol_temp.html(unit_converter('AT', last_six[0]['sensors']['AT']['av'], lang))
+        main_sol.sol_data.sol_temp.temp.html(unit_converter('AT', last_six[0]['sensors']['AT']['av'], lang))
+
+        const temp_chart_ctx = document.getElementById('temp_chart')
+        let chart_temp = new Chart(temp_chart_ctx, {
+            type: 'line',
+            data: {
+                labels: (new Array(6)).fill(0).map((empty, idx) => last_six[5 - idx]['sol_date'] ? "Sol " + last_six[5 - idx]['sol_date'] : translate("wd_no_dir", translations, lang)),
+                datasets: [
+                    {
+                        label: translate('AT', translations, lang) + " " + translate('avg_short', translations, lang) + " (" + get_temp_unit(lang) + ")",
+                        data: (new Array(6)).fill(0).map((empty, idx) => last_six[5 - idx]['sensors']['AT']['av'] ? unit_converter('AT', last_six[5 - idx]['sensors']['AT']['av'], lang, true) : 0),
+                        backgroundColor: [
+                            'rgba(255, 61, 33, .6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 61, 33, 1)'
+                        ],
+                        fill: false
+                    },
+                    /*{
+                        label: translate('AT', translations, lang) + "(" + get_temp_unit(lang) + ")" + " " + translate("min_short", translations, lang),
+                        data: (new Array(6)).fill(0).map((empty, idx) => last_six[5 - idx]['sensors']['AT']['mn'] ? unit_converter('AT', last_six[5 - idx]['sensors']['AT']['mn'], lang, true) : 0),
+                        backgroundColor: [
+                            'rgba(11, 61, 145, .6)'
+                        ],
+                        borderColor: [
+                            'rgba(11, 61, 145, 1)'
+                        ],
+                        fill: false
+                    },
+                    {
+                        label: translate('AT', translations, lang) + "(" + get_temp_unit(lang) + ")" + " " + translate("max_short", translations, lang),
+                        data: (new Array(6)).fill(0).map((empty, idx) => last_six[5 - idx]['sensors']['AT']['mx'] ? unit_converter('AT', last_six[5 - idx]['sensors']['AT']['mx'], lang, true) : 0),
+                        backgroundColor: [
+                            'rgba(11, 61, 145, .6)'
+                        ],
+                        borderColor: [
+                            'rgba(11, 61, 145, 1)'
+                        ],
+                        fill: false
+                    }*/
+                ],
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#ccc'
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            fontColor: '#ccc'
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        }
+                    }]
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white'
+                    }
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                }
+            }
+        })
+
         main_sol.sol_data.sol_sensors.html(function () {
             let out_str = "";
             out_str += "<ul>"
@@ -84,8 +174,8 @@
             return out_str;
         });
 
-        const chart_ctx = document.getElementById('wind_chart');
-        let chart_wind_sectors = new Chart(chart_ctx, {
+        const wind_chart_ctx = document.getElementById('wind_chart');
+        let chart_wind_sectors = new Chart(wind_chart_ctx, {
             type: 'radar',
             data: {
                 labels: (new Array(16)).fill(0).map((empty, idx) => last_six[0]['winds'][idx] ? translate(last_six[0]['winds'][idx]['compass_point'], translations, lang) : translate("wd_no_dir", translations, lang)),
