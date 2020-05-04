@@ -1,40 +1,20 @@
 from django.shortcuts import render, get_object_or_404
-from django.core import exceptions
-from django.utils import timezone
-from data_request import utils, models
 
-from pages.models import Hits
+from data_request import utils, models
 
 
 # Create your views here.
 def index(request):
     data = request.session['data']
-    try:
-        hits = Hits.objects.latest('-date_creation')
-    except exceptions.ObjectDoesNotExist as e:
-        hits = Hits()
-        hits.date_creation = timezone.now()
-    hits.count += 1
-    hits.save()
     env = {
-        'hits': hits.count,
-        'lang': data['lang']
-    }
-    return render(request, 'data_view/index.html', env)
-
-
-def data_index(request):
-    # TODO recuperation des données util a la pages
-    data = request.session['data']
-    env = {
-        'sol_list': utils.sol_days_2_json(), # Exemple de donnée
+        'last_six_sols': utils.last_six_sols_json(),
         'lang': data['lang']
     }
     return render(request, 'data_view/index.html', env)
 
 
 def list_view(request):
-    utils.request_data()
+    # utils.request_data()
     data = request.session['data']
     env = {
         'lang': data['lang'],
@@ -69,7 +49,7 @@ def wind_rose_view(request):
 
 def request_view(request):
     data = request.session['data']
-    header, body = utils.request_data()
+    header, body, status = utils.request_data()
     env = {
         'lang': data['lang'],
         'header': dict(header),

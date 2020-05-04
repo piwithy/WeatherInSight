@@ -1,39 +1,170 @@
 {% load static %}
-{{ hits |json_script:'hits_json' }}
-<div id="index">
-    <h1 Class="project_logo"><img src="{% static 'pages/img/weather_insight_logo_nasa.png' %}" alt="Weather InSight">
-    </h1>
-    <h2>
-        <span id="project_slogan"></span>
-    </h2>
-    <p id="project_description"></p>
-    <span id="hit_counter"></span>
+<!-- START OF DJANGO DATA-->
+{{ last_six_sols |json_script:'last_six_sols' }}
+<!-- END OF DJANGO DATA-->
+
+<!-- START OF HTML OBJECTS -->
+<div class="data_index">
+
+    <a href="#" class="main_sol_link">
+        <div class="main_sol">
+            <div class="sol_data">
+                <div class="sol_date"></div>
+                <div id="empty"></div>
+                <div class="sol_temp"></div>
+                <div id="empty"></div>
+                <div class="sol_sensors"></div>
+            </div>
+            <div class="wind_rose_chart">
+                <div class="chart_area">
+                    <canvas id="wind_chart"></canvas>
+                </div>
+                <div class="chart_fact"></div>
+            </div>
+        </div>
+    </a>
+
+    <div id="last_five"></div>
+
+    <div id="other_sols"></div>
+
+    <div id="debug"></div> <!-- Div de debug pour visualiser les données fourni par Django -->
 </div>
+<!-- END OF HTML OBJECTS -->
 
-
-<script>
+<!-- START OF JAVASCRIPT -->
+<script type="text/javascript">
     $(document).ready(function () {
-        const hits_count = JSON.parse(document.getElementById('hits_json').textContent);
-        const lang_index = '{{ lang }}'
-        $('#project_slogan').html(function () {
-            if (lang_index === 'fr')
-                return 'La météo Marsienne sur Terre grace a InSight';
-            else
-                return 'Mars Weather right down to earth thanks to InSight';
-        })
-        $('#project_description').html(function () {
-            if (lang_index === 'fr')
-                return 'Vous vous êtes toutjours demandez quelle temps il fait sur Mars?<br>Quand on aura fini VOUS le saurez!';
-            else
-                return "You ever wondered what's the weather on MARS?<br>When we will have finished YOU will know!";
-        })
-        $('#hit_counter').html(function () {
-            if (lang_index === 'fr') {
-                return "Vous êtes le visiteur " + hits_count;
-            } else {
-                return "You are visitor " + hits_count
+        /* START of PAGE FUNCTIONS */
+
+        /* END OF PAGES FUNCTIONS */
+
+        /* Start Of Javascript Django DATA  */
+        //console.log(translations);
+
+        const lang = "{{ lang }}"; // Langue du site, ex: "fr"
+        const last_six = JSON.parse(document.getElementById('last_six_sols').textContent); //donées au format json <==> dico python
+        const arrow_url = "{% static 'pages/img/arrow_down.png' %}"
+        /* END Of Javascript Django DATA */
+
+        /* START of HTML OBJECT DECLARATION */
+        let main_sol = {
+            sol_data: {
+                sol_link: $('.main_sol_link'),
+                sol_date: $('.sol_date'),
+                sol_temp: $('.sol_temp'),
+                sol_sensors: $('.sol_sensors'),
+            },
+            wind_rose_chart: {
+                chart_area: $('.chart_area'),
+                chart_fact: $('.chart_fact')
             }
 
+        };
+        let last_five = $('#last_five');
+
+        let other_sols = $('#other_sols');
+
+        let debug_html = $('#debug');
+        /* END od HTML OBJECT DECLARATION*/
+
+        /* START OF HTML OBJECT WORK*/
+        let urlmask = "{% url 'pages:sol_wind_rose' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", last_six[0]['sol_date'])
+        main_sol.sol_data.sol_link.attr('href', urlmask)
+        main_sol.sol_data.sol_date.html(translate('planet', translations, lang) + "<br>" + compact_date(new Date(last_six[0]['Median_UTC']), translations, lang) + " (Sol " + last_six[0].sol_date + ")")
+        main_sol.sol_data.sol_temp.html(unit_converter('AT', last_six[0]['sensors']['AT']['av'], lang))
+        main_sol.sol_data.sol_sensors.html(function () {
+            let out_str = "";
+            out_str += "<ul>"
+            out_str += "<li>" + translate("max_short", translations, lang) + '. ' + unit_converter('AT', last_six[0]['sensors']['AT']['mx'], lang) + "</li>";
+            out_str += "<li>" + translate("min_short", translations, lang) + '. ' + unit_converter('AT', last_six[0]['sensors']['AT']['mn'], lang) + "</li>";
+            out_str += "<li>" + translate("pressure", translations, lang) + '. ' + unit_converter('PRE', last_six[0]['sensors']['PRE']['av'], lang) + "</li>";
+            out_str += "<li>" + translate("avg_wind_speed", translations, lang) + '. ' + unit_converter('HWS', last_six[0]['sensors']['HWS']['av'], lang) + "</li>";
+            out_str += "</ul>"
+            return out_str;
+        });
+
+        const chart_ctx = document.getElementById('wind_chart');
+        let chart_wind_sectors = new Chart(chart_ctx, {
+            type: 'radar',
+            data: {
+                labels: (new Array(16)).fill(0).map((empty, idx) => last_six[0]['winds'][idx] ? translate(last_six[0]['winds'][idx]['compass_point'], translations, lang) : translate("wd_no_dir", translations, lang)),
+                datasets: [{
+                    label: translate('chart_data_title', translations, lang),
+                    data: (new Array(16)).fill(0).map((empty, idx) => last_six[0]['winds'][idx] ? (last_six[0]['winds'][idx]['ct'] / (last_six[0]['winds']['cnt'] / 100)).toFixed(3) : 0),
+                    backgroundColor: [
+                        'rgba(255, 61, 33, .6)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 61, 33, 1)',
+                    ],
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                responsive: true,
+                scale: {
+                    ticks: {
+                        display: false,
+                        backdropColor: 'rgba(0,0,0,0)',
+                        fontColor: 'white'
+                    },
+                    pointLabels: {
+                        fontColor: 'white'
+                    },
+                    gridLines: {
+                        color: '#ccc'
+                    },
+                    angleLines: {
+                        color: '#ddd'
+                    }
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white'
+                    }
+                }
+            }
         })
+
+        main_sol.wind_rose_chart.chart_fact.html(function () {
+            if (lang === 'fr') {
+                return 'Au Sol ' + last_six[0]['sol_date'] + ' le vent le plus présent était orienté ' + translate(last_six[0]['winds']['most_common']['compass_point'], translations, lang)
+            } else {
+                return 'On Sol ' + last_six[0]['sol_date'] + ' ' + translate(last_six[0]['winds']['most_common']['compass_point'], translations, lang) + ' was the most common wind'
+            }
+        })
+
+        last_five.html(function () {
+            let out_str = "<ul>"
+            out_str += "<li id='empty'></li>"
+            for (let i = 1; i < last_six.length; i++) {
+                let urlmask = "{% url 'pages:sol_wind_rose' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", last_six[i]['sol_date'])
+                out_str += "<li id='sol_" + last_six[i].sol_date + "'><a href='" + urlmask + "'";
+                out_str += "<div class='title'>" + translations[lang]["days_long"][(new Date(last_six[i]["Median_UTC"])).getDay()] + " (Sol " + last_six[i]["sol_date"] + ")" + "</div>";
+                out_str += "<div class='arrow'><img src='" + arrow_url + "' style='max-height:100px;transform-origin: center center;transform:rotate(" + last_six[i]['winds']['most_common']['compass_degrees'] + "deg)' alt='wind direction:" + last_six[i]['winds']['most_common']['compass_degrees'] + "°'></div>"
+                out_str += "<div class='wind_spd'>" + translate(last_six[i]['winds']['most_common']['compass_point'], translations, lang) + " " + unit_converter('HWS', last_six[i]['sensors']['HWS']['av'], lang) + "</div>"
+                out_str += "</a></li>";
+                out_str += "<li id='empty'></li>"
+            }
+            return out_str + "</ul>"
+        })
+
+        const list_url = "{% url 'pages:sol_list' lang %}";
+        other_sols.html("<a href='" + list_url + "'>" + translate("other_sols", translations, lang) + "</a>")
+
+
+        $.ajax({
+            url: "{% url 'data_request:request_data' %}",
+            success: function (data) {
+                //console.log("Request: " + data)
+            }
+        })
+
+        //debug_html.html("<pre>" + JSON.stringify(last_six, null, 4) + "</pre>")
+
+        /* END OF HTML OBJECT WORK*/
+
     })
 </script>
+<!-- END OF JAVASCRIPT -->

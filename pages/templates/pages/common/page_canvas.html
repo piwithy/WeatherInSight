@@ -2,199 +2,138 @@
 <!DOCTYPE html>
 <html lang="{{ lang }}">
 <head>
-    <!-- START OF PAGE CONFIGURATION-->
+    <!-- PAGE CONFIG -->
     <meta charset="UTF-8">
-    <title>Error!</title>
+    <title>Loading...</title>
     <link rel="sortcut icon" type="image/png" href="{% static 'pages/img/insight.png' %}">
-    <!-- START OF PAGE CONFIGURATION-->
 
-    <!-- START STYLESHEETS -->
+    <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'pages/css/style.css' %}">
-    <!-- START STYLESHEETS -->
 
-    <!-- START OF JQUERY -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-    <!-- END OF JQUERY -->
+    <!-- JS Libraries -->
+    <script src="https://code.jquery.com/jquery-3.5.0.js"
+            integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
 
-    <!-- START OF JQUERY-UI -->
+    <!-- JQUERY-UI -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://piwithy.fr/files/libs/jquery-ui/ui/i18n/datepicker-fr.js"></script>
-    <!-- END OF JQUERY-UI -->
 
-    <!-- START OF CHART-JS -->
+    <!-- CHARTJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-    <!-- START OF CHART-JS -->
 
-    <!-- START OF SELF-LIBRARY -->
+    <!-- Project Wide JS -->
     <script type="text/javascript" src="{% static 'data_view/js/support_functions.js' %}"></script>
-    <!-- START OF SELF-LIBRARY -->
+    <script type="text/javascript" src="{% static 'data_view/js/translations.js' %}"></script>
+    <script type="text/javascript" id="nav_data">
+        const nav_data = [
+            {
+                id: "ensta",
+                title: {
+                    fr: "ENSTA-Bretagne",
+                    en: "ENSTA-Bretagne"
+                },
+                content: {
+                    fr: '<img style="max-height:50px" alt="Logo ENSTA-Bretagne" src="{% static 'pages/img/ensta-logoh-rvb-blanctransparent.png' %}">',
+                    en: '<img style="max-height:50px" alt="ENSTA-Bretagne Logo" src="{% static 'pages/img/ensta-logoh-rvb-blanctransparent.png' %}">'
+                },
+                "url": "https://www.ensta-bretagne.fr/{{ lang }}"
+            },
+            {
+                id: "nasa",
+                title: {
+                    fr: "NASA",
+                    en: "NASA"
+                },
+                content: {
+                    fr: '<img style="max-height:50px" alt="Logo NASA" src="{% static 'pages/img/nasa-logo.svg' %}">',
+                    en: '<img style="max-height:50px" alt="NASA Logo" src="{% static 'pages/img/nasa-logo.svg' %}">'
+                },
+                url: "https://www.nasa.gov/"
+            },
+            {
+                id: "django",
+                title: {
+                    fr: "Django Project",
+                    en: "Django Project"
+                },
+                content: {
+                    fr: '<img style="max-height:50px" alt="Logo Django" src="{% static 'pages/img/django_logo.png' %}">',
+                    en: '<img style="max-height:50px" alt="Django Logo" src="{% static 'pages/img/django_logo.png' %}">'
+                },
+                url: "https://www.djangoproject.com/"
+            },
+            {
+                id: "github_project",
+                title: {
+                    fr: "Projet sur GitHub",
+                    en: "GitHub Project"
+                },
+                content: {
+                    fr: '<img style="max-height:50px" alt="Logo GitHub" src="{% static 'pages/img/github_logo.svg' %}">',
+                    en: '<img style="max-height:50px" alt="GitHub Logo" src="{% static 'pages/img/github_logo.svg' %}">'
+                },
+                url: "https://github.com/piwithy/WeatherInSight"
+            }
+        ]
+    </script>
+
 </head>
 <body>
 
 <div id="wrapper">
-    <div id="nav_bar"></div>
-
-    <div id="content">
-        <div id="place_holder">
-            {% if lang == "fr" %}
-                <h1>Page en cours de Chargement, Veuillez Patientez</h1>
-            {% else %}
-                <h1>Loading Please Wait</h1>
-            {% endif %}
-        </div>
+    <div id="nav">
+        <div id="home_button" style="height: 50px"></div>
+        <div id="empty"></div>
+        <div id="nav_bar"></div>
     </div>
+    <div id="content"><h1 style="text-align: center">Loading. Please Wait</h1></div>
 
-    <div id="footer">
-        <p>
-            <span id="copyright"></span>
-            <span id="joke"></span>
-        </p>
-    </div>
+    <div id="footer"></div>
 </div>
 
-<script>
-    const nav_data = [
-        {
-            id: "weatherinsight",
-            title: {
-                fr: "Weather InSight",
-                en: "Weather InSight"
-            },
-            content: {
-                fr: '<img alt="Logo Weather Insight" src="{% static 'pages/img/weather_insight_logo_nasa.png' %}">',
-                en: '<img alt="Weather Insight Logo" src="{% static 'pages/img/weather_insight_logo_nasa.png' %}">'
-            },
-            url: "{% url 'pages:index' lang=lang %}"
-        },
-        /*{
-            id: "empty",
-            title: {
-                fr: "",
-                en: ""
-            },
-            content: {
-                fr: "",
-                en: ""
-            },
-            url: ""
-        },
-        {
-            id: "list_view",
-            title: {
-                fr: "Liste des Sols",
-                en: "Sols List"
-            },
-            content: {
-                fr: "Liste des Sols",
-                en: "Sols List"
-            },
-            url: "{% url 'pages:sol_list' lang=lang %}"
-        },*/
-        {
-            id: "empty",
-            title: {
-                fr: "",
-                en: ""
-            },
-            content: {
-                fr: "",
-                en: ""
-            },
-            url: ""
-        },
-        {
-            id: "ensta",
-            title: {
-                fr: "ENSTA-Bretagne",
-                en: "ENSTA-Bretagne"
-            },
-            content: {
-                fr: '<img alt="Logo ENSTA-Bretagne" src="{% static 'pages/img/ensta-logoh-noir.png' %}">',
-                en: '<img alt="ENSTA-Bretagne Logo" src="{% static 'pages/img/ensta-logoh-noir.png' %}">'
-            },
-            "url": "https://www.ensta-bretagne.fr/{{ lang }}"
-        },
-        {
-            id: "nasa",
-            title: {
-                fr: "NASA",
-                en: "NASA"
-            },
-            content: {
-                fr: '<img alt="Logo NASA" src="{% static 'pages/img/nasa-logo.svg' %}">',
-                en: '<img alt="NASA Logo" src="{% static 'pages/img/nasa-logo.svg' %}">'
-            },
-            url: "https://www.nasa.gov/"
-        },
-        {
-            id: "django",
-            title: {
-                fr: "Django Project",
-                en: "Django Project"
-            },
-            content: {
-                fr: '<img alt="Logo Django" src="{% static 'pages/img/django_logo.png' %}">',
-                en: '<img alt="Django Logo" src="{% static 'pages/img/django_logo.png' %}">'
-            },
-            url: "https://www.djangoproject.com/"
-        },
-        {
-            id: "github_project",
-            title: {
-                fr: "Projet sur GitHub",
-                en: "GitHub Project"
-            },
-            content: {
-                fr: '<img alt="Logo GitHub" src="{% static 'pages/img/github_logo.svg' %}">',
-                en: '<img alt="GitHub Logo" src="{% static 'pages/img/github_logo.svg' %}">'
-            },
-            url: "https://github.com/piwithy/WeatherInSight"
-        }
-    ]
-</script>
-
-<script>
+<script type="text/javascript" id="main_script">
     $(document).ready(function () {
-        const lang_canvas = "{{ lang }}"
+        const lang = "{{ lang }}";
 
-        let nav_bar = $('#nav_bar');
-        let content = $('#content')
-        let footer = $('#footer');
+        const home_button = $('#home_button');
+        const nav_bar = $('#nav_bar');
+        const content = $('#content');
+        const footer = $('#footer');
+
+        switch (lang) {
+            case 'fr':
+                document.title = "{{ title_fr }} | " + location.hostname;
+                break;
+            default:
+                document.title = "{{ title_en }} | " + location.hostname;
+                break;
+        }
+
+        home_button.html("<a href='{% url 'pages:index' lang %}'><img style='max-height:50px' alt='logo' src='{% static 'pages/img/weather_insight_logo_nasa.png' %}'></a>")
 
         nav_bar.html(function () {
-            let out_str = "";
-            out_str += "<nav role='navigation'><ul class='menu'>";
-            for (const i in nav_data) {
-                out_str += '<li id="' + nav_data[i].id + '"><a title="' + nav_data[i].title[lang_canvas] + '" href="' + nav_data[i].url + '">' + nav_data[i].content[lang_canvas] + '</a> </li>';
+            let nav_str = "<nav role='navigation'><ul>";
+            for (let i = 0; i < nav_data.length; i++) {
+                nav_str += "<li id='" + nav_data[i].id + "'><a href='" + nav_data[i].url + "'>" + nav_data[i].content[lang] + "</a></li>";
             }
-            out_str += "</ul></nav>";
-            return out_str;
+            return nav_str + "</ul></nav>"
         });
-
-        content.load("{% url content_id %}");
 
         footer.html(function () {
             let copyright_year_str;
             if ((new Date()).getFullYear() !== 2020) {
                 copyright_year_str = "2020-" + (new Date()).getFullYear();
             } else {
-                copyright_year_str = "2020"
+                copyright_year_str = "2020";
             }
-            let out_str = "<p>"
-            out_str += "Copyright &copy; " + location.hostname + " " + copyright_year_str + "<br>";
-            out_str += key_format('joke', lang_canvas);
-            out_str += "</p>"
-            return out_str
+            return "<p>" + "Copyright &copy; " + location.hostname + " " + copyright_year_str + "<br>" + translate('joke', translations, lang) + "</p>"
         });
 
-        if (lang_canvas === "fr") {
-            document.title = "{{ title_fr }} | " + location.hostname;
-        } else {
-            document.title = "{{ title_en }} | " + location.hostname;
-        }
+        content.load("{% url content_id %}");
 
-    })
+
+    });
 </script>
 
 </body>

@@ -1,5 +1,6 @@
 {% load static %}
 {{ sol_days |json_script:'sol_days_json' }}
+<!--suppress ALL -->
 <div id="list_view">
     <div id="head_selector" style="margin-bottom: 10px">
         <form id="from_to_form" action="javascript:alert('Error!');">
@@ -32,7 +33,7 @@
 <script>
     $(document).ready(function () {
         //Data from DJANGO
-        const lang_list = '{{ lang }}';
+        const lang = '{{ lang }}';
         const sol_days = JSON.parse(document.getElementById('sol_days_json').textContent)
 
         //PAGE Functions
@@ -42,14 +43,14 @@
                 let itr = 0;
                 const filtered_sols = sols.filter(sol => (new Date(start) <= new Date(sol.median_utc) && new Date(sol.median_utc) <= new Date(end)))
                 if (sols.length === 0) {
-                    if (lang_list === 'fr') {
+                    if (lang === 'fr') {
                         return "<tr><td colspan='6'>Aucune Donées Disponible</td></tr>";
                     } else {
                         return "<tr><td colspan='6'>No Data in Available</td></tr>";
                     }
                 }
                 if (filtered_sols.length === 0) {
-                    if (lang_list === 'fr') {
+                    if (lang === 'fr') {
                         return "<tr><td colspan='6'>Aucune Donées dans la Plage Séléctionée</td></tr>";
                     } else {
                         return "<tr><td colspan='6'>No Data in Selection</td></tr>";
@@ -58,18 +59,18 @@
                 for (const i in filtered_sols) {
                     out_str += "<tr>";
                     out_str += "<td data-label='Sol'>" + filtered_sols[i]['sol_date'] + "</td>"
-                    out_str += "<td data-label='" + key_format('from', lang_list) + "'>" + date_format(new Date(filtered_sols[i]['first_utc']), lang_list) + "</td>"
-                    out_str += "<td data-label='" + key_format('to', lang_list) + "'>" + date_format(new Date(filtered_sols[i]['last_utc']), lang_list) + "</td>"
-                    out_str += "<td data-label='" + key_format('season', lang_list) + "'>" + key_format(filtered_sols[i]['season'], lang_list) + "</td>"
+                    out_str += "<td data-label='" + translate('from', translations, lang) + "'>" + date_format(new Date(filtered_sols[i]['first_utc']), lang) + "</td>"
+                    out_str += "<td data-label='" + translate('to', translations, lang) + "'>" + date_format(new Date(filtered_sols[i]['last_utc']), lang) + "</td>"
+                    out_str += "<td data-label='" + translate('season', translations, lang) + "'>" + translate(filtered_sols[i]['season'], translations, lang) + "</td>"
                     let url_mask = "{% url 'pages:sol_wind_rose' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", filtered_sols[i]['sol_date'])
-                    out_str += "<td data-label='" + key_format('wind_rose', lang_list) + "'><a href='" + url_mask + "'>" + key_format("wind_rose", lang_list) + "</a>"
+                    out_str += "<td data-label='" + translate('wind_rose', translations, lang) + "'><a href='" + url_mask + "'>" + translate("wind_rose",translations, lang) + "</a>"
                     url_mask = "{% url 'pages:sol_detail' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", filtered_sols[i]['sol_date'])
-                    out_str += "<td data-label='" + key_format('details', lang_list) + "'><a href='" + url_mask + "'>" + key_format("more_info", lang_list) + "</a>"
+                    out_str += "<td data-label='" + translate('details', translations, lang) + "'><a href='" + url_mask + "'>" + translate("more_info",translations, lang) + "</a>"
 
                     out_str += "</tr>";
                 }
                 out_str += "<tr><td colspan='6'><a href='{% url 'pages:request_viewer' lang=lang %}'>"
-                if (lang_list === 'fr') {
+                if (lang === 'fr') {
                     out_str += "Voir le résultat complet";
                 } else {
                     out_str += "See full response";
@@ -97,31 +98,31 @@
         let update_button = $('#update_btn');
         let from_to_form = $('#from_to_form');
         let sol_day_h = $('#sol_day_h').html('Sol');
-        let first_utc_h = $('#first_utc_h').html(key_format('from', lang_list));
-        let last_utc_h = $('#last_utc_h').html(key_format('to', lang_list));
-        let season_h = $('#season_h').html(key_format('season', lang_list));
-        let wind_rose_h = $('#wind_rose_h').html(key_format('wind_rose', lang_list));
-        let details_h = $('#details_h').html(key_format('details', lang_list));
+        let first_utc_h = $('#first_utc_h').html(translate('from', translations, lang));
+        let last_utc_h = $('#last_utc_h').html(translate('to', translations, lang));
+        let season_h = $('#season_h').html(translate('season', translations, lang));
+        let wind_rose_h = $('#wind_rose_h').html(translate('wind_rose', translations, lang));
+        let details_h = $('#details_h').html(translate('details', translations, lang));
         let debug = $('#debug');
 
         //Building Page
         page_title.html(function () {
-            if (lang_list === 'fr') {
+            if (lang === 'fr') {
                 return "Liste des Sols";
             } else {
                 return "Sols List";
             }
         });
 
-        from_cal_from.html(key_format('from', lang_list));
-        to_cal_to.html(key_format('to', lang_list));
+        from_cal_from.html(translate('from', translations, lang));
+        to_cal_to.html(translate('to', translations, lang));
 
         from_datepicker.datepicker('setDate', new Date(sol_days[sol_days.length - 1]['median_utc']));
-        from_datepicker.datepicker("option", $.datepicker.regional[lang_list]);
+        from_datepicker.datepicker("option", $.datepicker.regional[lang]);
         to_datepicker.datepicker('setDate', new Date(sol_days[0]['median_utc']));
-        to_cal_to.datepicker("option", $.datepicker.regional[lang_list]);
+        to_cal_to.datepicker("option", $.datepicker.regional[lang]);
 
-        update_button.val(key_format('update', lang_list))
+        update_button.val(translate('update', translations, lang))
 
         from_to_form.submit(function (event) {
             build_list(sol_days, from_datepicker.datepicker('getDate'), to_datepicker.datepicker('getDate'));

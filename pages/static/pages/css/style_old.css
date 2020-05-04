@@ -1,0 +1,222 @@
+html, body, #wrapper {
+    /*height: 100%;*/
+    margin: 0;
+    padding: 0;
+}
+
+#wrapper {
+    font-family: sans-serif;
+    padding: 10px;
+    text-align: left;
+}
+
+#nav_bar {
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #ccc;
+}
+
+#nav_bar ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+}
+
+#nav_bar #empty {
+    flex-grow: 1;
+}
+
+#nav_bar ul li a {
+    display: block;
+    font-size: 45px;
+    max-height: 50px;
+    text-decoration: none;
+    color: black;
+    text-align: center;
+}
+
+#nav_bar ul li a:hover {
+    background: #EEEEEE;
+}
+
+#nav_bar img {
+    max-height: 50px;
+}
+
+#content #index, #place_holder {
+    text-align: center;
+}
+
+#content #index img {
+    max-width: 50vw;
+}
+
+#content #list_view #list {
+    min-width: 100%;
+}
+
+#content #list_view table,
+#content #details table,
+#content #request table,
+#content #wind_rose table {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    padding: 0;
+    min-width: 100%;
+    table-layout: fixed;
+}
+
+#content #wind_rose table {
+    margin: 10px 0 10px 0;
+}
+
+#content #list_view table caption,
+#content #details table caption,
+#content #request table caption,
+#content #wind_rose table caption {
+    font-size: 1.5em;
+    margin: .5em 0 .75em;
+}
+
+#content #list_view table tr,
+#content #details table tr,
+#content #request table tr,
+#content #request table tr,
+#content #wind_rose table tr {
+    border: 1px solid #ccc;
+    background: #f8f8f8;
+}
+
+#content #list_view table td,
+#content #list_view table th,
+#content #details table td,
+#content #details table th,
+#content #request table td,
+#content #request table th,
+#content #wind_rose table td,
+#content #wind_rose table th {
+    padding: .625em;
+    text-align: center;
+}
+
+#content #list_view #head_selector table td {
+    background-color: #ccc;
+}
+
+
+#content #list_view table th,
+#content #details table th,
+#content #request table th,
+#content #wind_rose table th {
+    font-size: .85em;
+    left: .1em;
+    text-transform: uppercase;
+    background-color: #ccc;
+}
+
+#content #wind_rose {
+    display: flex;
+}
+
+#content #wind_rose #chart {
+    flex-grow: 2;
+    max-width: 65vw;
+    text-align: center;
+}
+
+#content #wind_rose #sensors_tables {
+    flex-grow: 1;
+    display: block;
+}
+
+
+#footer {
+    text-align: center;
+}
+
+@media (max-width: 1080px) {
+    #nav_bar ul {
+        flex-direction: column;
+    }
+
+    #nav_bar #empty {
+        flex-grow: 0;
+    }
+
+    #content #list_view table,
+    #content #details table,
+    #content #request table {
+        border: 0;
+    }
+
+    #content #list_view table caption,
+    #content #details table caption,
+    #content #request table caption {
+        font-size: 1.3em;
+    }
+
+    #content #list_view table thead,
+    #content #details table thead,
+    #content #request table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    #content #list_view table tr,
+    #content #details table tr,
+    #content #request table tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+    }
+
+    #content #list_view table td,
+    #content #details table td,
+    #content #request table td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+
+    #content #list_view table td::before,
+    #content #details table td:before,
+    #content #request table td:before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    #content #list_view table td:last-child,
+    #content #details table td:last-child,
+    #content #request table td:last-child {
+        border-bottom: 0;
+    }
+
+    #content #list_view #list table tr:last-child td {
+        text-align: center;
+    }
+
+    #content #wind_rose {
+        flex-direction: column;
+    }
+
+    #content #wind_rose #chart {
+        width: 100%;
+        max-width: 100vw;
+    }
+
+    #content #wind_rose {
+        flex-direction: column;
+    }
+
+
+}

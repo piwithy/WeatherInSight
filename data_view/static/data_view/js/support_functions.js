@@ -11,20 +11,21 @@ function date_format(date, lang) {
     let months = {};
     switch (lang) {
         case 'fr':
-            months = {
-                0: 'Janvier',
-                1: 'Fevrier',
-                2: 'Mars',
-                3: 'Avril',
-                4: 'Mai',
-                5: 'Juin',
-                6: 'Juillet',
-                7: 'Août',
-                8: 'Septembre',
-                9: 'Octobre',
-                10: 'Novembre',
-                11: 'Decembre'
-            };
+            months = [
+                'Janvier',
+                'Fevrier',
+                'Mars',
+                'Avril',
+                'Mai',
+                'Juin',
+                'Juillet',
+                'Août',
+                'Septembre',
+                'Octobre',
+                'Novembre',
+                'Decembre'
+            ];
+            //console.log(date.getMonth() + ":" + months[date.getMonth()])
             return num_2_str(date.getDate()) + ' ' + months[date.getMonth()] + ' ' + date.getFullYear() + ' ' + num_2_str(date.getHours()) + ':' + num_2_str(date.getMinutes()) + ':' + num_2_str(date.getSeconds()) + '';
         case 'en':
             months = {
@@ -65,6 +66,38 @@ function date_format(date, lang) {
     }
 }
 
+function compact_date(date, translation_dict, lang) {
+    //console.log(date + "," + date.getDay() + ',' + date.getMonth() + ',' + date.getDate())
+    //console.log(date + "," + date.getDay() + ',' + date.getMonth() + ',' + date.getDate())
+    if (!date instanceof Date) throw "date not Type Date"
+    if (!lang in translation_dict) throw "Unsupported Language: \"" + lang + "\""
+    if (!('days_short' in translation_dict[lang] && 'months' in translation_dict[lang])) {
+        //console.warn("days or month not fond in lang " + lang)
+        lang = "en"
+        if (!('day_short' in translation_dict[lang] && 'months' in translation_dict[lang])) {
+            throw "Unsupported Translations dict " + translation_dict
+        }
+    }
+    switch (lang) {
+        case 'fr':
+            return translation_dict[lang]['days_short'][date.getDay()] + ', ' + num_2_str(date.getDate()) + ' ' + translation_dict[lang]['months'][date.getMonth()];
+        default:
+            let en_date = date.getDate();
+            if (en_date === 1 || en_date === 21 || en_date === 31)
+                en_date += 'st';
+            else if (en_date === 2 || en_date === 22)
+                en_date += 'nd';
+            else if (en_date === 3 || en_date === 23)
+                en_date += 'rd';
+            else
+                en_date += 'th';
+            return translation_dict[lang]['days_short'][date.getDay()] + ', ' + translation_dict[lang]['months'][date.getMonth()] + ' ' + en_date;
+
+    }
+
+
+}
+
 function is_valid(valid, lang) {
     if (lang === 'fr') {
         if (valid > 0) {
@@ -87,7 +120,7 @@ function unit_converter(sensor, value, lang) {
         if (sensor === 'AT') {
             return value.toFixed(3) + " °C"
         } else if (sensor === 'PRE') {
-            return pa_2_mbar(value).toFixed(3) + "*10<sup>-3</sup></sup> Bar"
+            return pa_2_mbar(value).toFixed(3) + " mBar"
         } else if (sensor === 'HWS') {
             return mps_2_kph(value).toFixed(3) + " km/h"
         }
@@ -102,97 +135,20 @@ function unit_converter(sensor, value, lang) {
     }
 }
 
-function key_format(key, lang) {
-    const keys = {
-        'fr': {
-            'joke': "Propulsé par du Propergol 🚀",
-            'wd_no_dir': 'Pas de données',
-            'chart_data_title': "Presence du Vent (%)",
-            'average_short': '',
-            'min_short': 'Mini',
-            'max_short': 'Maxi',
-            'AT': 'Temperature',
-            'HWS': 'Vitesse du vent',
-            'PRE': 'Pression Atmospherique',
-            'request_head': 'Entête',
-            'request_body': 'Corps',
-            'more_info': "Plus d'Info",
-            'from': 'Début',
-            'to': 'Fin',
-            'wind_rose': 'Rose des Vents',
-            'details': 'Détails',
-            'SSW': 'SSO',
-            'SW': 'SO',
-            'WSW': 'OSO',
-            'W': 'O',
-            'WNW': 'ONO',
-            'NW': 'NO',
-            'NNW': 'NNO',
-            'summer': 'Été',
-            'autumn': 'Automne',
-            'winter': 'Hiver',
-            'spring': 'Printemps',
-            'key': 'Clé',
-            'value': 'Valeur',
-            'sol_date': 'Sol',
-            'season': 'Saison',
-            "First_UTC": 'Début (UTC)',
-            'Last_UTC': 'Fin (UTC)',
-            'valid': 'Validé',
-            'sensor': 'Capteur',
-            'mn': 'Valeur Minimum',
-            'av': 'Valeur Moyenne',
-            'mx': 'Valeur Maximum',
-            'ct': "Nombre d'échantillons",
-            'sector': 'Secteur',
-            'wind_sectors': 'Secteurs de Vents',
-            'compass_degrees': 'Angle de la Boussole',
-            'compass_point': 'Direction de la Boussole',
-        },
-        'en': {
-            'joke': "Powered by Rocket Fuel 🚀",
-            'wd_no_dir': 'No Data',
-            'chart_data_title': "Wind Presence (%)",
-            'min_short': 'Lows',
-            'max_short': 'Highs',
-            'average_short': '',
-            'AT': 'Temperature',
-            'HWS': 'Wind Speed',
-            'PRE': 'Atmospheric Pressure',
-            'request_head': 'Head',
-            'request_body': 'Body',
-            'more_info': "More Info",
-            'wind_rose': 'Wind Rose',
-            'summer': 'Summer',
-            'autumn': 'Autumn',
-            'winter': 'Winter',
-            'spring': 'Spring',
-            'key': 'Key',
-            'value': 'Value',
-            'sol_date': 'Sol',
-            'season': 'Season',
-            "First_UTC": 'Start (UTC)',
-            'Last_UTC': 'End (UTC)',
-            'valid': 'Validated',
-            'sensor': 'Sensor',
-            'mn': 'Minimum Value',
-            'av': 'Average Value',
-            'mx': 'Maximum Value',
-            'ct': "Sample Count",
-            'compass_degrees': 'Compass Degrees',
-            'compass_point': 'Compass Point',
-            'compass_right': 'Compass Right',
-            'compass_up': 'Compass Up',
-            'sector': 'Sector',
-            'wind_sectors': 'Wind Sectors',
-        }
-    }
+function translate(keyword, translation_dict, lang) {
     //console.log(keys)
-    let value = keys[lang.toString()][key]
+    if (keyword == null || translation_dict == null || lang == null)
+        throw "Incomplete Data for translations:" + keyword + "," + lang + "," + translation_dict
+    if (!lang in translation_dict) {
+        //console.warn("Language: " + lang + " not available in translation dict");
+        lang = 'en';
+    }
+    let value = translation_dict[lang][keyword];
     if (value == null) {
-        value = keys['en'][key]
+        value = translation_dict.en[keyword];
         if (value == null) {
-            return key
+            //console.warn("Keyword: " + keyword + " not found in translations dict for language: \"" + lang + "\"");
+            return keyword;
         }
     }
     return value
