@@ -15,18 +15,7 @@ def index(request, lang='en'):
     """
     data = {'lang': lang}
     request.session['data'] = data
-    env = {'lang': lang, 'title_en': "Coming Soon!", 'title_fr': 'Bientôt Disponible!', 'content_id': 'data_view:index'}
-    return render(request, 'pages/common/page_canvas.html', env)
-
-
-def data_index(request, lang='en'):
-    """
-    Index page of the website (DATA)
-    """
-    data = {'lang': lang}
-    request.session['data'] = data
-    env = {'lang': lang, 'title_en': "Data Index!", 'title_fr': 'Index des Donées!',
-           'content_id': 'data_view:data_index'}
+    env = {'lang': lang, 'title_en': "The Marsian Weather!", 'title_fr': 'La Météo Marsienne!', 'content_id': 'data_view:index'}
     return render(request, 'pages/common/page_canvas.html', env)
 
 

@@ -26,7 +26,7 @@
 
     $(document).ready(function () {
 
-        const lang_wind_rose = '{{ lang }}';
+        const lang = '{{ lang }}';
         const sol_day = JSON.parse(document.getElementById('sol_day').textContent);
         const sensors = JSON.parse(document.getElementById('sensors').textContent);
         const wind_sectors = JSON.parse(document.getElementById('wind_sectors').textContent);
@@ -37,8 +37,8 @@
                 'en': "Average Temperature on Earth is " + celsius_2_fahrenheit(15).toFixed(0) + " °F",
             },
             "PRE": {
-                'fr': 'Soit ' + ((sensors['PRE']['av'] / 101325) * 100).toFixed(2) + "% de la Pression Atmospherique Terrestre (" + pa_2_bar(101325).toFixed(2) + " Bar)",
-                'en': 'Only ' + ((sensors['PRE']['av'] / 101325) * 100).toFixed(2) + "% of Earth Atmospheric Pressure (" + pa_2_psi(101325).toFixed(2) + " PSI)",
+                'fr': 'Soit ' + ((sensors['PRE']['av'] / 101325) * 100).toFixed(2) + "% de la Pression Atmospherique Terrestre ",
+                'en': 'Only ' + ((sensors['PRE']['av'] / 101325) * 100).toFixed(2) + "% of Earth Atmospheric Pressure",
             },
             "HWS": {
                 'fr': "Pendant un Tempête le vent souffle a environ 100 km/h",
@@ -46,18 +46,13 @@
             }
         }
 
-        $('#chart_title').html(function () {
-            if (lang_wind_rose === 'fr')
-                return '<span><hi>R</hi>ose des <hi>V</hi>ents au <hi>S</hi>ol ' + sol_day['sol_date'] + ' (' + time_span(new Date(sol_day['First_UTC']), new Date(sol_day['Last_UTC']), lang_wind_rose) + ') </span>'
-            else
-                return '<span><hi>W</hi>ind <hi>R</hi>ose on <hi>S</hi>ol ' + sol_day['sol_date'] + ' (' + time_span(new Date(sol_day['First_UTC']), new Date(sol_day['Last_UTC']), lang_wind_rose) + ') </span>'
-        })
+        $('#chart_title').html('<span>' + translate('chart_title', translations, lang) + " " + sol_day['sol_date'] + ' (' + time_span(new Date(sol_day['First_UTC']), new Date(sol_day['Last_UTC']), lang) + ') </span>')
 
         $('#chart_fact').html(function () {
-            if (lang_wind_rose === 'fr') {
-                return 'Au Sol ' + sol_day['sol_date'] + ' le vent le plus présent était orienté ' + key_format(wind_sectors['most_common']['compass_point'], lang_wind_rose)
+            if (lang === 'fr') {
+                return 'Au Sol ' + sol_day['sol_date'] + ' le vent le plus présent était orienté ' + translate(wind_sectors['most_common']['compass_point'], translations, lang)
             } else {
-                return 'On Sol ' + sol_day['sol_date'] + ' ' + key_format(wind_sectors['most_common']['compass_point'], lang_wind_rose) + ' was the most common wind'
+                return 'On Sol ' + sol_day['sol_date'] + ' ' + translate(wind_sectors['most_common']['compass_point'], translations, lang) + ' was the most common wind'
             }
         })
 
@@ -65,9 +60,9 @@
         let chart_wind_sectors = new Chart(chart_ctx, {
             type: 'radar',
             data: {
-                labels: (new Array(16)).fill(0).map((empty, idx) => wind_sectors[idx] ? key_format(wind_sectors[idx]['compass_point'], lang_wind_rose) : key_format("wd_no_dir", lang_wind_rose)),
+                labels: (new Array(16)).fill(0).map((empty, idx) => wind_sectors[idx] ? translate(wind_sectors[idx]['compass_point'], translations, lang) : translate("wd_no_dir", translations, lang)),
                 datasets: [{
-                    label: key_format('chart_data_title', lang_wind_rose),
+                    label: translate('chart_data_title', translations, lang),
                     data: (new Array(16)).fill(0).map((empty, idx) => wind_sectors[idx] ? (wind_sectors[idx]['ct'] / (wind_sectors['cnt'] / 100)).toFixed(3) : 0),
                     backgroundColor: [
                         'rgba(255, 61, 33, .6)',
@@ -80,7 +75,29 @@
             },
             options: {
                 responsive: true,
+                scale: {
+                    ticks: {
+                        display: false,
+                        backdropColor: 'rgba(0,0,0,0)',
+                        fontColor: 'white'
+                    },
+                    pointLabels: {
+                        fontColor: 'white'
+                    },
+                    gridLines: {
+                        color: '#ccc'
+                    },
+                    angleLines: {
+                        color: '#ddd'
+                    }
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white'
+                    }
+                }
             }
+
         })
 
         $('#sensors_tables').html(function () {
@@ -88,12 +105,12 @@
             out_str += '<div class="empty"></div>'
             for (const key in sensors) {
                 out_str += "<table><thead><tr>"
-                out_str += "<th>" + key_format(key, lang_wind_rose) + "</th>"
-                out_str += "<th>" + key_format("min_short", lang_wind_rose) + " " + unit_converter(key, sensors[key]['mn'], lang_wind_rose) + "</th>"
-                out_str += "<th>" + key_format("max_short", lang_wind_rose) + " " + unit_converter(key, sensors[key]['mx'], lang_wind_rose) + "</th>"
+                out_str += "<th colspan='2'>" + translate(key, translations, lang) + "</th>"
                 out_str += "</tr></thead><tbody>"
-                out_str += "<tr><td colspan='3'>" + key_format("average_short", lang_wind_rose) + " " + unit_converter(key, sensors[key]['av'], lang_wind_rose) + "</td></tr>"
-                out_str += "<tr><td colspan='3'>" + sensors_facts[key][lang_wind_rose] + "</td></tr>"
+                out_str += "<tr><td>" + translate("min_short", translations, lang) + " " + unit_converter(key, sensors[key]['mn'], lang) + "</td>"
+                out_str += "<td>" + translate("max_short", translations, lang) + " " + unit_converter(key, sensors[key]['mx'], lang) + "</td></tr>"
+                out_str += "<tr><td colspan='2'>" + translate("average_short", translations, lang) + " " + unit_converter(key, sensors[key]['av'], lang) + "</td></tr>"
+                out_str += "<tr><td colspan='2'>" + sensors_facts[key][lang] + "</td></tr>"
                 out_str += "</tbody></table>"
                 out_str += '<div class="empty"></div>'
             }

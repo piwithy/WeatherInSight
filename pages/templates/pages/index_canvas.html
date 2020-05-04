@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <!-- START OF PAGE CONFIGURATION-->
+    <meta charset="UTF-8">
+    <title>Error!</title>
+    <link rel="sortcut icon" type="image/png" href="{% static 'pages/img/insight.png' %}">
+    <!-- START OF PAGE CONFIGURATION-->
+
+    <!-- START STYLESHEETS -->
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'pages/css/style_old.css' %}">-->
+    <!-- START STYLESHEETS -->
+
+    <!-- START OF JQUERY -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+    <!-- END OF JQUERY -->
+
+    <!-- START OF JQUERY-UI -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://piwithy.fr/files/libs/jquery-ui/ui/i18n/datepicker-fr.js"></script>
+    <!-- END OF JQUERY-UI -->
+
+    <!-- START OF CHART-JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <!-- START OF CHART-JS -->
+
+    <!-- START OF SELF-LIBRARY -->
+    <script type="text/javascript" src="{% static 'data_view/js/support_functions.js' %}"></script>
+    <script type="text/javascript" src="{% static 'data_view/js/translations.js' %}"></script>
+    <!-- START OF SELF-LIBRARY -->
+</head>
+<body>
+
+<div id="wrapper">
+
+    <!--<div id="logo">
+        <a href="{% url 'pages:index' lang=lang %}">
+            <img alt="Weather Insight" src="{% static 'pages/img/weather_insight_logo_nasa.png' %}">
+        </a>
+    </div>-->
+
+    <div id="nav_bar"></div>
+
+    <div id="content">
+        <div id="place_holder">
+            {% if lang == "fr" %}
+                <h1>Page en cours de Chargement, Veuillez Patientez</h1>
+            {% else %}
+                <h1>Loading Please Wait</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="footer">
+        <p>
+            <span id="copyright"></span>
+            <span id="joke"></span>
+        </p>
+    </div>
+</div>
+
+<script>
+    const nav_data = [
+        {
+            id: "ensta",
+            title: {
+                fr: "ENSTA-Bretagne",
+                en: "ENSTA-Bretagne"
+            },
+            content: {
+                fr: '<img alt="Logo ENSTA-Bretagne" src="{% static 'pages/img/ensta-logoh-noir.png' %}">',
+                en: '<img alt="ENSTA-Bretagne Logo" src="{% static 'pages/img/ensta-logoh-noir.png' %}">'
+            },
+            "url": "https://www.ensta-bretagne.fr/{{ lang }}"
+        },
+        {
+            id: "nasa",
+            title: {
+                fr: "NASA",
+                en: "NASA"
+            },
+            content: {
+                fr: '<img alt="Logo NASA" src="{% static 'pages/img/nasa-logo.svg' %}">',
+                en: '<img alt="NASA Logo" src="{% static 'pages/img/nasa-logo.svg' %}">'
+            },
+            url: "https://www.nasa.gov/"
+        },
+        {
+            id: "django",
+            title: {
+                fr: "Django Project",
+                en: "Django Project"
+            },
+            content: {
+                fr: '<img alt="Logo Django" src="{% static 'pages/img/django_logo.png' %}">',
+                en: '<img alt="Django Logo" src="{% static 'pages/img/django_logo.png' %}">'
+            },
+            url: "https://www.djangoproject.com/"
+        },
+        {
+            id: "github_project",
+            title: {
+                fr: "Projet sur GitHub",
+                en: "GitHub Project"
+            },
+            content: {
+                fr: '<img alt="Logo GitHub" src="{% static 'pages/img/github_logo.svg' %}">',
+                en: '<img alt="GitHub Logo" src="{% static 'pages/img/github_logo.svg' %}">'
+            },
+            url: "https://github.com/piwithy/WeatherInSight"
+        }
+    ]
+</script>
+
+<script>
+    $(document).ready(function () {
+        console.log(translations);
+        const lang = "{{ lang }}"
+
+        let nav_bar = $('#nav_bar');
+        let content = $('#content')
+        let footer = $('#footer');
+
+        nav_bar.html(function () {
+            let out_str = "";
+            out_str += "<nav role='navigation'><ul class='menu'>";
+            for (let i = 0; i < nav_data.length; i++) {
+                out_str += '<li id="' + nav_data[i].id + '">';
+                out_str += '<a title="' + nav_data[i].title[lang] + '" href="' + nav_data[i].url + '">' + nav_data[i].content[lang] + '</a>';
+                out_str += '</li>';
+            }
+            out_str += "</ul></nav>";
+            return out_str;
+        });
+
+
+        footer.html(function () {
+            let copyright_year_str;
+            if ((new Date()).getFullYear() !== 2020) {
+                copyright_year_str = "2020-" + (new Date()).getFullYear();
+            } else {
+                copyright_year_str = "2020"
+            }
+            let out_str = "<p>"
+            out_str += "Copyright &copy; " + location.hostname + " " + copyright_year_str + "<br>";
+            out_str += translate('joke', translations, lang);
+            out_str += "</p>"
+            return out_str
+        });
+
+        switch (lang) {
+            case 'fr':
+                document.title = "{{ title_fr }} | " + location.hostname;
+                break;
+            default:
+                document.title = "{{ title_en }} | " + location.hostname;
+        }
+
+        content.load("{% url content_id %}");
+
+    });
+</script>
+
+</body>
+</html>

@@ -6,6 +6,24 @@ from datetime import datetime, timezone
 from .models import SolDayData, WindSector, SensorData
 
 
+def sol_days_2_json():
+    sol_days = SolDayData.objects.all().order_by("-sol_date")
+    # sol_days_dict = []
+    sol_days_list = []
+    for sol_day in sol_days:
+        sol_day_dict = {
+            'sol_date': sol_day.sol_date,
+            'first_utc': sol_day.first_utc,
+            'last_utc': sol_day.last_utc,
+            'median_utc': get_utc_med(sol_day.first_utc, sol_day.last_utc),
+            'season': sol_day.season,
+            'validated': sol_day.validated
+        }
+        sol_days_list.append(sol_day_dict)
+        # sol_days_dict[sol_day.sol_date] = sol_day_dict
+    return sol_days_list  # sol_days_dict
+
+
 def wind_data_2_json(sol_day: SolDayData):
     wind_sectors = WindSector.objects.filter(wind_directions__sol_day__exact=sol_day)
     wind_sectors_dict = {}
@@ -47,9 +65,20 @@ def sol_data_2_json(sol_day: SolDayData):
         'season': sol_day.season,
         'First_UTC': sol_day.first_utc,
         'Last_UTC': sol_day.last_utc,
-        'valid': sol_day.is_validated()
+        'Median_UTC': get_utc_med(sol_day.first_utc, sol_day.last_utc),
+        'valid': sol_day.is_validated(),
+        'sensors': sensor_data_2_json(sol_day),
+        'winds': wind_data_2_json(sol_day),
     }
     return data
+
+
+def last_six_sols_json():
+    sol_days = SolDayData.objects.all().order_by("-sol_date")[:6]
+    last_six = []
+    for sol_day in sol_days:
+        last_six.append(sol_data_2_json(sol_day))
+    return last_six
 
 
 def request_data():
@@ -73,7 +102,7 @@ def request_data():
                 sol_day.save()
         except exceptions.MultipleObjectsReturned as e:
             return exceptions.EmptyResultSet
-    return get_request.headers, json.loads(body_data_raw)
+    return get_request.headers, json.loads(body_data_raw), get_request.status_code
 
 
 def check_sol_valid(sol_key, validity_checks):
@@ -92,24 +121,6 @@ def check_sol_valid(sol_key, validity_checks):
         if not validity_checks[sol_key]['WD'].get('valid', False):
             return False
     return True
-
-
-def sol_days_2_json():
-    sol_days = SolDayData.objects.all().order_by("-sol_date")
-    # sol_days_dict = []
-    sol_days_list = []
-    for sol_day in sol_days:
-        sol_day_dict = {
-            'sol_date': sol_day.sol_date,
-            'first_utc': sol_day.first_utc,
-            'last_utc': sol_day.last_utc,
-            'median_utc': get_utc_med(sol_day.first_utc, sol_day.last_utc),
-            'season': sol_day.season,
-            'validated': sol_day.validated
-        }
-        sol_days_list.append(sol_day_dict)
-        # sol_days_dict[sol_day.sol_date] = sol_day_dict
-    return sol_days_list  # sol_days_dict
 
 
 def get_utc_med(first_utc: datetime, last_utc: datetime):

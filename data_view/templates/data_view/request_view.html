@@ -21,11 +21,11 @@
 </div>
 <script>
     $(document).ready(function () {
-        const lang_req = "{{ lang }}"
+        const lang = "{{ lang }}"
         const head_data = JSON.parse(document.getElementById("header_data").textContent);
         const body_data = JSON.parse(document.getElementById("body_data").textContent);
-        $('#head_table_caption').html(key_format('request_head', lang_req))
-        $('#head_table_head').html("<tr><th>" + key_format('key', lang_req) + "</th><th>" + key_format('value', lang_req) + "</th></tr>")
+        $('#head_table_caption').html(translate('request_head', translations, lang))
+        $('#head_table_head').html("<tr><th>" + translate('key', translations, lang) + "</th><th>" + translate('value', translations, lang) + "</th></tr>")
         $('#head_table_body').html(function () {
             let out_str = "";
             for (const key in head_data) {
@@ -34,12 +34,12 @@
             return out_str
         });
 
-        $('#body_table_caption').html(key_format('request_body', lang_req))
-        $('#body_table_head').html("<tr><th>" + key_format('key', lang_req) + "</th><th>" + key_format('value', lang_req) + "</th></tr>")
+        $('#body_table_caption').html(translate('request_body', translations, lang))
+        $('#body_table_head').html("<tr><th>" + translate('key', translations, lang) + "</th><th>" + translate('value', translations, lang) + "</th></tr>")
         $('#body_table_body').html(function () {
             let out_str = "";
             for (const key in body_data) {
-                out_str += "<tr><td>" + key_format(key, lang_req) + "</td><td><pre style='text-align: left'>" + JSON.stringify(body_data[key], null, 2) + "</pre></td></tr>"
+                out_str += "<tr><td>" + translate(key, translations, lang) + "</td><td><pre style='text-align: left'>" + JSON.stringify(body_data[key], null, 2) + "</pre></td></tr>"
             }
             return out_str
         })
