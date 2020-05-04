@@ -13,7 +13,7 @@ a {
 }
 
 body {
-
+    font-family: 'Noto Sans', sans-serif;
 }
 
 
@@ -63,8 +63,9 @@ body {
 
 #footer {
     text-align: center;
+    font-weight: bold;
     background: rgba(0, 0, 0, 0);
-    color: #222;
+    color: #0b3d91;
 }
 
 #content {
@@ -92,9 +93,10 @@ body {
 }
 
 #other_sols a {
+    text-decoration: underline;
     display: block;
     text-align: center;
-    font-size: 1.2em;
+    font-size: 1.5em;
 }
 
 #other_sols a:hover {
@@ -107,11 +109,11 @@ body {
 }
 
 .main_sol .sol_data {
-    width: 30%;
+    width: 35%;
 }
 
 .main_sol .wind_rose_chart {
-    width: 70%;
+    width: 65%;
     text-align: center;
     border-left: 1px rgb(128, 30, 16) solid;
     padding-bottom: 5px;
@@ -183,7 +185,7 @@ body {
     text-align: center;
 }
 
-#content #chart #chart_title{
+#content #chart #chart_title {
     font-size: 2em;
 }
 
