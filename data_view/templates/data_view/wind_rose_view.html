@@ -41,7 +41,7 @@
                 'en': 'Only ' + ((sensors['PRE']['av'] / 101325) * 100).toFixed(2) + "% of Earth Atmospheric Pressure",
             },
             "HWS": {
-                'fr': "Pendant un Tempête le vent souffle à plus de 100 km/h",
+                'fr': "Un vent de tempête depasse les 100 km/h",
                 'en': "Durring a Storm wind speed is " + (100 / 1.609).toFixed(0) + " mph",
             }
         }
@@ -70,7 +70,9 @@
                     borderColor: [
                         'rgba(255, 61, 33, 1)',
                     ],
-                    borderWidth: 1
+                    borderWidth: 1,
+                    pointRadius: 3,
+                    pointBackgroundColor: 'rgba(204 , 50, 26, 1)'
                 }]
             },
             options: {
