@@ -22,6 +22,9 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://piwithy.fr/files/libs/jquery-ui/ui/i18n/datepicker-fr.js"></script>
 
+    <!-- DETECT-JS -->
+    <script src="{% static 'data_view/js/libs/detect.min.js' %}"></script>
+
     <!-- CHARTJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
@@ -97,12 +100,21 @@
 
 <script type="text/javascript" id="main_script">
     $(document).ready(function () {
+
+
         const lang = "{{ lang }}";
 
         const home_button = $('#home_button');
         const nav_bar = $('#nav_bar');
         const content = $('#content');
         const footer = $('#footer');
+
+        let user = detect.parse(navigator.userAgent);
+        console.log("\"" + user.browser.family + "\"")
+        if (user.browser.family === "IE") {
+            content.html("<h1 style='text-align: center'> Browser Not Supported </h1>")
+
+        }
 
         switch (lang) {
             case 'fr':
