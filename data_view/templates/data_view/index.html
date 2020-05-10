@@ -238,10 +238,12 @@
             let out_str = "<ul>"
             out_str += "<li id='empty'></li>"
             for (let i = 1; i < last_six.length; i++) {
+                const w_dir = last_six[i]['winds']['most_common']['compass_degrees']
+                console.log("Sol:" + last_six[i].sol_date + " " + w_dir + "°")
                 let urlmask = "{% url 'pages:sol_wind_rose' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", last_six[i]['sol_date'])
                 out_str += "<li id='sol_" + last_six[i].sol_date + "'><a href='" + urlmask + "'";
                 out_str += "<div class='title'>" + translations[lang]["days_long"][(new Date(last_six[i]["Median_UTC"])).getDay()] + " (Sol " + last_six[i]["sol_date"] + ")" + "</div>";
-                out_str += "<div class='arrow'><img src='" + arrow_url + "' style='max-height:100px;transform-origin: center center;transform:rotate(" + last_six[i]['winds']['most_common']['compass_degrees'] + "deg)' alt='wind direction:" + last_six[i]['winds']['most_common']['compass_degrees'] + "°'></div>"
+                out_str += "<div class='arrow'><img src='" + arrow_url + "' style='max-height:100px;transform-origin: center center;transform:rotate(" + w_dir + "deg)' alt='wind direction:" + last_six[i]['winds']['most_common']['compass_degrees'] + "°'></div>"
                 out_str += "<div class='wind_spd'>" + translate(last_six[i]['winds']['most_common']['compass_point'], translations, lang) + " " + unit_converter('HWS', last_six[i]['sensors']['HWS']['av'], lang) + "</div>"
                 out_str += "</a></li>";
                 out_str += "<li id='empty'></li>"
