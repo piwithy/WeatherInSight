@@ -12,6 +12,7 @@ urlpatterns = [
     path('', views.redirector, name='redirector'),
 
     path('<str:lang>/', views.index, name='index'),
+    path('<str:lang>/evol', views.evol_view, name='evol_view'),
     path('<str:lang>/list', views.list_view, name='sol_list'),
     path('<str:lang>/sol_<str:sol_key>/detail', views.detail_view, name='sol_detail'),
     path('<str:lang>/sol_<str:sol_key>/', views.wind_rose, name='sol_wind_rose'),

@@ -15,7 +15,16 @@ def index(request, lang='en'):
     """
     data = {'lang': lang}
     request.session['data'] = data
-    env = {'lang': lang, 'title_en': "The Marsian Weather!", 'title_fr': 'La Météo Marsienne!', 'content_id': 'data_view:index'}
+    env = {'lang': lang, 'title_en': "The Marsian Weather!", 'title_fr': 'La Météo Marsienne!',
+           'content_id': 'data_view:index'}
+    return render(request, 'pages/common/page_canvas.html', env)
+
+
+def evol_view(request, lang='en'):
+    data = {'lang': lang}
+    request.session['data'] = data
+    env = {'lang': lang, 'title_en': "Sensor Evolution!", 'title_fr': 'Evolution des Données!',
+           'content_id': 'data_view:evol'}
     return render(request, 'pages/common/page_canvas.html', env)
 
 

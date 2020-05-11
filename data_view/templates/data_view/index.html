@@ -5,30 +5,33 @@
 
 <!-- START OF HTML OBJECTS -->
 <div class="data_index">
-
-    <a href="#" class="main_sol_link">
-        <div class="main_sol">
-            <div class="sol_data">
+    <div class="main_sol">
+        <div class="sol_data">
+            <a href="{% url 'pages:evol_view' lang %}">
                 <div class="sol_date"></div>
                 <div id="empty"></div>
                 <div class="sol_temp">
                     <div class="temp"></div>
                     <div id="empty"></div>
+
                     <div id="temp_chart_area">
                         <canvas id="temp_chart"></canvas>
                     </div>
                 </div>
                 <div id="empty"></div>
                 <div class="sol_sensors"></div>
-            </div>
-            <div class="wind_rose_chart">
+            </a>
+        </div>
+
+        <div class="wind_rose_chart">
+            <a href="#" class="main_sol_link" style="display: block">
                 <div class="chart_area">
                     <canvas id="wind_chart"></canvas>
                 </div>
                 <div class="chart_fact"></div>
-            </div>
+            </a>
         </div>
-    </a>
+    </div>
 
     <div id="last_five"></div>
 
@@ -239,7 +242,7 @@
             out_str += "<li id='empty'></li>"
             for (let i = 1; i < last_six.length; i++) {
                 const w_dir = last_six[i]['winds']['most_common']['compass_degrees']
-                console.log("Sol:" + last_six[i].sol_date + " " + w_dir + "°")
+                //console.log("Sol:" + last_six[i].sol_date + " " + w_dir + "°")
                 let urlmask = "{% url 'pages:sol_wind_rose' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", last_six[i]['sol_date'])
                 out_str += "<li id='sol_" + last_six[i].sol_date + "'><a href='" + urlmask + "'";
                 out_str += "<div class='title'>" + translations[lang]["days_long"][(new Date(last_six[i]["Median_UTC"])).getDay()] + " (Sol " + last_six[i]["sol_date"] + ")" + "</div>";
