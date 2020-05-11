@@ -2,7 +2,7 @@
 
 <table>
     <tr>
-        <td>JEZEGOU Pierre-Yves <br> Lassalle Lucie</td>
+        <td>JEZEGOU Pierre-Yves <br> LASSALLE Lucie</td>
         <td>FIPA 2021 <br> May-2020</td>
 </table>
 
