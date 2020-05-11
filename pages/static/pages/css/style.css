@@ -201,6 +201,10 @@ body {
     flex-grow: 10;
 }
 
+#content #evol_view .chart_area {
+    border-top: 1px rgb(128, 30, 16) solid;
+}
+
 @media (max-width: 1200px) {
     #content {
         width: 880px;

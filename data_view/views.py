@@ -7,10 +7,19 @@ from data_request import utils, models
 def index(request):
     data = request.session['data']
     env = {
-        'last_six_sols': utils.last_six_sols_json(),
+        'last_six_sols': utils.last_sols_json(6),
         'lang': data['lang']
     }
     return render(request, 'data_view/index.html', env)
+
+
+def evol_view(request):
+    data = request.session['data']
+    env = {
+        'sols': utils.last_sols_json(),
+        'lang': data['lang']
+    }
+    return render(request, 'data_view/evolution.html', env)
 
 
 def list_view(request):

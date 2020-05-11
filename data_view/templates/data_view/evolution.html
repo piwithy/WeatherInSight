@@ -1,0 +1,531 @@
+{{ sols|json_script:"sols" }}
+
+<div id="evol_view">
+    <div id="head_selector" style="margin-bottom: 10px">
+        <form id="from_to_form" action="javascript:alert('Error!');">
+            <table>
+                <caption id="page_title"></caption>
+                <tbody id="head_table_body">
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div id="temp_evol" class="chart_area">
+        <div id="temp_title" class="chart_title">
+        </div>
+        <canvas id="temp_chart"></canvas>
+    </div>
+
+    <div id="pressure_evol" class="chart_area">
+        <div id="pressure_title" class="chart_title">
+        </div>
+        <canvas id="pressure_chart"></canvas>
+    </div>
+
+    <div id="wind_speed_evol" class="chart_area">
+        <div id="wind_speed_title" class="chart_title">
+        </div>
+        <canvas id="wind_speed_chart"></canvas>
+    </div>
+
+    <div id="wind_direction_evol" class="chart_area">
+        <div id="wind_direction_title" class="chart_title">
+        </div>
+        <canvas id="wind_direction_chart"></canvas>
+    </div>
+
+    <div id="debug"></div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+
+        function get_unit(sensor, lang) {
+            switch (lang) {
+                case 'fr':
+                    switch (sensor) {
+                        case 'AT':
+                            return '°C'
+                        case 'PRE':
+                            return 'mBar'
+                        case 'HWS':
+                            return 'km/h'
+                        default:
+                            throw 'unknown sensor'
+                    }
+                default:
+                    switch (sensor) {
+                        case 'AT':
+                            return '°F'
+                        case 'PRE':
+                            return 'PSIA'
+                        case 'HWS':
+                            return 'mph'
+                        default:
+                            throw 'unknown sensor'
+                    }
+            }
+        }
+
+        function fill_graphs(sols, start, end) {
+            let sols_list_filtered = sols.filter(sol => (new Date(sol['Median_UTC']) >= start && new Date(sol['Median_UTC']) <= end))
+            sol_length = sols_list_filtered.length;
+            const x_vector = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sol_date'] ? sols_list_filtered[(sol_length - 1) - idx]['sol_date'] : translate("wd_no_dir", translations, lang))
+            console.log(x_vector)
+            chart_temp.data.labels = x_vector
+            chart_pressure.data.labels = x_vector
+            chart_wind_speed.data.labels = x_vector
+            chart_wind_direction.data.labels = x_vector
+
+            chart_temp.data.datasets[0].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sensors']['AT']['mx'] ? unit_converter('AT', sols_list_filtered[(sol_length - 1) - idx]['sensors']['AT']['mx'], lang, true) : 0)
+            chart_temp.data.datasets[1].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sensors']['AT']['av'] ? unit_converter('AT', sols_list_filtered[(sol_length - 1) - idx]['sensors']['AT']['av'], lang, true) : 0)
+            chart_temp.data.datasets[2].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sensors']['AT']['mn'] ? unit_converter('AT', sols_list_filtered[(sol_length - 1) - idx]['sensors']['AT']['mn'], lang, true) : 0)
+
+            chart_pressure.data.datasets[0].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sensors']['PRE']['mx'] ? unit_converter('PRE', sols_list_filtered[(sol_length - 1) - idx]['sensors']['PRE']['mx'], lang, true) : 0)
+            chart_pressure.data.datasets[1].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sensors']['PRE']['av'] ? unit_converter('PRE', sols_list_filtered[(sol_length - 1) - idx]['sensors']['PRE']['av'], lang, true) : 0)
+            chart_pressure.data.datasets[2].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sensors']['PRE']['mn'] ? unit_converter('PRE', sols_list_filtered[(sol_length - 1) - idx]['sensors']['PRE']['mn'], lang, true) : 0)
+
+            chart_wind_speed.data.datasets[0].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sensors']['HWS']['mx'] ? unit_converter('HWS', sols_list_filtered[(sol_length - 1) - idx]['sensors']['HWS']['mx'], lang, true) : 0)
+            chart_wind_speed.data.datasets[1].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sensors']['HWS']['av'] ? unit_converter('HWS', sols_list_filtered[(sol_length - 1) - idx]['sensors']['HWS']['av'], lang, true) : 0)
+            chart_wind_speed.data.datasets[2].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sensors']['HWS']['mn'] ? unit_converter('HWS', sols_list_filtered[(sol_length - 1) - idx]['sensors']['HWS']['mn'], lang, true) : 0)
+
+            chart_wind_direction.data.datasets[0].data = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['winds']['most_common']['compass_degrees'] ? convert_angle(sols_list_filtered[(sol_length - 1) - idx]['winds']['most_common']['compass_degrees']) : 0)
+
+            chart_temp.update()
+            chart_pressure.update()
+            chart_wind_speed.update()
+            chart_wind_direction.update()
+
+            temp_chart_title.html("<h1 style='display:block;text-align: center'>" + translate("temp_evol_title", translations, lang) + " " + sols_list_filtered[sols_list_filtered.length - 1]['sol_date'] + " " + translate("and", translations, lang) + " " + sols_list_filtered[0]['sol_date'] + "</h1>")
+            pressure_chart_title.html("<h1 style='display:block;text-align: center'>" + translate("pressure_evol_title", translations, lang) + " " + sols_list_filtered[sols_list_filtered.length - 1]['sol_date'] + " " + translate("and", translations, lang) + " " + sols_list_filtered[0]['sol_date'] + "</h1>")
+            wind_speed_chart_title.html("<h1 style='display:block;text-align: center'>" + translate("wind_speed_evol_title", translations, lang) + " " + sols_list_filtered[sols_list_filtered.length - 1]['sol_date'] + " " + translate("and", translations, lang) + " " + sols_list_filtered[0]['sol_date'] + "</h1>")
+            wind_direction_chart_title.html("<h1 style='display:block;text-align: center'>" + translate("wind_direction_evol_title", translations, lang) + " " + sols_list_filtered[sols_list_filtered.length - 1]['sol_date'] + " " + translate("and", translations, lang) + " " + sols_list_filtered[0]['sol_date'] + "</h1>")
+
+        }
+
+        function convert_angle(angle) {
+            /*if (angle > 180)
+                return -(angle - 180)*/
+            return (angle + 180) % 360
+        }
+
+        const lang = "{{ lang }}"
+        const sols_list_raw = JSON.parse(document.getElementById("sols").textContent)
+        /*let debug_html = $('#debug');
+        debug_html.html("<pre>" + JSON.stringify(sols_list_raw, null, 4))*/
+
+        let head_table_body = $('#head_table_body').html('<tr><td style="text-transform: uppercase; font-weight:bold " id=" from_cal"><span id="from_cal_from"></span>: <input style="text-align: center; width: 80px" type="text" id="from_cal_datepicker" readonly="readonly"/></td><td style="text-transform: uppercase;font-weight:bold" id="to_cal"><span id="to_cal_to"></span>: <input style="text-align: center; width: 80px" type="text" id="to_cal_datepicker" readonly="readonly"/></td><td><input id="update_btn" type="submit"></td></tr>')
+        let from_cal_from = $('#from_cal_from');
+        let to_cal_to = $('#to_cal_to');
+        let from_datepicker = $('#from_cal_datepicker').datepicker({
+            minDate: new Date(sols_list_raw[sols_list_raw.length - 1]['Median_UTC']),
+            maxDate: new Date(sols_list_raw[0]['Median_UTC']),
+        });
+        let to_datepicker = $('#to_cal_datepicker').datepicker({
+            minDate: new Date(sols_list_raw[sols_list_raw.length - 1]['Median_UTC']),
+            maxDate: new Date(sols_list_raw[0]['Median_UTC']),
+        });
+        let update_button = $('#update_btn');
+        let from_to_form = $('#from_to_form');
+
+        const temp_chart_title = $('#temp_title')
+        const pressure_chart_title = $('#pressure_title')
+        const wind_speed_chart_title = $('#wind_speed_title')
+        const wind_direction_chart_title = $('#wind_direction_title')
+
+        temp_chart_title.html("<h1 style='display:block;text-align: center'>" + translate("temp_evol_title", translations, lang) + " " + sols_list_raw[sols_list_raw.length - 1]['sol_date'] + " " + translate("and", translations, lang) + " " + sols_list_raw[0]['sol_date'] + "</h1>")
+        pressure_chart_title.html("<h1 style='display:block;text-align: center'>" + translate("pressure_evol_title", translations, lang) + " " + sols_list_raw[sols_list_raw.length - 1]['sol_date'] + " " + translate("and", translations, lang) + " " + sols_list_raw[0]['sol_date'] + "</h1>")
+        wind_speed_chart_title.html("<h1 style='display:block;text-align: center'>" + translate("wind_speed_evol_title", translations, lang) + " " + sols_list_raw[sols_list_raw.length - 1]['sol_date'] + " " + translate("and", translations, lang) + " " + sols_list_raw[0]['sol_date'] + "</h1>")
+        wind_direction_chart_title.html("<h1 style='display:block;text-align: center'>" + translate("wind_direction_evol_title", translations, lang) + " " + sols_list_raw[sols_list_raw.length - 1]['sol_date'] + " " + translate("and", translations, lang) + " " + sols_list_raw[0]['sol_date'] + "</h1>")
+
+        const temp_chart_ctx = document.getElementById("temp_chart")
+        let chart_temp = new Chart(temp_chart_ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: translate('AT', translations, lang) + " " + translate('max_short', translations, lang) + " (" + get_unit('AT', lang) + ")",
+                        backgroundColor: [
+                            'rgba(11 , 61, 145, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(11 , 61, 145, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(11 , 61, 120, 1)'
+                    },
+                    {
+                        label: translate('AT', translations, lang) + " " + translate('avg_short', translations, lang) + " (" + get_unit('AT', lang) + ")",
+                        backgroundColor: [
+                            'rgba(204 , 50, 26, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 61, 33, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(204 , 50, 26, 1)'
+                    },
+                    {
+                        label: translate('AT', translations, lang) + " " + translate('min_short', translations, lang) + " (" + get_unit('AT', lang) + ")",
+                        backgroundColor: [
+                            'rgba(11 , 61, 145, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(11 , 61, 145, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(11 , 61, 120, 1)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            fontColor: '#ccc'
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: translate('AT', translations, lang) + " (" + get_unit('AT', lang) + ")",
+                            fontColor: '#ccc',
+                            fontSize: '16'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#ccc'
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Sols',
+                            fontColor: '#ccc',
+                            fontSize: '16'
+                        }
+                    }]
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white'
+                    }
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                },
+                tooltips: {
+                    mode: 'nearest',
+                    intersect: false,
+                }
+            }
+        })
+
+        const pressure_chart_ctx = document.getElementById("pressure_chart")
+        let chart_pressure = new Chart(pressure_chart_ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: translate('PRE', translations, lang) + " " + translate('max_short', translations, lang) + " (" + get_unit('PRE', lang) + ")",
+                        backgroundColor: [
+                            'rgba(11 , 61, 145, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(11 , 61, 145, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(11 , 61, 120, 1)'
+                    },
+                    {
+                        label: translate('PRE', translations, lang) + " " + translate('avg_short', translations, lang) + " (" + get_unit('PRE', lang) + ")",
+                        backgroundColor: [
+                            'rgba(204 , 50, 26, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 61, 33, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(204 , 50, 26, 1)'
+                    },
+                    {
+                        label: translate('PRE', translations, lang) + " " + translate('min_short', translations, lang) + " (" + get_unit('PRE', lang) + ")",
+                        backgroundColor: [
+                            'rgba(11 , 61, 145, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(11 , 61, 145, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(11 , 61, 120, 1)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            fontColor: '#ccc'
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: translate('PRE', translations, lang) + " (" + get_unit('PRE', lang) + ")",
+                            fontColor: '#ccc',
+                            fontSize: '16'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#ccc'
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Sols',
+                            fontColor: '#ccc',
+                            fontSize: '16'
+                        }
+                    }]
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white'
+                    }
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                },
+                tooltips: {
+                    mode: 'nearest',
+                    intersect: false,
+                }
+            }
+        })
+
+        const wind_speed_chart_ctx = document.getElementById("wind_speed_chart")
+        let chart_wind_speed = new Chart(wind_speed_chart_ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: translate('HWS', translations, lang) + " " + translate('max_short', translations, lang) + " (" + get_unit('HWS', lang) + ")",
+                        backgroundColor: [
+                            'rgba(11 , 61, 145, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(11 , 61, 145, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(11 , 61, 120, 1)'
+                    },
+                    {
+                        label: translate('HWS', translations, lang) + " " + translate('avg_short', translations, lang) + " (" + get_unit('HWS', lang) + ")",
+                        backgroundColor: [
+                            'rgba(204 , 50, 26, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 61, 33, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(204 , 50, 26, 1)'
+                    },
+                    {
+                        label: translate('HWS', translations, lang) + " " + translate('min_short', translations, lang) + " (" + get_unit('HWS', lang) + ")",
+                        backgroundColor: [
+                            'rgba(11 , 61, 145, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(11 , 61, 145, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(11 , 61, 120, 1)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            fontColor: '#ccc'
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: translate('HWS', translations, lang) + " (" + get_unit('HWS', lang) + ")",
+                            fontColor: '#ccc',
+                            fontSize: '16'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#ccc'
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Sols',
+                            fontColor: '#ccc',
+                            fontSize: '16'
+                        }
+                    }]
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white'
+                    }
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                },
+                tooltips: {
+                    mode: 'nearest',
+                    intersect: false,
+                }
+            }
+        })
+
+        const wind_direction_chart_ctx = document.getElementById("wind_direction_chart")
+        let chart_wind_direction = new Chart(wind_direction_chart_ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: translate('wind_dir', translations, lang),
+                        backgroundColor: [
+                            'rgba(204 , 50, 26, .4)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 61, 33, .8)'
+                        ],
+                        fill: false,
+                        lineTension: 0.2,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(204 , 50, 26, 1)'
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#ccc',
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Sols',
+                            fontColor: '#ccc',
+                            fontSize: '16'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            fontColor: '#ccc',
+                            min: 0,
+                            max: 337.5,
+                            suggestedMax: 337.5,
+                            stepSize: 22.5,
+                            callback: function (label, index, value) {
+                                const labels = [
+                                    'N',
+                                    'NNE',
+                                    'NE',
+                                    'ENE',
+                                    'E',
+                                    'ESE',
+                                    'SE',
+                                    'SSE',
+                                    'S',
+                                    translate('SSW', translations, lang),
+                                    translate('SW', translations, lang),
+                                    translate('WSW', translations, lang),
+                                    translate('W', translations, lang),
+                                    translate('WNW', translations, lang),
+                                    translate('NW', translations, lang),
+                                    translate('NNW', translations, lang),
+                                    //'N'
+                                ]
+                                return labels[15 - index] /*+ '(' + value[index] + '°)'*/
+
+                            }
+                        },
+                        gridLines: {
+                            color: '#ccc'
+                        }
+                    }]
+                },
+                legend: {
+                    labels: {
+                        fontColor: 'white'
+                    }
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true,
+                },
+                tooltips: {
+                    mode: 'nearest',
+                    intersect: false,
+                }
+            }
+        })
+
+        from_cal_from.html(translate('from', translations, lang));
+        to_cal_to.html(translate('to', translations, lang));
+        from_datepicker.datepicker('setDate', new Date(sols_list_raw[sols_list_raw.length - 1]['Median_UTC']));
+        from_datepicker.datepicker("option", $.datepicker.regional[lang]);
+        to_datepicker.datepicker('setDate', new Date(sols_list_raw[0]['Median_UTC']));
+        to_cal_to.datepicker("option", $.datepicker.regional[lang]);
+
+        update_button.val(translate('update', translations, lang))
+
+        from_to_form.submit(function (event) {
+            fill_graphs(sols_list_raw, from_datepicker.datepicker('getDate'), to_datepicker.datepicker('getDate'));
+            event.preventDefault();
+        });
+
+        fill_graphs(sols_list_raw, new Date(sols_list_raw[sols_list_raw.length - 1]['Median_UTC']), new Date(sols_list_raw[0]['Median_UTC']))
+
+
+    });
+</script>

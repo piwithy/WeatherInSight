@@ -34,7 +34,7 @@
         const sensors_facts = {
             "AT": {
                 'fr': "La Temperature Moyenne sur Terre est de 15 °C",
-                'en': "Average Temperature on Earth is " + celsius_2_fahrenheit(15).toFixed(0) + " °F",
+                'en': "Average Temperature on Earth is " + celsius_2_fahrenheit(15, 0) + " °F",
             },
             "PRE": {
                 'fr': 'Soit ' + ((sensors['PRE']['av'] / 101325) * 100).toFixed(2) + "% de la Pression Atmospherique Terrestre ",

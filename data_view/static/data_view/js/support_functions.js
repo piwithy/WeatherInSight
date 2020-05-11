@@ -119,19 +119,19 @@ function unit_converter(sensor, value, lang, no_unit = false) {
     if (no_unit) {
         if (lang === 'fr') {
             if (sensor === 'AT') {
-                return value.toFixed(3)
+                return value
             } else if (sensor === 'PRE') {
-                return pa_2_mbar(value).toFixed(3)
+                return pa_2_mbar(value)
             } else if (sensor === 'HWS') {
-                return mps_2_kph(value).toFixed(3)
+                return mps_2_kph(value)
             }
         } else {
             if (sensor === 'AT') {
-                return celsius_2_fahrenheit(value).toFixed(3)
+                return celsius_2_fahrenheit(value)
             } else if (sensor === 'PRE') {
-                return pa_2_psi(value).toFixed(3)
+                return pa_2_psi(value)
             } else if (sensor === 'HWS') {
-                return mps_2_mph(value).toFixed(3)
+                return mps_2_mph(value)
             }
         }
     } else {
@@ -139,17 +139,17 @@ function unit_converter(sensor, value, lang, no_unit = false) {
             if (sensor === 'AT') {
                 return value.toFixed(3) + " °C"
             } else if (sensor === 'PRE') {
-                return pa_2_mbar(value).toFixed(3) + " mBar"
+                return pa_2_mbar(value, 3) + " mBar"
             } else if (sensor === 'HWS') {
-                return mps_2_kph(value).toFixed(3) + " km/h"
+                return mps_2_kph(value, 3) + " km/h"
             }
         } else {
             if (sensor === 'AT') {
-                return celsius_2_fahrenheit(value).toFixed(3) + " °F"
+                return celsius_2_fahrenheit(value, 3) + " °F"
             } else if (sensor === 'PRE') {
-                return pa_2_psi(value).toFixed(3) + " PSI"
+                return pa_2_psi(value, 3) + " PSIA"
             } else if (sensor === 'HWS') {
-                return mps_2_mph(value).toFixed(3) + " mph"
+                return mps_2_mph(value, 3) + " mph"
             }
         }
     }
@@ -251,26 +251,26 @@ function time_span(first_UTC, last_UTC, lang) {
     return out_str
 }
 
-function celsius_2_fahrenheit(celsius) {
-    return (celsius * (9 / 5)) + 32
+function celsius_2_fahrenheit(celsius, digits = 3) {
+    return ((celsius * (9 / 5)) + 32).toFixed(digits)
 }
 
-function mps_2_mph(mps) {
-    return mps * 2.237
+function mps_2_mph(mps, digits = 3) {
+    return (mps * 2.237).toFixed(digits)
 }
 
-function mps_2_kph(mps) {
-    return mps * 3.6
+function mps_2_kph(mps, digits = 3) {
+    return (mps * 3.6).toFixed(digits)
 }
 
-function pa_2_psi(pa) {
-    return pa / 6895
+function pa_2_psi(pa, digits = 6) {
+    return (pa / 6895).toFixed(digits)
 }
 
-function pa_2_mbar(pa) {
-    return pa * (Math.pow(10, -2))
+function pa_2_mbar(pa, digits = 3) {
+    return (pa * (Math.pow(10, -2))).toFixed(digits)
 }
 
-function pa_2_bar(pa) {
-    return pa * (Math.pow(10, -5))
+function pa_2_bar(pa, digits = 6) {
+    return (pa * (Math.pow(10, -5))).toFixed(digits)
 }

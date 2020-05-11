@@ -1,7 +1,8 @@
 import json
+from datetime import datetime
+
 import requests as req
 from django.core import exceptions
-from datetime import datetime, timezone
 
 from .models import SolDayData, WindSector, SensorData
 
@@ -73,12 +74,15 @@ def sol_data_2_json(sol_day: SolDayData):
     return data
 
 
-def last_six_sols_json():
-    sol_days = SolDayData.objects.all().order_by("-sol_date")[:6]
-    last_six = []
+def last_sols_json(count: int = -1):
+    if count == -1:
+        sol_days = SolDayData.objects.all().order_by("-sol_date")
+    else:
+        sol_days = SolDayData.objects.all().order_by("-sol_date")[:count]
+    last_sols = []
     for sol_day in sol_days:
-        last_six.append(sol_data_2_json(sol_day))
-    return last_six
+        last_sols.append(sol_data_2_json(sol_day))
+    return last_sols
 
 
 def request_data():
