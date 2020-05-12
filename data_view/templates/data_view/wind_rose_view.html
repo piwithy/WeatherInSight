@@ -65,14 +65,14 @@
                     label: translate('chart_data_title', translations, lang),
                     data: (new Array(16)).fill(0).map((empty, idx) => wind_sectors[idx] ? (wind_sectors[idx]['ct'] / (wind_sectors['cnt'] / 100)).toFixed(3) : 0),
                     backgroundColor: [
-                        'rgba(255, 61, 33, .6)',
+                        orange_background
                     ],
                     borderColor: [
-                        'rgba(255, 61, 33, 1)',
+                        orange_border
                     ],
                     borderWidth: 1,
                     pointRadius: 3,
-                    pointBackgroundColor: 'rgba(204 , 50, 26, 1)'
+                    pointBackgroundColor: orange_point
                 }]
             },
             options: {
