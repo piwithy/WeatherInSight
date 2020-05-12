@@ -44,6 +44,7 @@
 <!-- START OF JAVASCRIPT -->
 <script type="text/javascript">
     $(document).ready(function () {
+
         /* START of PAGE FUNCTIONS */
         function get_temp_unit(lang) {
             switch (lang) {
@@ -103,15 +104,16 @@
                         label: translate('AT', translations, lang) + " " + translate('avg_short', translations, lang) + " (" + get_temp_unit(lang) + ")",
                         data: (new Array(6)).fill(0).map((empty, idx) => last_six[5 - idx]['sensors']['AT']['av'] ? unit_converter('AT', last_six[5 - idx]['sensors']['AT']['av'], lang, true) : 0),
                         backgroundColor: [
-                            'rgba(204 , 50, 26, .4)'
+                            orange_background
                         ],
                         borderColor: [
-                            'rgba(255, 61, 33, .8)'
+                            orange_border
                         ],
                         fill: false,
                         lineTension: 0.2,
                         pointRadius: 5,
-                        pointBackgroundColor: 'rgba(204 , 50, 26, 1)'
+                        pointBackgroundColor: orange_point,
+                        showLine: !scatter
                     },
                 ],
             },
@@ -120,7 +122,13 @@
                 scales: {
                     xAxes: [{
                         ticks: {
-                            fontColor: '#ccc'
+                            fontColor: '#ccc',
+                            min: 0,
+                            max: 5,
+                            stepSize: 1,
+                            callback: function (label, index, value) {
+                                return "Sol " + last_six[index]['sol_date']
+                            }
                         },
                         gridLines: {
                             color: '#ccc'
@@ -171,14 +179,14 @@
                     label: translate('chart_data_title', translations, lang),
                     data: (new Array(16)).fill(0).map((empty, idx) => last_six[0]['winds'][idx] ? (last_six[0]['winds'][idx]['ct'] / (last_six[0]['winds']['cnt'] / 100)).toFixed(3) : 0),
                     backgroundColor: [
-                        'rgba(255, 61, 33, .6)',
+                        orange_background
                     ],
                     borderColor: [
-                        'rgba(255, 61, 33, 1)',
+                        orange_border
                     ],
                     borderWidth: 1,
                     pointRadius: 3,
-                    pointBackgroundColor: 'rgba(204 , 50, 26, 1)'
+                    pointBackgroundColor: orange_point
                 }]
             },
             options: {
