@@ -19,7 +19,7 @@ pipeline{
                 branch 'master'
             }
             steps{
-                withCredentials([usernamePassword(credentialsId:'', passwordVariable:'ip', usernameVariable:'user')]){
+                withCredentials([usernamePassword(credentialsId:'Prod_ssh_conn', passwordVariable:'ip', usernameVariable:'user')]){
                     sh """
                         ssh $user@$ip "./deploy.sh ${GIT_COMMIT}"
                     """
