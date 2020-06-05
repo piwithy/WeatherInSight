@@ -19,15 +19,17 @@ pipeline{
                 branch 'master'
             }
             steps{
-                sh """
-                    ssh jezegoup@192.168.0.245 "./deploy.sh ${GIT_COMMIT}"
-                """
+                withCredentials([usernamePassword(credentialsId:'Prod_ssh_conn', passwordVariable:'ip', usernameVariable:'user')]){
+                    sh """
+                        ssh $user@$ip "./deploy.sh ${GIT_COMMIT}"
+                    """
+                }
                 emailext(
-                    body: '''
+                    body: """
                         Job: ${JOB_NAME}${BUILD_DISPLAY_NAME} Has been Deployed Please\n check if https://weatherinsight.space/ is online
-                    ''',
+                    """,
                     subject: "[JENKINS] Deployment Notification (${JOB_NAME}${BUILD_DISPLAY_NAME})",
-                    to: 'salydu29@gmail.com'
+                    to: 'pierre-yves.jezegou@ensta-bretagne.org'
                 )
             }
         }
@@ -41,9 +43,5 @@ pipeline{
             cleanWs()
         }
     }
-
-}
-
-def notify(status) {
 
 }
