@@ -84,7 +84,7 @@
         ]
     </script>
     <script type="text/javascript" id="scatter_plots">
-        const scatter = true;
+        const scatter = false;
         const blue_border = 'rgba(11 , 61, 145, .8)';
         const blue_background = 'rgba(11 , 61, 145, .4)';
         const blue_point = 'rgba(11 , 61, 120, 1)';
@@ -120,13 +120,13 @@
         const footer = $('#footer');
 
         let user = detect.parse(navigator.userAgent);
-        console.log("\"" + user.browser.family + "\"")
+        console.log("\"" + user.browser.family + "\"")	//detecting Internet Explorer User
         if (user.browser.family === "IE") {
             content.html("<h1 style='text-align: center'> Browser Not Supported </h1>")
 
         }
 
-        switch (lang) {
+        switch (lang) { //setting page title
             case 'fr':
                 document.title = "{{ title_fr }} | " + location.hostname;
                 break;
@@ -135,6 +135,7 @@
                 break;
         }
 
+		//NAV bar
         home_button.html("<a href='{% url 'pages:index' lang %}'><img style='max-height:50px' alt='logo' src='{% static 'pages/img/weather_insight_logo_nasa.png' %}'></a>")
 
         nav_bar.html(function () {
@@ -145,6 +146,7 @@
             return nav_str + "</ul></nav>"
         });
 
+		//Footer
         footer.html(function () {
             let copyright_year_str;
             if ((new Date()).getFullYear() !== 2020) {
@@ -155,6 +157,7 @@
             return "<p>" + "Copyright &copy; " + location.hostname + " " + copyright_year_str + "<br>" + translate('joke', translations, lang) + "</p>"
         });
 
+		//Content
         content.load("{% url content_id %}");
 
 
