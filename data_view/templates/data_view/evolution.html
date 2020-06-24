@@ -67,7 +67,8 @@
         }
 
         function fill_graphs(sols, start, end) {
-            let sols_list_filtered = sols.filter(sol => (new Date(sol['Median_UTC']) >= start && new Date(sol['Median_UTC']) <= end))
+            let sols_list_filtered = sols.filter(sol => (new Date(sol['Last_UTC']) >= start && new Date(sol['First_UTC']) <= end))
+            console.log(sols_list_filtered)
             sol_length = sols_list_filtered.length;
             const x_vector = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sol_date'] ? sols_list_filtered[(sol_length - 1) - idx]['sol_date'] : translate("wd_no_dir", translations, lang))
             console.log(x_vector)

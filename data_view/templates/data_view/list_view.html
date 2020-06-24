@@ -38,10 +38,12 @@
 
         //PAGE Functions
         function build_list(sols, start, end) {
+            console.log(sols)
             $('#list_body').html(function () {
                 let out_str = "";
                 let itr = 0;
-                const filtered_sols = sols.filter(sol => (new Date(start) <= new Date(sol.median_utc) && new Date(sol.median_utc) <= new Date(end)))
+                const filtered_sols = sols.filter(sol => (new Date(sol['last_utc']) >= start && new Date(sol['first_utc']) <= end))
+                console.log(filtered_sols)
                 if (sols.length === 0) {
                     if (lang === 'fr') {
                         return "<tr><td colspan='6'>Aucune Donées Disponible</td></tr>";
@@ -63,9 +65,9 @@
                     out_str += "<td data-label='" + translate('to', translations, lang) + "'>" + date_format(new Date(filtered_sols[i]['last_utc']), lang) + "</td>"
                     out_str += "<td data-label='" + translate('season', translations, lang) + "'>" + translate(filtered_sols[i]['season'], translations, lang) + "</td>"
                     let url_mask = "{% url 'pages:sol_wind_rose' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", filtered_sols[i]['sol_date'])
-                    out_str += "<td data-label='" + translate('wind_rose', translations, lang) + "'><a href='" + url_mask + "'>" + translate("wind_rose",translations, lang) + "</a>"
+                    out_str += "<td data-label='" + translate('wind_rose', translations, lang) + "'><a href='" + url_mask + "'>" + translate("wind_rose", translations, lang) + "</a>"
                     url_mask = "{% url 'pages:sol_detail' lang=lang sol_key="sol_key_from_js" %}".replace("sol_key_from_js", filtered_sols[i]['sol_date'])
-                    out_str += "<td data-label='" + translate('details', translations, lang) + "'><a href='" + url_mask + "'>" + translate("more_info",translations, lang) + "</a>"
+                    out_str += "<td data-label='" + translate('details', translations, lang) + "'><a href='" + url_mask + "'>" + translate("more_info", translations, lang) + "</a>"
 
                     out_str += "</tr>";
                 }
@@ -129,7 +131,7 @@
             event.preventDefault();
         });
 
-        build_list(sol_days, from_datepicker.datepicker("getDate"), to_datepicker.datepicker("getDate"))
+        build_list(sol_days, new Date(sol_days[sol_days.length - 1]['median_utc']), new Date(sol_days[0]['median_utc']))
 
         //debug.html(JSON.stringify(sol_days, null, 4));
 
