@@ -98,7 +98,7 @@
         let chart_temp = new Chart(temp_chart_ctx, {
             type: 'line',
             data: {
-                labels: (new Array(6)).fill(0).map((empty, idx) => last_six[5 - idx]['sol_date'] ? "Sol " + last_six[5 - idx]['sol_date'] : translate("wd_no_dir", translations, lang)),
+                labels: (new Array(6)).fill(0).map((empty, idx) => last_six[idx]['sol_date'] ? "Sol " + last_six[idx]['sol_date'] : translate("wd_no_dir", translations, lang)),
                 datasets: [
                     {
                         label: translate('AT', translations, lang) + " " + translate('avg_short', translations, lang) + " (" + get_temp_unit(lang) + ")",
