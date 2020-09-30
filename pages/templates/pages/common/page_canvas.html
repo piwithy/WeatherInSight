@@ -92,6 +92,11 @@
         const orange_border = 'rgba(255, 61, 33, .8)';
         const orange_background = 'rgba(255, 61, 33, .4)';
         const orange_point = 'rgba(204 , 50, 26, 1)';
+
+        Date.prototype.subtractDays = function (d) {
+            this.setDate(this.getDate() - d);
+            return this;
+        }
     </script>
 
 </head>
@@ -120,7 +125,7 @@
         const footer = $('#footer');
 
         let user = detect.parse(navigator.userAgent);
-        console.log("\"" + user.browser.family + "\"")	//detecting Internet Explorer User
+        //console.log("\"" + user.browser.family + "\"")	//detecting Internet Explorer User
         if (user.browser.family === "IE") {
             content.html("<h1 style='text-align: center'> Browser Not Supported </h1>")
 
@@ -135,7 +140,7 @@
                 break;
         }
 
-		//NAV bar
+        //NAV bar
         home_button.html("<a href='{% url 'pages:index' lang %}'><img style='max-height:50px' alt='logo' src='{% static 'pages/img/weather_insight_logo_nasa.png' %}'></a>")
 
         nav_bar.html(function () {
@@ -146,7 +151,7 @@
             return nav_str + "</ul></nav>"
         });
 
-		//Footer
+        //Footer
         footer.html(function () {
             let copyright_year_str;
             if ((new Date()).getFullYear() !== 2020) {
@@ -157,7 +162,7 @@
             return "<p>" + "Copyright &copy; " + location.hostname + " " + copyright_year_str + "<br>" + translate('joke', translations, lang) + "</p>"
         });
 
-		//Content
+        //Content
         content.load("{% url content_id %}");
 
 
