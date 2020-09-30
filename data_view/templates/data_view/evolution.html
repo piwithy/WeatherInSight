@@ -68,10 +68,10 @@
 
         function fill_graphs(sols, start, end) {
             let sols_list_filtered = sols.filter(sol => (new Date(sol['Last_UTC']) >= start && new Date(sol['First_UTC']) <= end))
-            console.log(sols_list_filtered)
+            // console.log(sols_list_filtered)
             sol_length = sols_list_filtered.length;
             const x_vector = (new Array(sol_length)).fill(0).map((empty, idx) => sols_list_filtered[(sol_length - 1) - idx]['sol_date'] ? sols_list_filtered[(sol_length - 1) - idx]['sol_date'] : translate("wd_no_dir", translations, lang))
-            console.log(x_vector)
+            // console.log(x_vector)
             chart_temp.data.labels = x_vector
             chart_pressure.data.labels = x_vector
             chart_wind_speed.data.labels = x_vector
@@ -471,7 +471,7 @@
                             fontColor: '#ccc',
                             min: 0,
                             //max: 337.5,
-                            suggestedMax: 180-22.5,
+                            suggestedMax: 180 - 22.5,
                             stepSize: 22.5,
                             callback: function (label, index, value) {
                                 const labels = [
@@ -521,7 +521,7 @@
 
         from_cal_from.html(translate('from', translations, lang));
         to_cal_to.html(translate('to', translations, lang));
-        from_datepicker.datepicker('setDate', new Date(sols_list_raw[sols_list_raw.length - 1]['Median_UTC']));
+        from_datepicker.datepicker('setDate', (new Date(sols_list_raw[0]['Median_UTC'])).subtractDays(14));
         from_datepicker.datepicker("option", $.datepicker.regional[lang]);
         to_datepicker.datepicker('setDate', new Date(sols_list_raw[0]['Median_UTC']));
         to_cal_to.datepicker("option", $.datepicker.regional[lang]);
@@ -533,7 +533,7 @@
             event.preventDefault();
         });
 
-        fill_graphs(sols_list_raw, new Date(sols_list_raw[sols_list_raw.length - 1]['Median_UTC']), new Date(sols_list_raw[0]['Median_UTC']))
+        fill_graphs(sols_list_raw, from_datepicker.datepicker('getDate'), to_datepicker.datepicker('getDate'));
 
 
     });
