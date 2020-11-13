@@ -110,7 +110,8 @@
         }
 
         const lang = "{{ lang }}"
-        const sols_list_raw = JSON.parse(document.getElementById("sols").textContent)
+        let sols_list_raw = JSON.parse(document.getElementById("sols").textContent)
+        let sols_list_raw = sols_list_raw.filter(sol => (sol['validated'] === 1));
 
 
         let head_table_body = $('#head_table_body').html('<tr><td style="text-transform: uppercase; font-weight:bold " id=" from_cal"><span id="from_cal_from"></span>: <input style="text-align: center; width: 80px" type="text" id="from_cal_datepicker" readonly="readonly"/></td><td style="text-transform: uppercase;font-weight:bold" id="to_cal"><span id="to_cal_to"></span>: <input style="text-align: center; width: 80px" type="text" id="to_cal_datepicker" readonly="readonly"/></td><td><input id="update_btn" type="submit"></td></tr>')
