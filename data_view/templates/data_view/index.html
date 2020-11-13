@@ -61,8 +61,7 @@
         //console.log(translations);
 
         const lang = "{{ lang }}"; // Langue du site, ex: "fr"
-        let last_six = JSON.parse(document.getElementById('last_six_sols').textContent); //donées au format json <==> dico python
-        last_six = last_six.filter(sol => (sol['valid'] ===true));
+        const last_six = JSON.parse(document.getElementById('last_six_sols').textContent); //donées au format json <==> dico python
         const arrow_url = "{% static 'pages/img/arrow_down.png' %}"
         /* END Of Javascript Django DATA */
 
