@@ -97,7 +97,7 @@ def request_data():
     body_data_json.pop('sol_keys')
     body_data_json.pop('validity_checks')
     for key, item in body_data_json.items():
-        valid = check_sol_valid(key, validity_checks)
+        valid = check_sol_valid(key, validity_checks, item)
         try:
             sol_day = SolDayData.objects.get(sol_date=int(key))
         except exceptions.ObjectDoesNotExist as e:
@@ -109,10 +109,16 @@ def request_data():
     return get_request.headers, json.loads(body_data_raw), get_request.status_code
 
 
-def check_sol_valid(sol_key, validity_checks):
+def check_sol_valid(sol_key, validity_checks, sol):
     if sol_key not in validity_checks['sols_checked']:
         return False
-    if validity_checks[sol_key].get('AT', None) is not None:
+    if 'AT' not in sol:
+        return False
+    if 'PRE' not in sol:
+        return False
+    if 'HWS' not in sol:
+        return False
+    if 'AT' in validity_checks[sol_key].get('AT', None) is not None:
         if not validity_checks[sol_key]['AT'].get('valid', False):
             return False
     if validity_checks[sol_key].get('HWS', None) is not None:
