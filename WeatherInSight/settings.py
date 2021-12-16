@@ -24,7 +24,7 @@ SECRET_KEY = '3f4lr1xfa2+4#tq*)b%9cu4u+g@%peeiqvjvwmfo!9*-0(h2a'
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 ALLOWED_HOSTS = ['192.168.0.62', '127.0.0.1']
 
 if not DEBUG:
@@ -35,7 +35,7 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    ALLOWED_HOSTS = ['localhost','192.168.221.2', '127.0.0.1', '192.168.0.249', '192.168.0.62', '192.168.0.245', 'weatherinsight.space']
+    ALLOWED_HOSTS = ['localhost', 'weatherinsight.space']
 
 # Application definition
 
