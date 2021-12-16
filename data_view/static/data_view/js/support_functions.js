@@ -80,7 +80,7 @@ function compact_date(date, translation_dict, lang) {
     }
     switch (lang) {
         case 'fr':
-            return translation_dict[lang]['days_short'][date.getDay()] + ', ' + num_2_str(date.getDate()) + ' ' + translation_dict[lang]['months'][date.getMonth()];
+            return translation_dict[lang]['days_short'][date.getDay()] + ', ' + num_2_str(date.getDate()) + ' ' + translation_dict[lang]['months'][date.getMonth()] + ' ' + date.getFullYear();
         default:
             let en_date = date.getDate();
             if (en_date === 1 || en_date === 21 || en_date === 31)
@@ -91,7 +91,7 @@ function compact_date(date, translation_dict, lang) {
                 en_date += 'rd';
             else
                 en_date += 'th';
-            return translation_dict[lang]['days_short'][date.getDay()] + ', ' + translation_dict[lang]['months'][date.getMonth()] + ' ' + en_date;
+            return translation_dict[lang]['days_short'][date.getDay()] + ', ' + translation_dict[lang]['months'][date.getMonth()] + ' ' + en_date + ' ' + date.getFullYear();
 
     }
 
