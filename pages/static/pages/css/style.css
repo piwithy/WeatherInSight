@@ -205,6 +205,14 @@ body {
     border-top: 1px rgb(128, 30, 16) solid;
 }
 
+#eol_banner{
+    background-color: darkred;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    font-size: small;
+}
+
 @media (max-width: 1200px) {
     #content {
         width: 880px;

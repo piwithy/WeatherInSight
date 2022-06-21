@@ -138,10 +138,11 @@
 
         switch (lang) { //setting page title & eol text
             case 'fr':
+                eol_banner.html("<h3>L'atterrisseur InSight approche de sa fin de vie, ce site internet aussi 🥲. </br>Les données ne seront plus actualisées après le 31 Juillet 2022</h3>");
                 document.title = "{{ title_fr }} | " + location.hostname;
                 break;
             default:
-                eol_banner.html("<h3>The InSight lander is near is end of life, so this Website too. </br>Data will not be updated anymore after July 31st</h3>");
+                eol_banner.html("<h3>The InSight lander is near is end of life, so this Website too 🥲​. </br>Data will not be updated anymore after July 31st 2022</h3>");
                 document.title = "{{ title_en }} | " + location.hostname;
                 break;
         }
