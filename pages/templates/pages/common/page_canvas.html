@@ -97,12 +97,16 @@
             this.setDate(this.getDate() - d);
             return this;
         }
+    
     </script>
-
+    <script type="text/javascript" id="eol_data">
+        
+    </script>
 </head>
 <body>
 
 <div id="wrapper">
+    <div id="eol_banner"></div>
     <div id="nav">
         <div id="home_button" style="height: 50px"></div>
         <div id="empty"></div>
@@ -123,6 +127,7 @@
         const nav_bar = $('#nav_bar');
         const content = $('#content');
         const footer = $('#footer');
+        const eol_banner = $('#eol_banner');
 
         let user = detect.parse(navigator.userAgent);
         //console.log("\"" + user.browser.family + "\"")	//detecting Internet Explorer User
@@ -131,14 +136,16 @@
 
         }
 
-        switch (lang) { //setting page title
+        switch (lang) { //setting page title & eol text
             case 'fr':
                 document.title = "{{ title_fr }} | " + location.hostname;
                 break;
             default:
+                eol_banner.html("<h3>The InSight lander is near is end of life, so this Website too. </br>Data will not be updated anymore after July 31st</h3>");
                 document.title = "{{ title_en }} | " + location.hostname;
                 break;
         }
+
 
         //NAV bar
         home_button.html("<a href='{% url 'pages:index' lang %}'><img style='max-height:50px' alt='logo' src='{% static 'pages/img/weather_insight_logo_nasa.png' %}'></a>")
