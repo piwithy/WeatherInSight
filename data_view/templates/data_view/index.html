@@ -243,13 +243,17 @@
         const list_url = "{% url 'pages:sol_list' lang %}";
         other_sols.html("<a href='" + list_url + "'>" + translate("other_sols", translations, lang) + "</a>")
 
-
-        $.ajax({
-            url: "{% url 'data_request:request_data' %}",
-            success: function (data) {
-                //console.log("Request: " + data)
-            }
-        })
+        const eol_date = new Date("July 31, 2022 23:59:59 UTC");
+        if(new Date() < eol_date){
+            $.ajax({
+                url: "{% url 'data_request:request_data' %}",
+                success: function (data) {
+                    console.log("Request: " + data)
+                }
+            })
+        }else{
+            console.log("eol passed!");
+        }
 
         //debug_html.html("<pre>" + JSON.stringify(last_six, null, 4) + "</pre>")
 
