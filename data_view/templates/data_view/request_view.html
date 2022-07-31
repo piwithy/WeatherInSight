@@ -2,7 +2,11 @@
 {{ header|json_script:'header_data' }}
 {{ body|json_script:'body_data' }}
 
+<h1 id="page_title" style="text-align: center;"></h1>
+
+<!--
 <div id="request">
+    Disabling request display    
     <div id="head">
         <table>
             <caption id="head_table_caption"></caption>
@@ -19,7 +23,17 @@
 
     <div class="debug"></div>
 </div>
+-->
 <script>
+    $(document).ready(function() {
+        const lang = "{{ lang }}"
+        if (lang === "fr"){
+            $("#page_title").html("Cette page n'est plus disponible.");
+        }else {
+            $("#page_title").html("This page is no longer available, since Insight reached it's end of life.");
+        }
+    });
+    /* Disabling request display
     $(document).ready(function () {
         const lang = "{{ lang }}"
         const head_data = JSON.parse(document.getElementById("header_data").textContent);
@@ -46,4 +60,5 @@
 
         //$('.debug').html('HEAD:<br><pre>' + JSON.stringify(head_data, null, 4) + '</pre><br>BODY:<br><pre>' + JSON.stringify(body_data, null, 4) + "</pre>");
     })
+    */
 </script>
