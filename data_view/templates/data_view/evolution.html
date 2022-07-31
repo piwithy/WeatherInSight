@@ -521,7 +521,7 @@
 
         from_cal_from.html(translate('from', translations, lang));
         to_cal_to.html(translate('to', translations, lang));
-        from_datepicker.datepicker('setDate', (new Date(sols_list_raw[0]['Median_UTC'])).subtractDays(14));
+        from_datepicker.datepicker('setDate', (new Date(sols_list_raw[sols_list_raw.length - 1]['Median_UTC'])));
         from_datepicker.datepicker("option", $.datepicker.regional[lang]);
         to_datepicker.datepicker('setDate', new Date(sols_list_raw[0]['Median_UTC']));
         to_cal_to.datepicker("option", $.datepicker.regional[lang]);
