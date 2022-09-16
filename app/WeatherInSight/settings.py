@@ -25,7 +25,7 @@ SECRET_KEY = '3f4lr1xfa2+4#tq*)b%9cu4u+g@%peeiqvjvwmfo!9*-0(h2a'
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-ALLOWED_HOSTS = ['192.168.0.62', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.0.62', '127.0.0.1', 'localhost']
 
 if not DEBUG:
     with open('/etc/django/secret_key.txt') as f:
