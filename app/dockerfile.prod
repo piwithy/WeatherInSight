@@ -1,0 +1,64 @@
+###########
+# BUILDER #
+###########
+
+# Pull Official base image
+FROM python:bullseye AS builder
+
+# set Working Dir
+WORKDIR /usr/src/app
+
+# set ENV
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYHTONUNBUFFERED 1
+
+# Lint
+RUN pip install --upgrade pip
+RUN pip install flake8==3.9.2 
+COPY . .
+RUN flake8 --ignore=E501,F401 .
+
+# install dependancies
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+#########
+# FINAL #
+#########
+
+# Pull Official base image
+FROM python:bullseye
+
+# Create App user Dir
+RUN mkdir -p /home/app
+
+# Create App user
+RUN adduser --system --group --shell /bin/bash --disabled-password --home /home/app app
+
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir -p ${APP_HOME}
+RUN mkdir -p ${APP_HOME}/staticfiles 
+WORKDIR ${APP_HOME}
+
+#install dependencies
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+RUN pip install --no-cache /wheels/*
+
+# copy entrypoint.prod.sh
+COPY ./entrypoint.prod.sh .
+RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.prod.sh
+RUN chmod +x  $APP_HOME/entrypoint.prod.sh
+
+# copy project
+COPY . .
+
+# chown all files to the app user
+RUN chown -R app:app .
+
+# change to the app USer
+USER app
+
+# run entrypoint
+ENTRYPOINT [ "/home/app/web/entrypoint.prod.sh" ]

@@ -65,10 +65,10 @@ class WindDirection(models.Model):
 
     def update_data(self, data: dict):
         for key, item in data.items():
-            if key == "most_common":
-                sector = -1
-            else:
-                sector = int(key)
+            # if key == "most_common":
+            #     sector = -1
+            # else:
+            #     sector = int(key)
             wind_sector = WindSector.objects.filter(wind_directions__exact=self)
             wind_sector.update_data(item)
             wind_sector.save()

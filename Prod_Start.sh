@@ -1,9 +1,12 @@
 #!/bin/bash
 WORKING_DIR="$(dirname "$0")"
 cd "$WORKING_DIR" || exit 1
-bash -c "./Setup_environement.sh"
-source "venv/bin/activate"
-export "DJANGO_DEBUG=False"
-python manage.py collectstatic --no-input --clear
-python manage.py check --deploy
-gunicorn --access-logfile - --workers 3 --bind "unix:$WORKING_DIR/gunicorn.sock" WeatherInSight.wsgi:application
+
+docker-compose -f "docker-compose.prod.yml" up -d --build
+docker-compose -f "docker-compose.prod.yml" exec web python manage.py  makemigration --noinput
+docker-compose -f "docker-compose.prod.yml" exec web python manage.py  migrate --noinput
+docker-compose -f "docker-compose.prod.yml" exec web python manage.py  collectstatic --noinput --clear
+
+
+
+
