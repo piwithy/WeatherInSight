@@ -60,5 +60,7 @@ RUN chown -R app:app ${APP_HOME}
 # change to the app USer
 USER app
 
+RUN ls -lah ${APP_HOME}
+
 # run entrypoint
 ENTRYPOINT [ "/home/app/web/entrypoint.prod.sh" ]
