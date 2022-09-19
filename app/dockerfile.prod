@@ -59,7 +59,7 @@ RUN chown -R app:app ${APP_HOME}
 
 # change to the app USer
 USER app
-RUN chmod -R 744 ${APP_HOME}
+RUN chmod -R 766 ${APP_HOME}
 RUN chmod +x ${APP_HOME}/entrypoint.prod.sh
 
 RUN ls -lah ${APP_HOME}
