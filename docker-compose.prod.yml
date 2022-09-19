@@ -3,25 +3,15 @@ services:
     build:
       context: ./app
       dockerfile: dockerfile.prod
-    command: gunicorn WeatherInSight.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn WeatherInSight.wsgi:application --bind 0.0.0.0:1337 --worker=3
     volumes:
       - ./app/db.sqlite3:/home/app/web/db.sqlite3
       - static_volume:/home/app/web/staticfiles
       - media_volume:/home/app/web/mediafiles
-    expose:
-      - 8000
+    ports:
+      - 1337:1337
     env_file:
       - ./.env.prod
-  
-  nginx:
-    build: ./nginx
-    ports:
-      - 1337:80
-    depends_on:
-      - web
-    volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/mediafiles
 
 volumes:
   static_volume:
