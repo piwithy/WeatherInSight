@@ -129,10 +129,16 @@ dmypy.json
 .pyre/
 .idea
 *.iml
-prod_static/*
+
+
+**/staticfiles/*
+**/mediafiles/*
 
 # DS Store
 .DS_Store
 
 **/migrations/*0*.py
 **/results.xml
+
+**/.env.dev
+**/.env.prod

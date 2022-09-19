@@ -92,7 +92,7 @@ def request_data():
         raise exceptions.RequestAborted
     body_data_raw = get_request.text
     body_data_json = json.loads(body_data_raw)
-    sol_keys = body_data_json.get("sol_keys").copy()
+    # sol_keys = body_data_json.get("sol_keys").copy()
     validity_checks = body_data_json.get("validity_checks").copy()
     body_data_json.pop('sol_keys')
     body_data_json.pop('validity_checks')
@@ -100,11 +100,11 @@ def request_data():
         valid = check_sol_valid(key, validity_checks, item)
         try:
             sol_day = SolDayData.objects.get(sol_date=int(key))
-        except exceptions.ObjectDoesNotExist as e:
+        except exceptions.ObjectDoesNotExist:
             if valid:
                 sol_day = SolDayData.create(key, item, valid)
                 sol_day.save()
-        except exceptions.MultipleObjectsReturned as e:
+        except exceptions.MultipleObjectsReturned:
             return exceptions.EmptyResultSet
     return get_request.headers, json.loads(body_data_raw), get_request.status_code
 
