@@ -1,0 +1,66 @@
+<div *ngIf="generalChartOptions && generalChartOptions.chart && generalChartOptions.xaxis && generalChartOptions.stroke && generalChartOptions.legend">
+    <div id="temp_evol chart_zone" *ngIf="tempChartOptions && tempChartOptions.series && tempChartOptions.yaxis">
+        <div class="chart_title" *ngIf="firstSol && lastSol">
+            Temperature Evolution between Sol {{firstSol.sol_date}} and Sol {{lastSol.sol_date}}
+        </div>
+        <div class="chart">
+            <apx-chart 
+                [series]="tempChartOptions.series" 
+                [chart]="generalChartOptions.chart" 
+                [xaxis]="generalChartOptions.xaxis" 
+                [yaxis]="tempChartOptions.yaxis" 
+                [stroke]="generalChartOptions.stroke" 
+                [legend]="generalChartOptions.legend"
+            ></apx-chart>
+        </div>
+    </div>
+    <div class="pressure_evol chart_zone" *ngIf="pressureChartOptions && pressureChartOptions.series && pressureChartOptions.yaxis">
+        <div class="chart_title" *ngIf="firstSol && lastSol">
+            Atmospheric Pressure Evolution between Sol {{firstSol.sol_date}} and Sol {{lastSol.sol_date}}
+        </div>
+        <div class="chart">
+            <apx-chart 
+                [series]="pressureChartOptions.series" 
+                [chart]="generalChartOptions.chart" 
+                [xaxis]="generalChartOptions.xaxis" 
+                [yaxis]="pressureChartOptions.yaxis" 
+                [stroke]="generalChartOptions.stroke" 
+                [legend]="generalChartOptions.legend"
+            ></apx-chart>
+        </div>
+    </div>
+
+    <div class="wind_speed_evol chart_zone" *ngIf="windSpeedChartOptions && windSpeedChartOptions.series && windSpeedChartOptions.yaxis">
+        <div class="chart_title" *ngIf="firstSol && lastSol">
+            Wind Speed Evolution between Sol {{firstSol.sol_date}} and Sol {{lastSol.sol_date}}
+        </div>
+        <div class="chart">
+            <apx-chart 
+                [series]="windSpeedChartOptions.series" 
+                [chart]="generalChartOptions.chart" 
+                [xaxis]="generalChartOptions.xaxis" 
+                [yaxis]="windSpeedChartOptions.yaxis" 
+                [stroke]="generalChartOptions.stroke" 
+                [legend]="generalChartOptions.legend"
+            ></apx-chart>
+        </div>
+    </div>
+
+    <div class="wind_direction_evol chart_zone" *ngIf="windDirectionChartOptions && windDirectionChartOptions.series && windDirectionChartOptions.yaxis">
+        <div class="chart_title" *ngIf="firstSol && lastSol">
+            Wind Direction Evolution between Sol {{firstSol.sol_date}} and Sol {{lastSol.sol_date}}
+        </div>
+        <div class="chart">
+            <apx-chart 
+                [series]="windDirectionChartOptions.series" 
+                [chart]="generalChartOptions.chart" 
+                [xaxis]="generalChartOptions.xaxis" 
+                [yaxis]="windDirectionChartOptions.yaxis" 
+                [stroke]="generalChartOptions.stroke" 
+                [legend]="generalChartOptions.legend"
+            ></apx-chart>
+        </div>
+    </div>
+
+</div>
+

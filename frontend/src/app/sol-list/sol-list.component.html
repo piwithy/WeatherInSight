@@ -1,0 +1,33 @@
+<table>
+    <caption>Sol List</caption>
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Apply</th>
+        </tr>
+    </thead>
+
+</table>
+<table>
+    <thead>
+        <tr>
+            <th>Sol</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Season</th>
+            <th>Wind Rose</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let sol of sols">
+            <td>{{sol.sol_date}}</td>
+            <td>{{sol.First_UTC | date:'dd/M/YYYY HH:mm:ss'}}</td>
+            <td>{{sol.Last_UTC | date:'dd/MM/YYYY HH:mm:ss'}}</td>
+            <td>{{sol.season | titlecase}}</td>
+            <td><a routerLink="/wind-rose/sol/{{sol.sol_date}}">Wind Rose</a></td>
+            <td><a routerLink="/detail/sol/{{sol.sol_date}}">Details</a></td>
+        </tr>
+    </tbody>
+</table>

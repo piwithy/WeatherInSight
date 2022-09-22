@@ -1,0 +1,54 @@
+#wind_rose{
+    display: flex;
+}
+
+.wind_rose{
+    flex-grow: 1;
+    max-width: 65%;
+}
+
+.chart {
+    color: black;
+}
+
+#wind_rose .title{
+    text-align: center;
+    font-size: 2em;
+}
+
+#wind_rose .caption {
+    text-align: center;
+}
+
+#sensors_fact{
+    display: flex;
+    flex-direction: column;
+    max-width: 40%;
+    border-left: 1px rgb(128, 30, 16) solid;
+    padding-left: 20px;
+}
+
+table{
+    width: 100%;
+    table-layout: fixed;
+    font-size: 1.2em;
+    text-align: center;
+    margin: 50px 0 50px 0;
+    
+}
+
+table caption{
+    font-size: 1.7em;
+}
+
+table th {
+    text-transform: uppercase;
+}
+
+table tr:nth-child(odd){
+    background: rgba(255, 255, 255, .2);
+}
+
+table tr:nth-child(even){
+    background: rgba(255, 255, 255, .05);
+}

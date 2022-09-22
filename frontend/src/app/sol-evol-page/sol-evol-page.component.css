@@ -1,0 +1,13 @@
+.chart {
+    color: black;
+}
+
+.chart_title {
+    text-align: center;
+    font-size: 2em;
+}
+
+.chart_zone {
+    padding: 10px;
+    border-top: 1px rgb(128, 30, 16) solid;
+}

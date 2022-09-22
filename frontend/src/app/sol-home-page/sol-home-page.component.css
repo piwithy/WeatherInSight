@@ -1,0 +1,83 @@
+.last_five {
+    margin-top: 20px;
+    padding: 0;
+    justify-content: center;
+    display: flex;
+}
+
+.chart{
+    color: black;
+}
+
+.empty{
+    flex-grow: 1;
+}
+
+.wind_rose .caption{
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.last_five .sol_arrow {
+    margin: 0 1vw 0 1vw;
+}
+
+.last_five .sol_arrow .arrow{
+    display: flex;
+}
+
+.last_five .sol_arrow .arrow .empty{
+    flex-grow: 1;
+}
+
+.main_sol{
+    display: flex;
+    border-bottom: 1px rgb(128, 30, 16) solid;
+}
+
+.main_sol .wind_rose{
+    width: 65%;
+
+    border-left: 1px rgb(128, 30, 16) solid;
+}
+
+.main_sol .sol_data{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.main_sol .sol_temp{
+    display: block;
+    font-size: 3em;
+    text-align: center;
+}
+
+.main_sol .sol_date{
+    font-size: 1.7em;
+}
+
+.main_sol .sol_sensor ul {
+    list-style: none;
+    padding-left: 0;
+    font-size: 1.2em;
+}
+
+.other_sols a{
+    text-decoration: underline;
+    display: block;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.other_sols a:hover {
+    background: rgba(204, 204, 204, .4);
+}
+
+.last_five .arrow{
+    display: flex;
+}
+
+.last_five .sol_arrow{
+    text-align: center;
+}

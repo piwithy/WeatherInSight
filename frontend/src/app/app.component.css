@@ -1,0 +1,55 @@
+nav{
+    width: 100%;
+    display: flex;
+    padding: 10px;
+}
+
+nav #empty{
+    flex-grow: 1;
+}
+
+nav img{
+    max-height: 50px;
+}
+nav a{
+    display: block;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+nav a:hover{
+    background: rgba(204, 204, 204, .4);
+}
+
+#wrapper{
+    margin: 0 10px 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#content{
+    background: linear-gradient(rgba(4, 60, 112, .7), rgba(2, 39, 74, .7));
+    padding: 10px;
+    width: 80vw;
+    display: block;
+    align-items: center;
+    border: 1px rgb(128, 30, 16) solid;
+}
+
+#footer{
+    text-align: center;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0);
+    color: #0b3d91;
+}
+
+#eol_banner{
+    background-color:  darkred;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    font-size: small;
+}

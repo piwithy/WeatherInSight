@@ -1,0 +1,103 @@
+<div *ngIf="sol">
+    <table>
+        <caption>Sol: {{sol.sol_date}}</caption>
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Sol</td>
+                <td>{{sol.sol_date}}</td>
+            </tr>
+            <tr>
+                <td>Season</td>
+                <td>{{sol.season}}</td>
+            </tr>
+            <tr>
+                <td>Start (UTC)</td>
+                <td>{{sol.First_UTC | date : 'dd/MM/YYYY HH:mm:ss'}} UTC</td>
+            </tr>
+            <tr>
+                <td>End (UTC)</td>
+                <td>{{sol.Last_UTC | date : 'dd/MM/YYYY HH:mm:ss'}} UTC</td>
+            </tr>
+            <tr>
+                <td>Valid</td>
+                <td>{{sol.valid}}</td>
+            </tr>
+            <tr *ngFor="let sensor of sol.sensors | keyvalue">
+                <td>Sensor: {{sensor.key}}</td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Minimum Value</td>
+                                <td>{{sensor.value.mn}}</td>
+                            </tr>
+                            <tr>
+                                <td>Maximum Value</td>
+                                <td>{{sensor.value.mx}}</td>
+                            </tr>
+                            <tr>
+                                <td>Average Value</td>
+                                <td>{{sensor.value.av}}</td>
+                            </tr>
+                            <tr>
+                                <td>Sample Count</td>
+                                <td>{{sensor.value.ct}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr *ngFor="let sector of sol.winds | keyvalue">
+                <td>Sector: {{sector.key}}</td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Key
+                                </th>
+                                <th>
+                                    Value
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Compass Point</td>
+                                <td>{{sector.value.compass_point}}</td>
+                            </tr>
+                            <tr>
+                                <td>Compass Degres</td>
+                                <td>{{sector.value.compass_degrees}}°</td>
+                            </tr>
+                            <tr>
+                                <td>Compass Right</td>
+                                <td>{{sector.value.compass_right}}°</td>
+                            </tr>
+                            <tr>
+                                <td>Compass Up</td>
+                                <td>{{sector.value.compass_up}}°</td>
+                            </tr>
+                            <tr>
+                                <td>Sample Count</td>
+                                <td>{{sector.value.ct}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
