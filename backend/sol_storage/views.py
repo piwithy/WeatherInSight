@@ -11,12 +11,13 @@ from .models import Sol
 def home(request):
     return HttpResponse("Forbidden", status=403)
 
+
 @csrf_exempt
 def import_data(request):
     if request.method == "POST":
         data = json.loads(request.body)
         for sol in data:
-            try: 
+            try:
                 db_sol = Sol.objects.get(sol_number=sol['sol_date'])
             except exceptions.ObjectDoesNotExist:
                 db_sol = Sol.create(sol)
@@ -25,14 +26,14 @@ def import_data(request):
                 return HttpResponse("Internal Error", status=500)
         return HttpResponse("Ok", status=200)
     return HttpResponse("bad Request", status=400)
-    
-            
+
+
 def export_data(request):
     sol_id = request.GET.get("sol_id", '')
     last_sols = request.GET.get("last", '')
     if sol_id:
         try:
-            db_sol = Sol.objects.get(sol_number = int(sol_id))
+            db_sol = Sol.objects.get(sol_number=int(sol_id))
             sol_number, sol_data = db_sol.export()
             return JsonResponse({str(sol_number): sol_data})
         except exceptions.ObjectDoesNotExist:
