@@ -21,4 +21,4 @@ The Web Site provide an Insight into the weather (Wind roses, Atmospheric Temper
 
 ### Licence 
 
-[Apache License 2.0](LICENSE)
+[MIT](LICENSE)
