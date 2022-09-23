@@ -1,0 +1,24 @@
+<div id="wrapper">
+    <div id="eol_banner">
+        <h3>
+            The InSight lander is near its end of life, so this Website too 🥲​.<br>
+            The data has not been updated since July 31<sup>st</sup> 2022
+        </h3>
+    </div>
+    <nav>
+        <div id="home_button" style="height: 50px"><a routerLink="/"><img src="/assets/img/weather_insight_logo_nasa.png"></a></div>
+        <div id="empty"></div>
+        <div id="ensta_logo" style="height: 50px"><a href="https://www.ensta-bretagne.fr/"><img src="/assets/img/ensta-logoh-rvb-blanctransparent.png"></a></div>
+        <div id="nasa_logo" style="height: 50px"><a href="https://www.nasa.gov/"><img src="/assets/img/nasa-logo.svg"></a></div>
+        <div id="github_logo" style="height: 50px"><a href="https://github.com/piwithy/WeatherInSight/"><img src="/assets/img/github_logo.svg"></a></div>
+    </nav>
+    <div id="content">
+        <router-outlet></router-outlet>
+    </div>
+    <div id="footer">
+        <p>
+            Copyright © WeatherInsight.space 2020-{{current_year}}<br/>
+            Powered by Rocket Fuel 🚀
+        </p>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+{
+    "/api": {
+        "target":"http://django:1337",
+        "secure": false
+    }
+}

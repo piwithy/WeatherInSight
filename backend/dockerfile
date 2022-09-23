@@ -1,0 +1,60 @@
+###########
+# BUILDER #
+###########
+
+# Pull Oficial Base Image
+FROM python:bullseye AS BUILDER
+
+# Set Working Dir
+WORKDIR /usr/src/app
+
+# set ENV
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYHTONUNBUFFERED 1
+
+# Python Lint
+RUN pip install --upgrade pip
+RUN pip install flake8==3.9.2 
+COPY . .
+RUN flake8 --ignore=E501,F401 .
+
+# Install Dependencies
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+#########
+# FINAL #
+#########
+
+# Pull Oficial Base Image
+FROM python:bullseye
+
+# Create App User Dir
+RUN mkdir -p /home/app
+
+# Create User App
+RUN adduser --system --group --shell /bin/bash --disabled-password --home /home/app app
+
+ENV HOME=/home/app
+ENV APP_HOME=${HOME}/web
+RUN mkdir -p ${APP_HOME}
+RUN mkdir -p ${APP_HOME}/staticfiles
+WORKDIR ${APP_HOME}
+
+# install dependancies
+COPY --from=BUILDER /usr/src/app/wheels /wheels
+COPY --from=BUILDER /usr/src/app/requirements.txt ${APP_HOME}
+RUN pip install --no-cache /wheels/*
+
+
+# Copy Project
+COPY . .
+
+RUN chown -R app:app ${APP_HOME}
+# perm RWXRW-RW-
+RUN chmod -R 766 ${APP_HOME}
+
+
+# Change to App User
+USER app
+

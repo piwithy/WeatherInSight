@@ -1,0 +1,53 @@
+<div class="main_sol" *ngIf="last6sols">
+    <div class="sol_data">
+        <a routerLink="/evol">
+            <div class="sol_date">
+                Elysium Planitia, Mars<br>
+                {{ last6sols[0].First_UTC | date:"EEE, LLLL d YYYY"}} (Sol {{last6sols[0].sol_date}})
+            </div>
+            <div class="sol_temp">
+                {{ last6sols[0].sensors["AT"].av | number}} °C
+            </div>
+            <div class="chart" *ngIf="tempChartOptions && tempChartOptions.series && tempChartOptions.chart && tempChartOptions.xaxis && tempChartOptions.yaxis && tempChartOptions.stroke && tempChartOptions.theme && tempChartOptions.legend">
+                <apx-chart [series]="tempChartOptions.series" [chart]="tempChartOptions.chart" [xaxis]="tempChartOptions.xaxis" [yaxis]="tempChartOptions.yaxis" [stroke]="tempChartOptions.stroke" [theme]="tempChartOptions.theme" [legend]="tempChartOptions.legend"></apx-chart>
+            </div>
+            <div class="empty"></div>
+            <div class="sol_sensor">
+                <ul>
+                    <li>Max: {{last6sols[0].sensors["AT"].mx | number}} °C</li>
+                    <li>Min: {{last6sols[0].sensors["AT"].mn | number}} °C</li>
+                    <li>Atmospheric Pressure: {{last6sols[0].sensors["PRE"].av /100 | number}} mBar</li>
+                    <li>Wind Speed: {{last6sols[0].sensors["HWS"].av *3.6 | number}} km/h</li>
+                </ul>
+            </div>
+        </a>
+    </div>
+    <div class="wind_rose" *ngIf="windRoseChartOptions && windRoseChartOptions.series && windRoseChartOptions.chart && windRoseChartOptions.xaxis && windRoseChartOptions.yaxis && windRoseChartOptions.stroke && windRoseChartOptions.theme && windRoseChartOptions.legend">
+        <a routerLink="/wind-rose/sol/{{last6sols[0].sol_date}}">
+            <div class="chart">
+                <apx-chart [series]="windRoseChartOptions.series" [chart]="windRoseChartOptions.chart" [xaxis]="windRoseChartOptions.xaxis" [yaxis]="windRoseChartOptions.yaxis" [stroke]="windRoseChartOptions.stroke" [theme]="windRoseChartOptions.theme" [legend]="windRoseChartOptions.legend"></apx-chart>
+            </div>
+            <div class="caption">
+                On Sol {{last6sols[0].sol_date}} {{last6sols[0].winds["most_common"].compass_point | uppercase}} was the most common Wind Provenance
+            </div>
+        </a>
+    </div>
+</div>
+<div class="last_five">
+    <div *ngFor="let sol of last6sols | slice:1" class="sol_block">
+        <div class="sol_arrow">
+            <a routerLink="wind-rose/sol/{{sol.sol_date}}">
+                <div class="title">{{sol.First_UTC | date: 'EEEE'}} (Sol {{sol.sol_date}})</div>
+                <div class="arrow">
+                    <div class="empty"></div>
+                    <img src="/assets/img/arrow_down.png" style="max-height: 100px;transform-origin: center center;transform:rotate({{sol.winds['most_common'].compass_degrees}}deg)">
+                    <div class="empty"></div>
+                </div>
+                <div class="wind_spd">{{sol.winds["most_common"].compass_point | uppercase}} {{sol.sensors["HWS"].av * 3.6 | number}} km/h</div>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="other_sols">
+    <a routerLink="/list">See Older Sols</a>
+</div>

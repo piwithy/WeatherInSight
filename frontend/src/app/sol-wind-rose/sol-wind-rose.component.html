@@ -1,0 +1,76 @@
+
+<div id="wind_rose" *ngIf="solData">
+    <div class="wind_rose" *ngIf="windRoseChartOptions && windRoseChartOptions.series && windRoseChartOptions.chart && windRoseChartOptions.xaxis && windRoseChartOptions.yaxis && windRoseChartOptions.stroke && windRoseChartOptions.theme && windRoseChartOptions.legend">
+        <div class="title">
+            Wind Origin on Sol {{solData.sol_date}}
+        </div>
+        <div class="chart">
+            <apx-chart [series]="windRoseChartOptions.series" [chart]="windRoseChartOptions.chart" [xaxis]="windRoseChartOptions.xaxis" [yaxis]="windRoseChartOptions.yaxis" [stroke]="windRoseChartOptions.stroke" [theme]="windRoseChartOptions.theme" [legend]="windRoseChartOptions.legend"></apx-chart>
+        </div>
+        <div class="caption">
+            On Sol {{solData.sol_date}} {{solData.winds["most_common"].compass_point | uppercase}} was the most common Wind Provenance
+        </div>
+    </div>
+    <div id="sensors_fact">
+        <div class="empty"></div>
+        <table>
+            <caption>Temperature</caption>
+            <tbody>
+                <tr>
+                    <td>Min: {{solData.sensors["AT"].mn | number}} °C</td>
+                    <td>Max: {{solData.sensors["AT"].mx | number}} °C</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {{solData.sensors["AT"].av | number}} °C
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">The average temperature on Earth is about 15°C</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="empty"></div>
+        <table>
+            <caption>Wind Speed</caption>
+            <tbody>
+                <tr>
+                    <td>Min: {{solData.sensors["HWS"].mn * 3.6 | number}} km/h</td>
+                    <td>Max: {{solData.sensors["HWS"].mx * 3.6 | number}} km/h</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {{solData.sensors["HWS"].av * 3.6 | number}} km/h
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">During a storm wind speeds exceeds 100 km/h</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="empty"></div>
+        <table>
+            <caption>Atmospheric Pressure</caption>
+            <tbody>
+                <tr>
+                    <td>Min: {{solData.sensors["PRE"].mn / 100 | number}} mBar</td>
+                    <td>Max: {{solData.sensors["PRE"].mx / 100 | number}} mBar</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {{solData.sensors["PRE"].av / 100 | number}} mBar
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">or {{solData.sensors["PRE"].av / 1013.25 | number}} % of Earth Atmospheric Pressure</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="empty"></div>
+    </div>
+    
+</div>
+
+
+
+

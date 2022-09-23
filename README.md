@@ -1,4 +1,4 @@
-![](app/pages/static/pages/img/weather_insight_logo_nasa.png)
+![](frontend/src/assets/img/weather_insight_logo_nasa.png)
 
 Website: https://weatherinsight.space
 
