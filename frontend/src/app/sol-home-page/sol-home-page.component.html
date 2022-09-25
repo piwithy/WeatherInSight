@@ -23,6 +23,7 @@
         </a>
     </div>
     <div class="wind_rose" *ngIf="windRoseChartOptions && windRoseChartOptions.series && windRoseChartOptions.chart && windRoseChartOptions.xaxis && windRoseChartOptions.yaxis && windRoseChartOptions.stroke && windRoseChartOptions.theme && windRoseChartOptions.legend">
+        <div class="empty"></div>
         <a routerLink="/wind-rose/sol/{{last6sols[0].sol_date}}">
             <div class="chart">
                 <apx-chart [series]="windRoseChartOptions.series" [chart]="windRoseChartOptions.chart" [xaxis]="windRoseChartOptions.xaxis" [yaxis]="windRoseChartOptions.yaxis" [stroke]="windRoseChartOptions.stroke" [theme]="windRoseChartOptions.theme" [legend]="windRoseChartOptions.legend"></apx-chart>
@@ -31,6 +32,7 @@
                 On Sol {{last6sols[0].sol_date}} {{last6sols[0].winds["most_common"].compass_point | uppercase}} was the most common Wind Provenance
             </div>
         </a>
+        <div class="empty"></div>
     </div>
 </div>
 <div class="last_five">
