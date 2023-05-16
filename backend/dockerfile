@@ -3,7 +3,7 @@
 ###########
 
 # Pull Oficial Base Image
-FROM python:bullseye AS BUILDER
+FROM python:alpine AS BUILDER
 
 # Set Working Dir
 WORKDIR /usr/src/app
@@ -27,7 +27,7 @@ RUN pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements.txt
 #########
 
 # Pull Oficial Base Image
-FROM python:bullseye
+FROM python:alpine
 
 # Create App User Dir
 RUN mkdir -p /home/app
