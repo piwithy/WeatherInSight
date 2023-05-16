@@ -7,8 +7,7 @@ services:
       - 7070:80
     volumes:
       - ./nginx/site.conf:/etc/nginx/conf.d/default.conf
-      - ./logs/access.log:/var/log/nginx/access.log
-      - ./logs/error.log:/var/log/nginx/error.log
+      - ./logs:/var/log/nginx/
     links:
       - django
 
