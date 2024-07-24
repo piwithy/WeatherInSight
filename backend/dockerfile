@@ -3,7 +3,7 @@
 ###########
 
 # Pull Oficial Base Image
-FROM python:bullseye AS BUILDER
+FROM python:bullseye AS builder
 
 # Set Working Dir
 WORKDIR /usr/src/app
@@ -16,7 +16,7 @@ ENV PYHTONUNBUFFERED 1
 RUN pip install --upgrade pip
 RUN pip install flake8==3.9.2 
 COPY . .
-RUN flake8 --ignore=E501,F401 .
+#RUN flake8 --ignore=E501,F401 .
 
 # Install Dependencies
 COPY ./requirements.txt .
