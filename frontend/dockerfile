@@ -10,6 +10,6 @@ COPY . .
 RUN npm run build
 
 ### STAGE 2: Run ###
-FROM nginx:stable
+FROM nginx:1.26.1-bookworm
 
 COPY --from=build /usr/src/app/dist/wis_frontend /usr/share/nginx/html
